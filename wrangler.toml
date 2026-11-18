@@ -4,6 +4,12 @@ name = "calendar-astronomy-cf-archismancoder"
 main = "src/index.js"
 compatibility_date = "2025-06-01"
 
+# Served only on your own domain, so the zone's WAF rules (country blocks etc.) always apply.
+# The *.workers.dev address and per-version preview URLs skip those rules, so they are off.
+routes = [{ pattern = "calendar.archismancoder.com", custom_domain = true }]
+workers_dev = false
+preview_urls = false
+
 [assets]
 directory = "./site"
 binding = "ASSETS"
@@ -13,6 +19,9 @@ run_worker_first = ["/api/*"]
 [vars]
 # Set to "1" only if another site of yours must use the image proxy.
 ALLOW_ANY_ORIGIN = "0"
+# Two-letter country codes refused by the API routes too (a second line of defence behind
+# the zone's WAF rule). Keep it in step with the WAF rule; empty = no block.
+BLOCKED_COUNTRIES = "PK,TR,CN,BD,AZ,KP"
 
 [observability]
 enabled = false
@@ -32,8 +41,3 @@ persist = true
 
 [observability.issue_detection]
 enabled = true
-
-# Custom domain (uncomment after the first deploy, or add it in the dashboard:
-# Worker -> Settings -> Domains & Routes -> Add -> Custom domain):
-# routes = [{ pattern = "calendar.archismancoder.com", custom_domain = true }]
-

@@ -99,6 +99,9 @@ def library():
                         break
             e["file"] = f"library/{iid}.jpg"
         dst = os.path.join(SITE, "thumbs", f"{iid}.jpg")
+        if not os.path.exists(src):  # no full image here: the sheet's thumbnail is enough for the picker
+            alt = os.path.join(os.path.dirname(util.OPTIONS_DIR), "thumbs", f"{iid}.jpg")
+            src = alt if os.path.exists(alt) else src
         if os.path.exists(src):
             if not os.path.exists(dst) or os.path.getmtime(dst) < os.path.getmtime(src):
                 with Image.open(src) as im:
@@ -116,8 +119,11 @@ def library():
     slots = [dict(slot=s["slot"], name=MONTHS[i], default=first(s["default"]),
                   options=[o["id"] for o in s["options"] if o["id"] in images]) for i, s in enumerate(man)]
     compact(os.path.join(SITE, "data", "library.json"), dict(slots=slots, images=images))
-    print(f"  library: {len(images)} images, {have} thumbnails"
-          + ("" if have == len(images) else " (others load from their observatory through /api/img)"))
+    print(f"  library: {len(images)} images, {have} thumbnails")
+    missing = [i for i, e in images.items() if not e.get("thumb")]
+    if missing:
+        print(f"  !! no thumbnail for {len(missing)} images (run fetch_images.py first, or the picker "
+              f"falls back to the observatory through /api/img): {', '.join(missing)}")
 
 
 def fonts():

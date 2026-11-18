@@ -180,7 +180,44 @@ async function hero() {
     const chip = (n, label) => h("li", {}, h("b", {}, String(n)), ` ${label}`);
     ul.append(h("li", { class: "city" }, `From ${c.city} in 2027:`), chip(dark, "dark-sky nights"),
       chip(ecl, ecl === 1 ? "eclipse you can see" : "eclipses you can see"), chip(met, "meteor-shower peaks"), chip(com, "comets"));
+    countUp(ul);
+    ticker(ed, c);
   } catch (e) { console.warn(e); }
+}
+function countUp(ul) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  $$("b", ul).forEach((b) => {
+    const to = +b.textContent, t0 = performance.now();
+    const step = (t) => { const k = Math.min(1, (t - t0) / 900); b.textContent = String(Math.round(to * (1 - (1 - k) ** 3))); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+}
+/** A slow band of 2027's highlights, as seen from the visitor's city. */
+function ticker(ed, c) {
+  const box = $("#ticker");
+  if (!box) return;
+  const big = (e) => e.cat === "eclipse" || e.cat === "conj_planet" || e.cat === "interstellar"
+    || (e.cat === "meteor" && (parseInt(e.zhr, 10) >= 50 || /outburst/i.test(e.name)))
+    || (e.cat === "planet" && /opposition/i.test(e.name)) || (e.cat === "moon_extreme" && /Supermoon/.test(e.name))
+    || (e.cat === "comet" && /mag/.test(e.short));
+  const seen = new Set();
+  const items = ed.events.filter(big).filter((e) => !seen.has(e.short) && seen.add(e.short)).map((e) => {
+    const d = new Date(e.local_date + "T12:00:00Z");
+    const when = d.toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
+    const note = e.cat === "eclipse" ? (e.local_visible ? `visible from ${c.city}` : "not visible here")
+      : e.cat === "meteor" && e.zhr ? `up to ${e.zhr} an hour` : "";
+    const name = e.short === e.short.toUpperCase() ? e.name.split(" — ")[0] : e.short;
+    return h("li", { class: e.cat === "eclipse" && e.local_visible ? "hot" : null },
+      h("time", { datetime: e.local_date }, when), h("b", {}, name), note ? h("span", {}, note) : null);
+  });
+  if (!items.length) return;
+  const list = h("ul", {}, items);
+  box.innerHTML = "";
+  const copy = list.cloneNode(true);
+  copy.setAttribute("aria-hidden", "true");
+  box.append(list, copy);
+  box.style.setProperty("--dur", `${Math.max(40, items.length * 4.5)}s`);
+  $("#ticker-wrap").hidden = false;
 }
 
 /* ------------------------------------------------------------ ready-made */
@@ -396,12 +433,50 @@ function changed(redraw = true, force = false) {
 }
 
 /* ------------------------------------------------------------ tiles */
-function thumbURL(img) {
+const IC = window.ImgCheck;
+function thumbURL(img, big = false) {
   if (!img) return "";
   if (img.source === "own") return uploads.get(img.id)?.url || "";
   if (img.thumb) return img.thumb;
   if (img.source === "commons") return img.thumb_url || "";
-  return `api/img?src=${img.source}&id=${img.id}&r=${img.source === "noirlab" ? "screen" : "thumb300y"}`;
+  if (img.source === "licensed") return img.file || "";
+  return `api/img?src=${img.source}&id=${img.id}&r=${img.source === "noirlab" ? "screen" : big ? "thumb700x" : "thumb300y"}`;
+}
+/** <img> that never disappears: on error it tries the observatory's other size, then
+    becomes a drawn placeholder with the object's name. */
+function photo(img, { big = false, cls = "" } = {}) {
+  const wrap = h("span", { class: "ph " + cls });
+  if (!img) return wrap;
+  const el = h("img", { src: thumbURL(img, big), alt: "", loading: "lazy", decoding: "async" });
+  el.addEventListener("load", () => wrap.classList.add("loaded"));
+  el.addEventListener("error", () => {
+    const official = !["own", "licensed", "commons"].includes(img.source);
+    if (official && !el.dataset.fb) { el.dataset.fb = "1"; el.src = `api/img?src=${img.source}&id=${img.id}&r=screen`; return; }
+    el.remove();
+    wrap.classList.add("none");
+    wrap.append(h("span", { class: "ph-fallback" }, h("b", {}, img.object || img.title || "Picture"),
+      h("small", {}, "Preview unavailable · prints at full size")));
+  });
+  wrap.append(el);
+  return wrap;
+}
+/** How sharply a picture prints on the current page and paper. */
+function printFit(img, slot) {
+  if (!IC || !img || !img.pixels || !img.pixels[0]) return null;
+  const ppi = IC.quickPpi(img.pixels[0], img.pixels[1], img.fit, state.format, effPaper(), slot);
+  return { ppi, level: ppi >= 180 ? "pass" : ppi >= 120 ? "warn" : "fail",
+    label: ppi >= 240 ? "Print sharp" : ppi >= 180 ? "Sharp" : ppi >= 120 ? "Soft up close" : "Too small" };
+}
+/** Re-run the full checks on an uploaded photo for the current format and paper. */
+function ownVerdict(img, slot) {
+  const u = img && uploads.get(img.id);
+  if (!IC || !u || !u.info) return null;
+  return IC.evaluate(Object.assign({}, u.info, ownCtx(slot, img.fit), { tones: u.tones[slotKind(slot)] || u.info.tones }));
+}
+const slotKind = (slot) => `${state.format}-${effPaper()}-${slot === "cover" ? "cover" : "month"}`;
+function ownCtx(slot, fit) {
+  return { fit: fit || "cover", format: state.format, paper: effPaper(), slot, dpi: state.dpi,
+    paperName: (effPaper() === "ISO" ? { wall: "A3", desk: "A5" } : { wall: "Tabloid", desk: "half-letter" })[state.format] };
 }
 function renderTiles() {
   const ol = $("#tiles");
@@ -409,70 +484,172 @@ function renderTiles() {
   const d = defaults();
   for (const s of SLOTS) {
     const img = imgInfo(state.images[s]);
-    ol.append(h("li", { class: state.images[s] !== d[s] ? "changed" : null },
-      h("button", { class: "tile-btn", type: "button", onclick: () => openPicker(s), "aria-label": `${slotName(s)}: ${img?.object || "no picture"}. Change picture` },
-        h("span", { class: "ph" }, h("img", { src: thumbURL(img), alt: "", loading: "lazy", onerror: thumbFallback(img) }),
-          img?.fit === "band" ? h("span", { class: "tag" }, "panorama") : null),
-        h("span", { class: "cap" }, h("span", { class: "m" }, slotName(s)), h("span", { class: "o" }, img?.object || "—")))));
+    const v = img && img.source === "own" ? ownVerdict(img, s) : null;
+    const bad = v && v.some((x) => x.level === "fail");
+    const fit = img && img.source !== "own" ? printFit(img, s) : null;
+    const flag = bad ? "fail" : fit && fit.level !== "pass" ? fit.level : "";
+    ol.append(h("li", { class: [state.images[s] !== d[s] ? "changed" : "", flag ? "flag-" + flag : ""].join(" ").trim() || null },
+      h("button", { class: "tile-btn", type: "button", onclick: () => openPicker(s),
+        "aria-label": `${slotName(s)}: ${img?.object || "no picture"}${bad ? " (doesn't fit this page)" : ""}. Change picture` },
+        photo(img),
+        h("span", { class: "cap" }, h("span", { class: "m" }, slotName(s)), h("span", { class: "o" }, img?.object || "—")),
+        flag ? h("span", { class: "flag", title: bad ? "This photo doesn't fit the current page" : fit.label }, "!") : null)));
   }
-}
-function thumbFallback(img) {
-  return (e) => {
-    const el = e.target;
-    if (!img || ["own", "licensed", "commons"].includes(img.source) || el.dataset.fb) { el.style.visibility = "hidden"; return; }
-    el.dataset.fb = "1";
-    el.src = `api/img?src=${img.source}&id=${img.id}&r=screen`;
-  };
 }
 
 /* ------------------------------------------------------------ picker */
-let pickSlot = "01";
+const pk = { slot: "01", view: "lib", filter: "suggested", src: "", q: "", focus: null };
+const SRC_FILTERS = [["", "Every source"], ["eso", "ESO"], ["esahubble", "Hubble"], ["esawebb", "Webb"], ["noirlab", "NOIRLab"], ["commons", "Commons"]];
 function openPicker(slot) {
-  pickSlot = slot;
-  $("#pk-title").textContent = `Choose the ${slot === "cover" ? "cover" : slotName(slot)} picture`;
-  showTab("suggested");
-  $("#picker").showModal();
+  pk.slot = slot; pk.view = "lib"; pk.filter = "suggested"; pk.q = ""; pk.src = "";
+  pk.focus = state.images[slot];
+  renderPicker();
+  const d = $("#picker");
+  if (!d.open) d.showModal();
+  requestAnimationFrame(() => $("#pk-rail .on")?.scrollIntoView({ block: "nearest", inline: "center" }));
 }
-$$("#picker .tabs button").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
 $("#picker").addEventListener("click", (e) => { if (e.target.id === "picker") $("#picker").close(); });
-function choose(id) {
-  state.images[pickSlot] = id;
-  $("#picker").close();
+$("#picker").addEventListener("close", () => { renderTiles(); });
+function choose(id, { close = false } = {}) {
+  state.images[pk.slot] = id;
+  pk.focus = id;
   renderTiles();
-  if (pickSlot !== "cover") $("#pv-page").value = `month:${+pickSlot}`; else $("#pv-page").value = "cover";
+  $("#pv-page").value = pk.slot === "cover" ? "cover" : `month:${+pk.slot}`;
   changed();
+  if (close) { $("#picker").close(); return; }
+  renderPicker({ keepScroll: true });
 }
-function card(img) {
-  const on = state.images[pickSlot] === img.id;
-  const px = img.pixels && img.pixels[0] ? `${img.pixels[0].toLocaleString()} × ${img.pixels[1].toLocaleString()} px` : "";
-  return h("button", { class: "card" + (on ? " on" : ""), type: "button", onclick: () => choose(img.id), "aria-pressed": on },
-    h("span", { class: "ph" }, h("img", { src: thumbURL(img), alt: "", loading: "lazy", onerror: thumbFallback(img) })),
-    h("span", { class: "cap" },
-      h("span", { class: "t" }, img.object || img.title),
-      h("span", { class: "s" }, [SRC_NAME[img.source] || img.source, img.source === "own" ? "" : img.id, img.fit === "band" ? "panorama" : ""].filter(Boolean).join(", ")),
-      px ? h("span", { class: "c" }, px) : null,
-      img.note ? h("span", { class: "c" }, img.note) : null,
-      h("span", { class: "c" }, img.credit)));
-}
-function showTab(tab) {
-  $$("#picker .tabs button").forEach((b) => b.setAttribute("aria-selected", b.dataset.tab === tab));
+function renderPicker({ keepScroll = false } = {}) {
+  const grid = $("#pk-body .pk-grid");
+  const top = keepScroll && grid ? grid.scrollTop : 0;
+  $("#pk-title").textContent = pk.slot === "cover" ? "Cover picture" : `${slotName(pk.slot)} picture`;
+  $("#pk-sub").textContent = pk.slot === "cover"
+    ? "Fills the whole front page."
+    : `Fills the ${state.format === "wall" ? "top half of the page" : "left panel"}; it is also the month's target object.`;
+  // month rail
+  const rail = $("#pk-rail");
+  rail.innerHTML = "";
+  for (const s of SLOTS) {
+    const img = imgInfo(state.images[s]);
+    rail.append(h("button", { type: "button", class: s === pk.slot ? "on" : null, "aria-current": s === pk.slot ? "true" : null,
+      onclick: () => { pk.slot = s; pk.focus = state.images[s]; pk.filter = "suggested"; renderPicker(); } },
+      photo(img), h("span", {}, s === "cover" ? "Cover" : MONTHS[+s - 1].slice(0, 3))));
+  }
+  $$("#pk-views button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.view === pk.view)));
   const body = $("#pk-body");
   body.innerHTML = "";
-  if (tab === "suggested") {
-    const s = LIB.slots.find((x) => x.slot === pickSlot);
-    body.append(h("p", { class: "hint", style: "margin:0 0 14px" }, pickSlot === "cover"
-      ? "Pictures that work as a full-page cover."
-      : `Objects well placed in ${slotName(pickSlot)} evenings. Any picture can go on any page — see All pictures.`));
-    body.append(h("div", { class: "grid" }, s.options.map((id) => card(LIB.images[id]))));
-  } else if (tab === "all") {
-    const all = [...Object.values(LIB.images), ...Object.values(state.extra)];
-    body.append(h("div", { class: "grid" }, all.map(card)));
-  } else if (tab === "id") {
-    idTab(body);
-  } else {
-    ownTab(body);
-  }
+  body.dataset.view = pk.view;
+  if (pk.view === "lib") libView(body, top);
+  else if (pk.view === "id") idTab(body);
+  else ownTab(body);
 }
+$$("#pk-views button").forEach((b) => b.addEventListener("click", () => { pk.view = b.dataset.view; renderPicker(); }));
+$("#pk-done").addEventListener("click", () => $("#picker").close());
+
+function libList() {
+  const all = [...Object.values(LIB.images), ...Object.values(state.extra).filter((m) => !LIB.images[m.id])];
+  let list;
+  if (pk.filter === "suggested" && !pk.q) {
+    const s = LIB.slots.find((x) => x.slot === pk.slot);
+    list = (s ? s.options : []).map((id) => LIB.images[id]).filter(Boolean);
+    const cur = imgInfo(state.images[pk.slot]);
+    if (cur && !list.includes(cur)) list.unshift(cur);
+  } else {
+    const q = pk.q.toLowerCase();
+    list = all.filter((m) => (!pk.src || m.source === pk.src)
+      && (!q || [m.object, m.title, m.catalog, m.constellation, m.kind, m.id, m.credit].join(" ").toLowerCase().includes(q)));
+  }
+  return list;
+}
+function libView(body, top) {
+  const count = Object.keys(LIB.images).length + Object.values(state.extra).filter((m) => !LIB.images[m.id]).length;
+  const search = h("input", { type: "search", placeholder: "Search: Orion, M31, nebula, Webb…", value: pk.q, autocomplete: "off", spellcheck: "false", "aria-label": "Search pictures" });
+  let t;
+  search.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => { pk.q = search.value.trim(); if (pk.q) pk.filter = "all"; drawGrid(); syncChips(); }, 120); });
+  const chip = (key, label) => h("button", { type: "button", class: "chip", "data-k": key, onclick: () => { pk.filter = key; if (key === "suggested") { pk.q = ""; search.value = ""; pk.src = ""; } drawGrid(); syncChips(); } }, label);
+  const srcSel = h("select", { "aria-label": "Source", onchange: (e) => { pk.src = e.target.value; pk.filter = "all"; drawGrid(); syncChips(); } },
+    SRC_FILTERS.map(([v, l]) => h("option", { value: v, selected: v === pk.src ? true : null }, l)));
+  const chips = h("div", { class: "chips" }, chip("suggested", pk.slot === "cover" ? "Suggested for the cover" : `Suggested for ${slotName(pk.slot)}`), chip("all", `All pictures · ${count}`));
+  const syncChips = () => $$(".chip", chips).forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.k === pk.filter)));
+  const grid = h("div", { class: "pk-grid", role: "listbox", "aria-label": "Pictures" });
+  const aside = h("aside", { class: "pk-detail", "aria-live": "polite" });
+  const drawGrid = () => {
+    const list = libList();
+    grid.innerHTML = "";
+    if (!list.length) grid.append(h("p", { class: "pk-empty" }, "Nothing matches. Try another word, or look it up by ID."));
+    list.forEach((m, i) => grid.append(card(m, i)));
+    drawDetail(aside, imgInfo(pk.focus) || list[0]);
+  };
+  syncChips();
+  body.append(h("div", { class: "pk-tools" }, chips, h("div", { class: "pk-find" }, search, srcSel)),
+    h("div", { class: "pk-main" }, grid, aside));
+  drawGrid();
+  grid.scrollTop = top || 0;
+  grid.addEventListener("mouseleave", () => drawDetail(aside, imgInfo(pk.focus) || imgInfo(state.images[pk.slot])));
+  grid.addEventListener("keydown", (e) => {
+    const cards = $$(".card", grid), i = cards.indexOf(document.activeElement);
+    if (i < 0) return;
+    const cols = Math.max(1, Math.round(grid.clientWidth / cards[0].offsetWidth));
+    const to = { ArrowRight: i + 1, ArrowLeft: i - 1, ArrowDown: i + cols, ArrowUp: i - cols }[e.key];
+    if (to != null && cards[to]) { e.preventDefault(); cards[to].focus(); }
+  });
+}
+function card(img, i) {
+  const on = state.images[pk.slot] === img.id;
+  const fit = img.source === "own" ? null : printFit(img, pk.slot);
+  const own = img.source === "own" ? ownVerdict(img, pk.slot) : null;
+  const ownBad = own && own.some((x) => x.level === "fail");
+  const b = h("button", { class: "card" + (on ? " on" : ""), type: "button", role: "option", "aria-selected": String(on), style: `--i:${Math.min(i, 14)}`,
+    onclick: () => { if (ownBad) { pk.focus = img.id; drawDetail($(".pk-detail"), img); return; } choose(img.id); },
+    onmouseenter: () => drawDetail($(".pk-detail"), img), onfocus: () => drawDetail($(".pk-detail"), img) },
+    photo(img),
+    h("span", { class: "badges" },
+      h("span", { class: "src" }, SRC_NAME[img.source] || img.source),
+      img.fit === "band" ? h("span", { class: "src" }, "Panorama") : null),
+    h("span", { class: "cap" }, h("span", { class: "t" }, img.object || img.title),
+      h("span", { class: "s" }, [img.kind, img.constellation].filter(Boolean).join(" · ") || img.title || ""),
+      fit ? h("span", { class: `q q-${fit.level}`, title: `${Math.round(fit.ppi)} ppi on this page` }, fit.label) : null,
+      ownBad ? h("span", { class: "q q-fail" }, "Doesn't fit this page") : null),
+    h("span", { class: "tick", "aria-hidden": "true", html: '<svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' }));
+  return b;
+}
+function drawDetail(aside, img) {
+  if (!aside) return;
+  aside.innerHTML = "";
+  if (!img) return;
+  const on = state.images[pk.slot] === img.id;
+  const fit = img.source === "own" ? null : printFit(img, pk.slot);
+  const px = img.pixels && img.pixels[0] ? `${img.pixels[0].toLocaleString()} × ${img.pixels[1].toLocaleString()} px` : "";
+  const facts = [["Type", img.kind], ["Catalogue", img.catalog], ["Constellation", img.constellation], ["Distance", img.distance],
+    ["Size", px], ["Licence", img.license || (img.source === "own" ? "" : "CC BY 4.0")]].filter(([, v]) => v);
+  const v = img.source === "own" ? ownVerdict(img, pk.slot) : null;
+  const bad = v && v.some((x) => x.level === "fail");
+  aside.append(
+    photo(img, { big: true, cls: "pk-hero" }),
+    h("div", { class: "pk-info" },
+      h("p", { class: "eyebrow" }, SRC_NAME[img.source] || img.source, img.source === "own" ? "" : ` · ${img.id}`),
+      h("h4", {}, img.object || img.title),
+      img.title && img.title !== img.object ? h("p", { class: "dim" }, img.title) : null,
+      fit ? h("p", { class: `fitline q-${fit.level}` }, h("i"), `${fit.label}: ${Math.round(fit.ppi)} ppi on ${paperLabel()}`) : null,
+      v ? checklist(v, true) : null,
+      h("dl", {}, facts.flatMap(([k, val]) => [h("dt", {}, k), h("dd", {}, val)])),
+      h("p", { class: "credit" }, h("span", {}, "Credit "), img.credit || "—"),
+      img.note ? h("p", { class: "note" }, img.note) : null,
+      img.page ? h("a", { class: "src-link", href: img.page, target: "_blank", rel: "noopener" }, "Open the original page") : null),
+    h("div", { class: "pk-act" },
+      bad ? h("p", { class: "warn" }, "This photo can't be used on this page as it is.")
+        : on ? h("button", { class: "btn ghost wide", type: "button", onclick: () => $("#picker").close() }, "Selected · Done")
+          : h("button", { class: "btn primary wide", type: "button", onclick: () => choose(img.id, { close: true }) }, `Use for ${pk.slot === "cover" ? "the cover" : slotName(pk.slot)}`)));
+}
+const paperLabel = () => `${(effPaper() === "ISO" ? { wall: "A3", desk: "A5" } : { wall: "Tabloid", desk: "half-letter" })[state.format]} ${state.format === "wall" ? "wall" : "desk"} ${pk.slot === "cover" ? "cover" : "pages"}`;
+function checklist(items, compact = false) {
+  const shown = compact ? items.filter((x) => x.level !== "pass" || ["ppi", "light", "crop"].includes(x.id)) : items;
+  return h("ul", { class: "checks" + (compact ? " compact" : "") }, shown.map((x) => h("li", { class: x.level },
+    h("i", { "aria-hidden": "true" }), h("div", {}, h("b", {}, x.title), x.detail && !compact ? h("span", {}, x.detail) : null,
+      h("span", { class: "sr" }, ` (${x.level === "pass" ? "OK" : x.level === "warn" ? "warning" : "problem"})`)))));
+}
+
+/* ------------------------------------------------------------ look up by ID */
 async function lookup(text, src) {
   const q = new URLSearchParams({ id: text.trim() });
   if (src) q.set("src", src);
@@ -484,10 +661,10 @@ async function lookup(text, src) {
 }
 const FIELDS = [["object", "Object", true], ["catalog", "Catalogue number"], ["kind", "Type of object"],
   ["constellation", "Constellation"], ["distance", "Distance"], ["ra", "RA (hh:mm:ss)"], ["dec", "Dec (±dd:mm:ss)"]];
-function metaForm(m, { own = false } = {}) {
+function metaForm(m, { own = false, onBand = null } = {}) {
   const wrap = h("div", { class: "form2" });
   const credit = h("textarea", { rows: 2, required: true }, m.credit || "");
-  wrap.append(h("label", { class: "field full" }, h("span", {}, own ? "Credit — printed under the photo (required)" : "Credit — printed in full under the picture"), credit));
+  wrap.append(h("label", { class: "field full" }, h("span", {}, own ? "Credit printed under the photo (required)" : "Credit, printed in full under the picture"), credit));
   const inputs = { credit };
   for (const [k, label, req] of FIELDS) {
     const i = h("input", { value: m[k] || "", required: req ? true : null, autocomplete: "off" });
@@ -496,9 +673,10 @@ function metaForm(m, { own = false } = {}) {
   }
   const band = h("input", { type: "checkbox" });
   band.checked = m.fit === "band";
-  wrap.append(h("label", { class: "check full" }, band, h("span", {}, "Panorama: show it as a full-width band instead of filling the photo area")));
+  if (onBand) band.addEventListener("change", () => onBand(band.checked));
+  wrap.append(h("label", { class: "check full" }, band, h("span", {}, "Panorama: show it whole as a full-width band instead of filling the photo area")));
   inputs.band = band;
-  return { el: wrap, read: () => {
+  return { el: wrap, band, read: () => {
     const o = {};
     for (const [k] of FIELDS) o[k] = inputs[k].value.trim();
     o.credit = credit.value.trim();
@@ -507,9 +685,9 @@ function metaForm(m, { own = false } = {}) {
   } };
 }
 function idTab(body) {
-  const input = h("input", { placeholder: "eso1733a, weic2326a, or a Wikimedia Commons / Wikipedia image link", autocomplete: "off", spellcheck: "false" });
-  const src = h("select", {}, h("option", { value: "" }, "Site: guess"), h("option", { value: "eso" }, "ESO"), h("option", { value: "esahubble" }, "ESA/Hubble"), h("option", { value: "esawebb" }, "ESA/Webb"));
-  const go = h("button", { class: "btn small", type: "submit" }, "Look up");
+  const input = h("input", { placeholder: "eso1733a, weic2326a, heic0506a, or a Wikimedia Commons link", autocomplete: "off", spellcheck: "false" });
+  const src = h("select", {}, h("option", { value: "" }, "Guess from the ID"), h("option", { value: "eso" }, "ESO"), h("option", { value: "esahubble" }, "ESA/Hubble"), h("option", { value: "esawebb" }, "ESA/Webb"));
+  const go = h("button", { class: "btn primary", type: "submit" }, "Look up");
   const out = h("div");
   const form = h("form", { class: "lookup", onsubmit: async (e) => {
     e.preventDefault();
@@ -525,81 +703,171 @@ function idTab(body) {
       out.innerHTML = "";
       out.append(h("p", { class: "warn" }, err.message));
     } finally { go.disabled = false; }
-  } }, h("label", { class: "field" }, h("span", {}, "Image ID or link"), input), h("label", { class: "field", style: "flex:0 0 auto" }, h("span", {}, "From"), src), go);
-  body.append(h("p", { class: "hint", style: "margin:0 0 14px" }, "Find a picture on ",
-    h("a", { href: "https://www.eso.org/public/images/", target: "_blank", rel: "noopener" }, "eso.org/public/images"), " or ",
-    h("a", { href: "https://esahubble.org/images/", target: "_blank", rel: "noopener" }, "esahubble.org/images"), " or ",
-    h("a", { href: "https://esawebb.org/images/", target: "_blank", rel: "noopener" }, "esawebb.org/images"),
-    ", or a photo on ", h("a", { href: "https://commons.wikimedia.org/wiki/Category:Astronomical_images", target: "_blank", rel: "noopener" }, "Wikimedia Commons"),
-    ", and paste its ID or link. Commons photos are checked for a licence that allows reuse with credit, and for print resolution."), form, out);
+  } }, h("label", { class: "field" }, h("span", {}, "Image ID or link"), input), h("label", { class: "field narrow" }, h("span", {}, "From"), src), go);
+  body.append(h("div", { class: "pk-pane" }, h("p", { class: "lead" }, "Use any picture from ",
+    h("a", { href: "https://www.eso.org/public/images/", target: "_blank", rel: "noopener" }, "ESO"), ", ",
+    h("a", { href: "https://esahubble.org/images/", target: "_blank", rel: "noopener" }, "ESA/Hubble"), ", ",
+    h("a", { href: "https://esawebb.org/images/", target: "_blank", rel: "noopener" }, "ESA/Webb"), " or ",
+    h("a", { href: "https://commons.wikimedia.org/wiki/Category:Astronomical_images", target: "_blank", rel: "noopener" }, "Wikimedia Commons"),
+    ". Paste its ID or link. The credit, size and licence are read from its page; Commons photos must allow reuse with credit and be at least 4000 px."), form, out));
   setTimeout(() => input.focus(), 30);
 }
 function foundCard(out, m) {
   const f = metaForm(m);
   const ok = h("input", { type: "checkbox" });
-  const use = h("button", { class: "btn primary", type: "button", disabled: true }, `Use for ${slotName(pickSlot)}`);
+  const use = h("button", { class: "btn primary", type: "button", disabled: true }, `Use for ${slotName(pk.slot)}`);
   ok.addEventListener("change", () => (use.disabled = !ok.checked));
   use.addEventListener("click", () => {
     const v = f.read();
     if (!v.credit || !v.object) { alert("The credit and object name are needed."); return; }
     const meta = Object.assign({}, m, v, { license: m.license || "CC BY 4.0" });
     state.extra[meta.id] = meta;
-    choose(meta.id);
+    choose(meta.id, { close: true });
   });
+  const fit = printFit(m, pk.slot);
   const px = m.pixels && m.pixels[0] ? `${m.pixels[0].toLocaleString()} × ${m.pixels[1].toLocaleString()} px` : "size unknown";
-  const small = m.pixels && m.pixels[0] && Math.max(...m.pixels) < 2500;
   out.append(h("div", { class: "found" },
-    h("div", {}, h("img", { src: m.source === "commons" ? m.thumb_url : `api/img?src=${m.source}&id=${m.id}&r=thumb700x`, alt: m.title, onerror: thumbFallback(m) }),
-      h("p", { class: "fine", style: "margin-top:8px" }, `${SRC_NAME[m.source]}${m.source === "commons" ? "" : " " + m.id}, ${px}, ${m.license || "CC BY 4.0"}. `, h("a", { href: m.page, target: "_blank", rel: "noopener" }, "Open its page")),
+    h("div", {}, photo(Object.assign({}, m, { thumb: m.source === "commons" ? m.thumb_url : null }), { big: true, cls: "pk-hero" }),
+      h("p", { class: "fine" }, `${SRC_NAME[m.source]}${m.source === "commons" ? "" : " " + m.id} · ${px} · ${m.license || "CC BY 4.0"} · `, h("a", { href: m.page, target: "_blank", rel: "noopener" }, "page")),
+      fit ? h("p", { class: `fitline q-${fit.level}` }, h("i"), `${fit.label}: ${Math.round(fit.ppi)} ppi on ${paperLabel()}`) : null,
       m.note ? h("p", { class: "fine" }, m.note) : null),
-    h("div", {}, h("h3", { style: "font-size:24px;margin-bottom:10px" }, m.title),
+    h("div", {}, h("h4", { class: "found-t" }, m.title),
       m.warning ? h("p", { class: "warn" }, m.warning) : null,
-      small ? h("p", { class: "warn" }, "This picture is small; it will look soft when printed large.") : null,
+      fit && fit.level === "fail" ? h("p", { class: "warn" }, "This picture is too small for this page; it would print blurry.") : null,
       f.el,
       h("label", { class: "check" }, ok, h("span", {}, "I've checked the credit against the image's page.")),
       use)));
 }
+
+/* ------------------------------------------------------------ your own photo */
+async function analyse(file, slot, fit) {
+  const head = new Uint8Array(await file.slice(0, 1 << 20).arrayBuffer());
+  const type = IC.sniff(head);
+  const info = Object.assign({ type, bytes: file.size }, IC.header(head, type));
+  if (!["jpeg", "png", "webp"].includes(type)) return { info, tones: {} };
+  // Decode through an <img> (the browser applies EXIF rotation), then work on a ~1600 px copy.
+  const url = URL.createObjectURL(file);
+  const el = new Image();
+  el.src = url;
+  try { await el.decode(); } catch (e) { URL.revokeObjectURL(url); info.w = 0; info.h = 0; return { info, tones: {} }; }
+  info.w = el.naturalWidth; info.h = el.naturalHeight;
+  const k = Math.min(1, 1600 / Math.max(info.w, info.h));
+  const cv = document.createElement("canvas");
+  cv.width = Math.max(1, Math.round(info.w * k)); cv.height = Math.max(1, Math.round(info.h * k));
+  const cx = cv.getContext("2d", { willReadFrequently: true });
+  cx.imageSmoothingQuality = "medium";
+  cx.drawImage(el, 0, 0, cv.width, cv.height);
+  const rgba = cx.getImageData(0, 0, cv.width, cv.height).data;
+  // brightness under the text, for each page shape the photo may land on
+  const tones = {};
+  for (const format of ["wall", "desk"]) for (const paper of ["ISO", "US"]) for (const kind of ["cover", "month"]) {
+    const z = IC.zone(format, paper, kind === "cover" ? "cover" : "01");
+    const k2 = IC.keep(cv.width, cv.height, z), a = cv.width / cv.height, b = z.w / z.h;
+    const crop = fit === "band" ? [1, 1] : a > b ? [k2, 1] : [1, k2];
+    tones[`${format}-${paper}-${kind}`] = IC.tones(rgba, cv.width, cv.height, z.text, crop);
+  }
+  info.tones = tones[`${state.format}-${effPaper()}-${slot === "cover" ? "cover" : "month"}`];
+  // fine detail from a full-resolution 512 px square at the centre
+  try {
+    const s = Math.min(512, info.w, info.h);
+    const c2 = document.createElement("canvas");
+    c2.width = c2.height = s;
+    const x2 = c2.getContext("2d", { willReadFrequently: true });
+    x2.drawImage(el, Math.floor((info.w - s) / 2), Math.floor((info.h - s) / 2), s, s, 0, 0, s, s);
+    const d = x2.getImageData(0, 0, s, s).data, g = new Float32Array(s * s);
+    for (let i = 0; i < s * s; i++) g[i] = 0.2126 * d[4 * i] + 0.7152 * d[4 * i + 1] + 0.0722 * d[4 * i + 2];
+    info.detail = IC.detail(g, s);
+  } catch (e) { info.detail = null; }
+  URL.revokeObjectURL(url);
+  return { info, tones };
+}
+function framePreview(url, slot, fit) {
+  const z = IC.zone(state.format, effPaper(), slot);
+  const [x0, y0, x1, y1] = z.text;
+  return h("figure", { class: "frame" + (fit === "band" ? " band" : ""), style: `aspect-ratio:${z.w.toFixed(3)} / ${z.h.toFixed(3)}` },
+    h("img", { src: url, alt: "How your photo fills the page" }),
+    h("span", { class: "textzone", style: `left:${x0 * 100}%;top:${y0 * 100}%;width:${(x1 - x0) * 100}%;height:${(y1 - y0) * 100}%` }, h("span", {}, "Month name, dates and events print here")),
+    h("figcaption", {}, `How it fills the ${z.label} (${paperLabel()})`));
+}
 function ownTab(body) {
-  const file = h("input", { type: "file", accept: "image/jpeg,image/png,image/tiff,image/webp" });
-  const pv = h("div");
+  const file = h("input", { type: "file", accept: "image/jpeg,image/png,image/webp", class: "sr" });
+  const drop = h("label", { class: "drop" }, file,
+    h("span", { class: "drop-ico", "aria-hidden": "true", html: '<svg viewBox="0 0 24 24"><path d="M12 16V4m0 0-4.5 4.5M12 4l4.5 4.5M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' }),
+    h("b", {}, "Drop your astrophoto here, or choose a file"),
+    h("span", {}, "JPEG, PNG or WebP. It's checked and read on this device, never uploaded."));
+  const result = h("div", { class: "own-result" });
+  const pane = h("div", { class: "pk-pane own" },
+    h("p", { class: "lead" }, `Before it can go on ${pk.slot === "cover" ? "the cover" : `the ${slotName(pk.slot)} page`}, your photo is checked for print size, shape, brightness behind the text, sharpness, blown highlights and file format, for the ${paperLabel()} you've chosen.`),
+    drop, result);
+  body.append(pane);
+  ["dragenter", "dragover"].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach((t) => drop.addEventListener(t, () => drop.classList.remove("over")));
+  drop.addEventListener("drop", (e) => { e.preventDefault(); if (e.dataTransfer.files[0]) handle(e.dataTransfer.files[0]); });
+  file.addEventListener("change", () => file.files[0] && handle(file.files[0]));
+
   let picked = null;
-  const f = metaForm({});
-  const ok = h("input", { type: "checkbox" });
-  const lic = h("input", { placeholder: "e.g. © 2026 Your Name — leave empty if not needed", autocomplete: "off" });
-  const use = h("button", { class: "btn primary", type: "button" }, `Use for ${slotName(pickSlot)}`);
-  const err = h("p", { class: "warn", hidden: true });
-  file.addEventListener("change", async () => {
-    pv.innerHTML = "";
-    picked = file.files[0] || null;
-    if (!picked) return;
-    if (picked.size > 120e6) { err.hidden = false; err.textContent = "That file is over 120 MB; save a smaller JPEG first."; picked = null; return; }
-    const url = URL.createObjectURL(picked);
-    const img = h("img", { src: url, alt: "Your photo", style: "border-radius:10px;max-height:220px;width:auto" });
-    pv.append(img);
-    img.onload = () => {
-      picked.w = img.naturalWidth; picked.h = img.naturalHeight;
-      if (picked.w / picked.h > 2.6) f.el.querySelector('input[type="checkbox"]').checked = true;
-      pv.append(h("p", { class: "fine" }, `${picked.w.toLocaleString()} × ${picked.h.toLocaleString()} px`
-        + (Math.max(picked.w, picked.h) < 2500 ? " — small for print; it may look soft." : "")));
-    };
-    picked.url = url;
-  });
-  use.addEventListener("click", async () => {
-    const v = f.read();
-    err.hidden = true;
-    const miss = !picked ? "Choose a photo first." : !v.credit ? "Add the credit line." : !v.object ? "Name the object." : !ok.checked ? "Confirm you may use the photo." : "";
-    if (miss) { err.hidden = false; err.textContent = miss; return; }
-    const ext = (picked.name.split(".").pop() || "jpg").toLowerCase().replace("jpeg", "jpg");
-    const id = `own-${Date.now().toString(36)}`;
-    uploads.set(id, { bytes: await picked.arrayBuffer(), ext, url: picked.url });
-    state.extra[id] = Object.assign({ id, source: "own", title: v.object, license: lic.value.trim(), pixels: [picked.w || 0, picked.h || 0],
-      focus: null, zoom: 1, note: "", renditions: [] }, v);
-    choose(id);
-  });
-  body.append(h("p", { class: "hint", style: "margin:0 0 14px" }, "Your photo is read on this device and never uploaded. It's kept until you close this tab."),
-    h("label", { class: "field" }, h("span", {}, "Photo (JPEG, PNG, TIFF or WebP)"), file), pv, f.el,
-    h("label", { class: "field" }, h("span", {}, "Licence or copyright line (optional)"), lic),
-    h("label", { class: "check" }, ok, h("span", {}, "I took this photo, or I have permission to print it.")), err, use);
+  async function handle(f) {
+    drop.classList.add("compact");
+    $("b", drop).textContent = "Drop another photo, or choose a file";
+    result.innerHTML = "";
+    result.append(h("div", { class: "checking" }, h("span", { class: "spin" }), "Checking your photo…"));
+    if (picked && picked.url) URL.revokeObjectURL(picked.url);
+    picked = { file: f, url: URL.createObjectURL(f), fit: "cover" };
+    try {
+      const a = await analyse(f, pk.slot, "cover");
+      Object.assign(picked, a);
+      if (a.info.w / a.info.h > 2.6) { picked.fit = "band"; picked = Object.assign(picked, await analyse(f, pk.slot, "band")); }
+    } catch (e) {
+      picked.info = { type: "unknown", bytes: f.size, w: 0, h: 0 };
+      picked.tones = {};
+    }
+    draw();
+  }
+  function draw() {
+    result.innerHTML = "";
+    const items = IC.evaluate(Object.assign({}, picked.info, ownCtx(pk.slot, picked.fit)));
+    const fails = items.filter((x) => x.level === "fail"), warns = items.filter((x) => x.level === "warn");
+    const verdict = fails.length ? ["fail", "This photo can't be used here", `Fix ${fails.length === 1 ? "the problem" : "the problems"} below and try again, or choose another photo.`]
+      : warns.length ? ["warn", "Usable, with a few cautions", "Read the notes below and check the preview before printing."]
+        : ["pass", "Ready for print", "It meets every check for this page."];
+    const f = metaForm({ fit: picked.fit }, { own: true, onBand: async (on) => { picked.fit = on ? "band" : "cover"; Object.assign(picked, await analyse(picked.file, pk.slot, picked.fit)); draw(); } });
+    const ok = h("input", { type: "checkbox" });
+    const lic = h("input", { placeholder: "e.g. © 2026 Your Name (optional)", autocomplete: "off" });
+    const ack = warns.length && !fails.length ? h("input", { type: "checkbox" }) : null;
+    const err = h("p", { class: "warn", hidden: true });
+    const use = h("button", { class: "btn primary", type: "button", disabled: fails.length ? true : null }, `Use for ${pk.slot === "cover" ? "the cover" : slotName(pk.slot)}`);
+    use.addEventListener("click", async () => {
+      const v = f.read();
+      const miss = !v.credit ? "Add the credit line." : !v.object ? "Name the object in the photo." : !ok.checked ? "Confirm you may print this photo."
+        : ack && !ack.checked ? "Tick that you've read the cautions." : "";
+      if (miss) { err.hidden = false; err.textContent = miss; return; }
+      use.disabled = true;
+      let bytes = await picked.file.arrayBuffer(), ext = picked.info.type === "png" ? "png" : "jpg";
+      if (picked.info.type === "webp") {  // the print engine takes JPEG and PNG
+        const el = new Image(); el.src = picked.url; await el.decode();
+        const c = document.createElement("canvas"); c.width = el.naturalWidth; c.height = el.naturalHeight;
+        c.getContext("2d").drawImage(el, 0, 0);
+        bytes = await (await new Promise((r) => c.toBlob(r, "image/jpeg", 0.95))).arrayBuffer();
+        ext = "jpg";
+      }
+      const id = `own-${Date.now().toString(36)}`;
+      uploads.set(id, { bytes, ext, url: picked.url, info: picked.info, tones: picked.tones });
+      picked = null; // keep the object URL alive for the tile
+      state.extra[id] = Object.assign({ id, source: "own", title: v.object, license: lic.value.trim(), pixels: [0, 0],
+        focus: null, zoom: 1, note: "", renditions: [] }, v);
+      state.extra[id].pixels = [uploads.get(id).info.w, uploads.get(id).info.h];
+      choose(id, { close: true });
+    });
+    result.append(h("div", { class: `verdict v-${verdict[0]}` }, h("i"), h("div", {}, h("b", {}, verdict[1]), h("span", {}, verdict[2]))),
+      h("div", { class: "own-grid" },
+        h("div", {}, picked.info.w ? framePreview(picked.url, pk.slot, picked.fit) : null),
+        checklist(items)),
+      fails.length ? null : h("div", { class: "own-form" }, f.el,
+        h("label", { class: "field" }, h("span", {}, "Licence or copyright line (optional)"), lic),
+        h("label", { class: "check" }, ok, h("span", {}, "I took this photo, or I have permission to print it.")),
+        ack ? h("label", { class: "check" }, ack, h("span", {}, "I've read the cautions and checked how it looks.")) : null,
+        err, use));
+  }
 }
 
 /* ------------------------------------------------------------ worker */
@@ -738,6 +1006,16 @@ function showWarnings(list) {
 let lastUrl = null;
 async function buildAll() {
   const btn = $("#build");
+  const bad = SLOTS.filter((s) => {
+    const i = imgInfo(state.images[s]);
+    const v = i && i.source === "own" ? ownVerdict(i, s) : null;
+    return v && v.some((x) => x.level === "fail");
+  });
+  if (bad.length) {
+    $("#warn").hidden = false;
+    $("#warn").textContent = `Your photo for ${bad.map(slotName).join(", ")} doesn't fit the current format or paper. Open it to see why, or choose another picture.`;
+    return;
+  }
   btn.disabled = true;
   $("#result").hidden = true;
   $("#progress").hidden = false;

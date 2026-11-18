@@ -15,7 +15,9 @@
 <link rel="stylesheet" href="style.css">
 <script>try { if (localStorage.getItem("dse27-red") === "1") document.documentElement.dataset.theme = "red"; } catch (e) {}</script>
 <script src="config.js"></script>
+<script src="imgcheck.js" defer></script>
 <script src="app.js" defer></script>
+<script src="motion.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#downloads">Skip to the downloads</a>
@@ -41,6 +43,7 @@
 
 <main>
   <section class="hero" aria-labelledby="hero-title">
+    <canvas class="stars" aria-hidden="true"></canvas>
     <div class="glow" aria-hidden="true"></div>
     <p class="pill reveal">2027 edition<span></span>63 cities<span></span>free to print</p>
     <h1 id="hero-title" class="reveal">The night sky of 2027, on&nbsp;your&nbsp;wall.</h1>
@@ -55,6 +58,10 @@
       <img class="pg pg2" src="sample/wall-04.jpg" alt="" width="782" height="1100">
       <img class="pg pg3" src="sample/wall-11.jpg" alt="" width="782" height="1100">
     </div>
+  </section>
+
+  <section class="ticker" id="ticker-wrap" aria-label="Highlights of 2027 from your city" hidden>
+    <div class="track" id="ticker"></div>
   </section>
 
   <section id="downloads" class="section" aria-labelledby="dl-title">
@@ -237,13 +244,16 @@
 </footer>
 
 <dialog id="picker" aria-labelledby="pk-title">
-  <form method="dialog" class="pk-head"><h3 id="pk-title">Choose a picture</h3><button class="x" value="close" aria-label="Close">×</button></form>
-  <div class="tabs" role="tablist">
-    <button role="tab" type="button" data-tab="suggested" aria-selected="true">Suggested</button>
-    <button role="tab" type="button" data-tab="all" aria-selected="false">All pictures</button>
-    <button role="tab" type="button" data-tab="id" aria-selected="false">ESO / ESA-Hubble ID</button>
-    <button role="tab" type="button" data-tab="own" aria-selected="false">Your photo</button>
+  <div class="pk-top">
+    <div class="pk-heading"><h3 id="pk-title">Choose a picture</h3><p id="pk-sub"></p></div>
+    <div class="pk-views" id="pk-views" role="tablist" aria-label="Where the picture comes from">
+      <button role="tab" type="button" data-view="lib" aria-selected="true">Collection</button>
+      <button role="tab" type="button" data-view="id" aria-selected="false">Find by ID or link</button>
+      <button role="tab" type="button" data-view="own" aria-selected="false">Upload your photo</button>
+    </div>
+    <button class="btn primary sm" type="button" id="pk-done">Done</button>
   </div>
+  <nav class="pk-rail" id="pk-rail" aria-label="Page"></nav>
   <div class="pk-body" id="pk-body"></div>
 </dialog>
 

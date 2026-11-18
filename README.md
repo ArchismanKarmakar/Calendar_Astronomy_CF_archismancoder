@@ -17,6 +17,7 @@ site/        the website (static files, served as-is), incl. terms.html and down
 functions/   the two small API handlers (/api/img and /api/meta), wired up by src/index.js
 src/         the Worker entry point (routes /api/*, serves the site)
 lib/         code shared by the handlers
+tools/       cf_geoblock.py: block countries on every domain, Worker and Pages project
 kit/         the Python calendar kit (build PDFs locally; also generates site/ data)
 ```
 
@@ -60,6 +61,34 @@ kit/         the Python calendar kit (build PDFs locally; also generates site/ d
    domain → `calendar.archismancoder.com` (or `astro.archismancoder.com`). Because
    archismancoder.com is already on Cloudflare DNS, the record and certificate are created
    for you.
+
+## Block countries on every site
+
+The Worker only answers on `calendar.archismancoder.com` (`workers_dev = false`,
+`preview_urls = false` in `wrangler.toml`), so your zone's WAF rules always apply to it, and
+its API routes also refuse the countries in `BLOCKED_COUNTRIES`.
+
+Don't use Cloudflare Access for this: Access is a login gate, and a policy built on
+countries denies everyone who doesn't match an Allow rule, so the whole site goes dark.
+Use a WAF custom rule (Security → Security rules → Custom rules, action Block):
+
+    (ip.src.country in {"PK" "TR" "CN" "BD" "AZ" "KP"})
+
+A zone rule covers every hostname on that domain, including Pages and Workers custom
+domains. It does not cover `*.workers.dev` or `*.pages.dev`, and the free plan has no
+account-wide WAF, so each domain needs its own rule. `tools/cf_geoblock.py` does all of
+it in one go, a dry run first:
+
+    export CF_API_TOKEN=...    # permissions are listed at the top of the script
+    python3 tools/cf_geoblock.py --countries PK,TR,CN,BD,AZ,KP
+    python3 tools/cf_geoblock.py --countries PK,TR,CN,BD,AZ,KP --apply --pages-redirect
+
+## Picture thumbnails
+
+`make_site.py` writes a thumbnail for every picture in the library to `site/thumbs/`
+(from `photos/options/`, or the sheet's `photos/thumbs/`). Without one, the picker asks
+the observatory through `/api/img`, which is slower and can fail, so run
+`fetch_images.py` and `make_site.py` on your machine before every push.
 
 ## Ready-made calendars
 
