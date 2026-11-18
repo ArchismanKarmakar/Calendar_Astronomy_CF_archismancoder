@@ -4,6 +4,7 @@ name = "calendar-astronomy-cf-archismancoder"
 main = "src/index.js"
 compatibility_date = "2025-06-01"
 
+
 # Served only on your own domain, so the zone's WAF rules (country blocks etc.) always apply.
 # The *.workers.dev address and per-version preview URLs skip those rules, so they are off.
 routes = [{ pattern = "calendar.archismancoder.com", custom_domain = true }]
