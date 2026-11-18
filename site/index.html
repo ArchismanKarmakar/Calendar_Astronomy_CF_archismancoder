@@ -45,8 +45,8 @@
 <main>
   <section class="hero" aria-labelledby="hero-title">
     <canvas class="stars" aria-hidden="true"></canvas>
-    <div class="glow" aria-hidden="true"></div>
-    <p class="pill reveal">2027 edition<span></span>63 cities<span></span>free to print</p>
+    <div class="glow" aria-hidden="true"><i></i><i></i><i></i></div>
+    <p class="pill reveal"><b aria-hidden="true"></b>2027 edition<span></span>63 cities<span></span>free to print</p>
     <h1 id="hero-title" class="reveal">The night sky of 2027, on&nbsp;your&nbsp;wall.</h1>
     <p class="lede reveal">A wall and desk calendar for astronomers and astrophotographers. Eclipses, meteor showers, comets and dark-sky nights are computed for your city, under photographs from ESO, ESA/Hubble, ESA/Webb and NOIRLab.</p>
     <div class="actions reveal">
@@ -54,10 +54,14 @@
       <a class="btn ghost" href="#make">Make your own</a>
     </div>
     <ul class="stats reveal" id="stats" aria-live="polite"></ul>
-    <div class="fan reveal" aria-hidden="true">
-      <img class="pg pg1" src="sample/wall-01.jpg" alt="" width="782" height="1100">
-      <img class="pg pg2" src="sample/wall-04.jpg" alt="" width="782" height="1100">
-      <img class="pg pg3" src="sample/wall-11.jpg" alt="" width="782" height="1100">
+    <div class="fan" aria-hidden="true">
+      <img class="pg" style="--i:-3;--a:3" src="sample/wall-09.jpg" alt="" width="782" height="1100" loading="lazy">
+      <img class="pg" style="--i:-2;--a:2" src="sample/wall-03.jpg" alt="" width="782" height="1100">
+      <img class="pg" style="--i:-1;--a:1" src="sample/wall-01.jpg" alt="" width="782" height="1100">
+      <img class="pg" style="--i:0;--a:0" src="sample/wall-04.jpg" alt="" width="782" height="1100">
+      <img class="pg" style="--i:1;--a:1" src="sample/wall-11.jpg" alt="" width="782" height="1100">
+      <img class="pg" style="--i:2;--a:2" src="sample/wall-13.jpg" alt="" width="782" height="1100">
+      <img class="pg" style="--i:3;--a:3" src="sample/wall-07.jpg" alt="" width="782" height="1100" loading="lazy">
     </div>
   </section>
 
@@ -74,15 +78,19 @@
     <p class="after">Not your city? <a href="#make">Make your own</a> for any of 63 cities, with your own pictures and holidays.</p>
   </section>
 
-  <section id="inside" class="section" aria-labelledby="inside-title">
+  <section id="inside" class="section band" aria-labelledby="inside-title">
     <div class="head row">
       <div>
         <h2 id="inside-title">Look inside</h2>
         <p>Fifteen pages: a cover, a guide to the symbols, twelve months and the year at a glance. Shown: the <span id="sample-ed">India</span> edition.</p>
       </div>
-      <div class="seg" role="radiogroup" aria-label="Sample format">
-        <label><input type="radio" name="sfmt" value="wall" checked><span>Wall</span></label>
-        <label><input type="radio" name="sfmt" value="desk"><span>Desk</span></label>
+      <div class="strip-ctl">
+        <div class="seg" role="radiogroup" aria-label="Sample format">
+          <label><input type="radio" name="sfmt" value="wall" checked><span>Wall</span></label>
+          <label><input type="radio" name="sfmt" value="desk"><span>Desk</span></label>
+        </div>
+        <button class="arrow" type="button" id="strip-prev" aria-label="Previous pages" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="arrow" type="button" id="strip-next" aria-label="Next pages"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
     <div class="strip" id="strip" tabindex="0" aria-label="Sample pages, scroll sideways"></div>
@@ -209,7 +217,7 @@
     </div>
   </section>
 
-  <section id="support" class="section" aria-labelledby="support-title">
+  <section id="support" class="section band" aria-labelledby="support-title">
     <div class="head">
       <h2 id="support-title">Keep it free</h2>
       <p>Everything here is free: no ads, no account, nothing for sale. If you'd like to say thanks, an optional donation helps cover hosting. It doesn't buy anything extra.</p>

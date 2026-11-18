@@ -20,6 +20,7 @@
       o.setAttribute("aria-hidden", "true");
       const s = document.createElement("span");
       s.textContent = w;
+      if (/2027/.test(w)) o.classList.add("g");  // the year shimmers
       s.style.animationDelay = `${0.08 + i * 0.07}s`;
       o.append(s);
       h1.append(o, i < words.length - 1 ? " " : "");
@@ -138,6 +139,12 @@
 
   /* ---------------------------------------------------------- fan of pages */
   const fan = document.querySelector(".fan");
+  if (fan) {  // dealt out from one stack, then it follows scroll and pointer briskly
+    const deal = () => { fan.classList.add("dealt"); setTimeout(() => fan.classList.add("settled"), 1700); };
+    if (still.matches) { fan.classList.add("dealt", "settled"); }
+    else setTimeout(() => requestAnimationFrame(deal), 380);
+  }
+  const heroIn = document.querySelector(".hero");
   const nav = document.querySelector(".nav-wrap");
   let ticking = false;
   function onScroll() {
@@ -148,6 +155,8 @@
       const r = fan.getBoundingClientRect();
       const p = Math.max(0, Math.min(1, 1 - r.top / innerHeight));
       fan.style.setProperty("--spread", p.toFixed(3));
+      // the headline lifts away as the stage takes over
+      if (heroIn) heroIn.style.setProperty("--lift", Math.max(0, Math.min(1, y / (innerHeight * 0.8))).toFixed(3));
     }
   }
   addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
@@ -203,6 +212,21 @@
       const p = (innerHeight - r.top) / (innerHeight + r.height);
       strip.style.setProperty("--drift", `${(0.5 - p) * 60}px`);
     }, { passive: true });
+  }
+
+  /* ---------------------------------------------------------- look inside: arrow buttons */
+  const sp = document.querySelector("#strip"), prev = document.querySelector("#strip-prev"), next = document.querySelector("#strip-next");
+  if (sp && prev && next) {
+    const sync = () => {
+      prev.disabled = sp.scrollLeft < 8;
+      next.disabled = sp.scrollLeft + sp.clientWidth >= sp.scrollWidth - 8;
+    };
+    const go = (d) => sp.scrollBy({ left: d * sp.clientWidth * 0.8, behavior: still.matches ? "auto" : "smooth" });
+    prev.addEventListener("click", () => go(-1));
+    next.addEventListener("click", () => go(1));
+    sp.addEventListener("scroll", sync, { passive: true });
+    new ResizeObserver(sync).observe(sp);
+    new MutationObserver(() => { sp.scrollLeft = 0; sync(); }).observe(sp, { childList: true });
   }
 
   /* ---------------------------------------------------------- scroll reveals */
