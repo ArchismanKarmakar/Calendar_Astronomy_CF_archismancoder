@@ -1,0 +1,64 @@
+# Downloads every calendar picture and commits the website copies to this repo:
+#   site/library/<id>.jpg   print copy (300 dpi on an A3/Tabloid cover, at most 24 MB)
+#   site/previews/<id>.jpg  1600 px
+#   site/thumbs/<id>.jpg    640 px
+#   site/data/library.json  the site's picture list
+# Runs when the image list changes, or by hand: Actions -> Pictures -> Run workflow.
+# Pictures already stored are skipped, so later runs only fetch new ones.
+name: Pictures
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Download every picture again"
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - kit/data/image_manifest.json
+      - kit/data/custom_images.json
+      - .github/workflows/pictures.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pictures
+  cancel-in-progress: false
+
+jobs:
+  pictures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Pillow
+        run: pip install "pillow>=10"
+
+      - name: Download pictures and make the website copies
+        working-directory: kit
+        run: |
+          python fetch_images.py --drop-originals --workers 3 ${{ inputs.force && '--force' || '' }} || echo "::warning::some pictures could not be downloaded; see the log"
+
+      - name: Commit the pictures
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for p in site/library site/previews site/thumbs site/data/library.json site/data/licences kit/data/commons_resolved.json kit/data/licences; do
+            [ -e "$p" ] && git add -A "$p"
+          done
+          if git diff --cached --quiet; then
+            echo "Nothing new to commit."
+          else
+            git commit -m "Pictures: print copies, previews and thumbnails"
+            git push
+          fi
+          du -sh site/library site/previews site/thumbs 2>/dev/null || true

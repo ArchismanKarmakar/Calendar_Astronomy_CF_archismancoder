@@ -131,8 +131,29 @@ def selection(man=None):
     return out
 
 
+SITE_DIR = os.path.abspath(os.path.join(HERE, "..", "site"))
+
+
+def original_path(opt):
+    """Where fetch_images.py saves the full-size download (kept out of git: can be >100 MB)."""
+    return os.path.join(OPTIONS_DIR, f"{opt.get('id', '_')}.jpg")
+
+
+def site_copy_path(opt_or_id):
+    """The print copy committed with the website (site/library/<id>.jpg, at most 24 MB)."""
+    iid = opt_or_id if isinstance(opt_or_id, str) else opt_or_id["id"]
+    return os.path.join(SITE_DIR, "library", f"{iid}.jpg")
+
+
 def option_path(opt):
-    if opt.get("file"):  # your own photo, stored where you put it
+    """The image file to print from: your own photo, else the full-size download, else the
+    print copy kept in the repo (so a fresh clone never needs to download anything)."""
+    if opt.get("file"):  # a file named explicitly: your own photo, or the one the website's engine wrote
         p = opt["file"] if os.path.isabs(opt["file"]) else os.path.join(HERE, opt["file"])
-        return p
-    return os.path.join(OPTIONS_DIR, f"{opt['id']}.jpg")
+        if os.path.exists(p) or opt.get("source") in ("own", None):
+            return p
+    orig = original_path(opt)
+    if os.path.exists(orig):
+        return orig
+    copy = site_copy_path(opt)
+    return copy if os.path.exists(copy) else orig

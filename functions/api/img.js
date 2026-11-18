@@ -49,7 +49,9 @@ export async function onRequestGet({ request, env }) {
   }
   if (!up) return json({ error: `Could not reach ${SOURCES[src].name}.` }, 502);
   if (!up.ok) {
-    return json({ error: `${SOURCES[src].name} has no ${r} file for ${id} (HTTP ${up.status}).` },
+    const why = up.status === 404 ? `${SOURCES[src].name} has no ${r} file for ${id}`
+      : `${SOURCES[src].name}'s server refused this site's request for ${id}`;
+    return json({ error: `${why} (HTTP ${up.status}). This picture isn't stored on this site yet: run GitHub Actions → Pictures.` },
       up.status === 404 ? 404 : 502);
   }
   const type = up.headers.get("content-type") || "";

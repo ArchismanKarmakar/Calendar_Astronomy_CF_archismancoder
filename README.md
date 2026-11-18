@@ -87,29 +87,38 @@ it in one go, a dry run first:
 
 ## Pictures live in this repo
 
-Every picture is served from your own site, so building a calendar never depends on ESO,
-ESA or NOIRLab being reachable. ESO's CDN, for one, refuses Cloudflare's servers (the
-"HTTP 525" errors). `make_site.py` writes three files per picture from the originals
-that `fetch_images.py` downloaded:
+Every picture is stored in this repo and served by your own site. Building a calendar never
+asks ESO, ESA or NOIRLab for anything (ESO's servers refuse requests from Cloudflare, which is
+the "HTTP 525" error). Three files per picture:
 
 | Folder | Size | Used for |
 |---|---|---|
-| `site/library/<id>.jpg` | enough for 300 dpi on an A3 or Tabloid cover with bleed (e.g. 7590×5175 px), at most 24 MB | printing |
+| `site/library/<id>.jpg` | 300 dpi on an A3 or Tabloid cover with bleed (e.g. 7590×5175 px), at most 24 MB | printing |
 | `site/previews/<id>.jpg` | 1600 px | the live page in Make your own, the picker |
 | `site/thumbs/<id>.jpg` | 640 px | picker grid and filmstrip |
 
+**Easiest: let GitHub do it.** Push the repo, then on GitHub open **Actions → Pictures → Run
+workflow**. It downloads every picture, makes the three files, commits them, and Cloudflare
+redeploys. It runs again by itself whenever `kit/data/image_manifest.json` changes, and only
+fetches pictures that aren't stored yet. If the commit step fails with "permission denied",
+set **Settings → Actions → General → Workflow permissions** to "Read and write".
+
+**Or on your computer** (`build.py --fetch` does the same):
+
 ```bash
 cd kit
-python fetch_images.py            # downloads every original (several GB, kept out of git in kit/photos/)
-python make_site.py               # writes the three sizes and site/data/library.json
-git add site && git commit -m "pictures" && git push
+python fetch_images.py            # downloads, then writes site/library, previews, thumbs, library.json
+git add site kit/data && git commit -m "pictures" && git push
 ```
 
-Expect roughly 0.5 to 1 GB in `site/library/`. That's fine for GitHub (100 MB per file,
-and every file here is under 24 MB) and for Cloudflare (25 MiB per file). To keep the repo
-smaller, run `python make_site.py --print-dpi 240` after deleting `site/library/`. A picture
-with no copy here falls back to the observatory: previews straight from its CDN, print files
-through `/api/img`.
+The full-size downloads stay in `kit/photos/options/` (not in git; some are over 100 MB).
+Once a picture's print copy is in the repo, it's never downloaded again, and `build.py` prints
+from that copy if the full-size file isn't on your machine. `--drop-originals` deletes the
+full-size files after copying.
+
+Expect 0.5 to 1 GB in `site/library/`: fine for GitHub (every file is far under its 100 MB
+limit) and for Cloudflare (25 MiB per file). For a smaller repo, delete `site/library/` and run
+`python make_site.py --print-dpi 240`.
 
 ## How the default pictures are chosen
 

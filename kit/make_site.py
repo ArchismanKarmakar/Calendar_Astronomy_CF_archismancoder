@@ -105,6 +105,37 @@ def fresh(dst, src):
     return os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src)
 
 
+def site_copies(iid, src, zoom=1.0, quiet=False):
+    """Write the print copy, preview and thumbnail for one picture from `src` (the full-size
+    download, or the print copy itself when that's all there is). Skips files already newer."""
+    from PIL import Image
+    Image.MAX_IMAGE_PIXELS = None
+    out, prv, tmb = (os.path.join(SITE, d, f"{iid}.jpg") for d in ("library", "previews", "thumbs"))
+    for d in (out, prv, tmb):
+        os.makedirs(os.path.dirname(d), exist_ok=True)
+    same = os.path.abspath(src) == os.path.abspath(out)
+    if (same or fresh(out, src)) and fresh(prv, src) and fresh(tmb, src):
+        return out
+    with Image.open(src) as im:
+        size = print_size(im.width, im.height, zoom)
+        if im.format == "JPEG" and not same:
+            im.draft("RGB", size)  # decode at about the size needed: much faster and lighter
+        im = im.convert("RGB")
+        if not same and not fresh(out, src):
+            big = im if size == im.size else im.resize(size, Image.LANCZOS)
+            q = save_under(big, out + ".tmp.jpg", PRINT_MAX_BYTES)
+            os.replace(out + ".tmp.jpg", out)
+            if not quiet:
+                print(f"  site   {iid:16} print {big.width}x{big.height} q{q} {os.path.getsize(out) / 1e6:5.1f} MB")
+        if not fresh(prv, src):
+            p_ = im.copy(); p_.thumbnail((1600, 1600), Image.LANCZOS)
+            p_.save(prv, quality=82, optimize=True, progressive=True)
+        if not fresh(tmb, src):
+            t_ = im.copy(); t_.thumbnail((640, 640), Image.LANCZOS)
+            t_.save(tmb, quality=80, optimize=True, progressive=True)
+    return out
+
+
 def library():
     from PIL import Image
     Image.MAX_IMAGE_PIXELS = None
@@ -124,23 +155,8 @@ def library():
         e["renditions"] = list(o.get("downloads", {}))
         src = util.option_path(o)
         if os.path.exists(src):
-            out = os.path.join(SITE, "library", f"{iid}.jpg")
-            prv = os.path.join(SITE, "previews", f"{iid}.jpg")
-            tmb = os.path.join(SITE, "thumbs", f"{iid}.jpg")
-            if not (fresh(out, src) and fresh(prv, src) and fresh(tmb, src)):
-                with Image.open(src) as im:
-                    im = im.convert("RGB")
-                    if not fresh(out, src):
-                        size = print_size(im.width, im.height, o.get("zoom") or 1.0)
-                        big = im if size == im.size else im.resize(size, Image.LANCZOS)
-                        q = save_under(big, out, PRINT_MAX_BYTES)
-                        print(f"  print  {iid:16} {big.width}x{big.height}  q{q}  {os.path.getsize(out) / 1e6:5.1f} MB")
-                    if not fresh(prv, src):
-                        p = im.copy(); p.thumbnail((1600, 1600), Image.LANCZOS)
-                        p.save(prv, quality=82, optimize=True, progressive=True)
-                    if not fresh(tmb, src):
-                        t = im.copy(); t.thumbnail((640, 640), Image.LANCZOS)
-                        t.save(tmb, quality=80, optimize=True, progressive=True)
+            site_copies(iid, src, o.get("zoom") or 1.0)
+            out, prv, tmb = (os.path.join(SITE, d, f"{iid}.jpg") for d in ("library", "previews", "thumbs"))
             with Image.open(out) as pim:
                 e["orig_pixels"] = e.get("pixels")
                 e["pixels"] = list(pim.size)  # what actually prints
@@ -161,6 +177,10 @@ def library():
                 e["thumb"] = f"thumbs/{iid}.jpg"
                 have += 1
         images[iid] = e
+    lic = util.GFDL_TEXT  # the GNU FDL text fetch_images.py saved, served for the licence page
+    if os.path.exists(lic):
+        os.makedirs(os.path.join(SITE, "data", "licences"), exist_ok=True)
+        shutil.copyfile(lic, os.path.join(SITE, "data", "licences", os.path.basename(lic)))
     # drop files of pictures that left the library
     for d in ("library", "previews", "thumbs"):
         for f in glob.glob(os.path.join(SITE, d, "*.jpg")):
@@ -191,8 +211,9 @@ def library():
     print(f"  library: {len(images)} images; {printed} with print copies in site/ ({total / 1e6:.0f} MB), "
           f"{have} with thumbnails")
     if no_print:
-        print(f"  !! {len(no_print)} images have no downloaded original, so the site falls back to the observatory "
-              f"for them (run fetch_images.py, then make_site.py): {', '.join(no_print)}")
+        print(f"  !! {len(no_print)} pictures are not stored in site/library yet, so the site would have to fetch them "
+              f"from the observatory (ESO refuses that: HTTP 525). Run fetch_images.py, or GitHub Actions -> "
+              f"Pictures: {', '.join(no_print)}")
 
 
 def fonts():

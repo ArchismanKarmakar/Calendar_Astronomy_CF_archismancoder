@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 """
-Download the calendar's image options (ESO, ESA/Hubble, ESA/Webb, NOIRLab) into
-photos/options/<id>.jpg. Every option is CC BY 4.0; credits are printed on the pages
-from data/image_manifest.json.
+Download the calendar's pictures (ESO, ESA/Hubble, ESA/Webb, NOIRLab, Wikimedia Commons)
+and keep them with the website:
 
-    python fetch_images.py                    # every option for every slot (28 images)
+  photos/options/<id>.jpg   the full-size download (not in git: some are over 100 MB)
+  ../site/library/<id>.jpg  print copy, 300 dpi on an A3/Tabloid cover, at most 24 MB  -> commit
+  ../site/previews/<id>.jpg 1600 px                                                   -> commit
+  ../site/thumbs/<id>.jpg   640 px                                                    -> commit
+  ../site/data/library.json the site's picture list                                   -> commit
+
+A picture whose print copy is already in the repo is never downloaded again, and the
+kit prints from that copy when the full-size file isn't here.
+
+    python fetch_images.py                    # every picture in the library
     python fetch_images.py --selected-only    # just the ones currently selected
     python fetch_images.py --only 05 08       # every option for some slots
-    python fetch_images.py --prefer large     # biggest JPEG instead of the ~4K publication JPEG
-    python fetch_images.py --max-mb 400       # allow very large downloads (default 250 MB)
+    python fetch_images.py --force            # download again even if a copy exists
+    python fetch_images.py --drop-originals   # delete full-size files after copying (saves disk)
 
-Each image is tried rendition by rendition (only those its page offers), streamed
-to a .part file, checked to decode as an image, then moved into place.
+GitHub can do all of this for you: Actions -> "Pictures" -> Run workflow (see README).
 """
 import argparse
 import os
@@ -79,9 +86,9 @@ def download(url, dest, label, total):
 
 
 def fetch_option(opt, prefer, max_mb, force):
-    dest = util.option_path(opt)
-    if os.path.exists(dest) and not force:
-        return opt, "present", None
+    dest = util.original_path(opt)
+    if not force and (os.path.exists(dest) or os.path.exists(util.site_copy_path(opt))):
+        return opt, "present", None  # already downloaded, or its print copy is already in the repo
     order = ["large", "publicationjpg", "screen"] if prefer == "large" else ["publicationjpg", "large", "screen"]
     errors = []
     tries = []
@@ -166,6 +173,10 @@ def main(argv=None):
     ap.add_argument("--max-mb", type=float, default=250)
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--no-site", action="store_true",
+                    help="don't write the website copies (site/library, previews, thumbs)")
+    ap.add_argument("--drop-originals", action="store_true",
+                    help="delete each full-size download once its website copies exist (saves disk; used on GitHub)")
     a = ap.parse_args(argv)
     os.makedirs(util.OPTIONS_DIR, exist_ok=True)
     # adopt images saved by the first kit version (photos/<slot>.jpg)
@@ -198,6 +209,9 @@ def main(argv=None):
                 todo.append(o)
     print(f"{len(todo)} images to check ({'selected only' if a.selected_only else 'all options'})")
     failed = []
+    site = None
+    if not a.no_site:
+        import make_site as site  # the website copies are made here, one picture at a time
     with ThreadPoolExecutor(max_workers=a.workers) as ex:
         futs = [ex.submit(fetch_option, o, a.prefer, a.max_mb, a.force) for o in todo]
         for f in as_completed(futs):
@@ -205,8 +219,21 @@ def main(argv=None):
             if status is None:
                 failed.append((opt, errs))
                 say(f"  FAIL {opt['id']:9} " + "; ".join(errs))
-            elif status != "present":
+                continue
+            if status != "present":
                 say(f"  done {opt['id']:9} {status}" + (f"  (note: {'; '.join(errs)})" if errs else ""))
+            orig = util.original_path(opt)
+            if site and os.path.exists(orig):
+                try:
+                    site.site_copies(opt["id"], orig, opt.get("zoom") or 1.0)
+                except Exception as e:
+                    say(f"  !!   {opt['id']:9} website copy failed: {e}")
+                    continue
+                if a.drop_originals:
+                    os.remove(orig)
+    if site:
+        print("\n== website copies (site/library, site/previews, site/thumbs) and site/data/library.json")
+        site.library()
     sel_missing = [o for o in sel.values() if not os.path.exists(util.option_path(o))]
     print(f"\n{len(todo) - len(failed)}/{len(todo)} images present.")
     os.makedirs(util.OPTIONS_DIR, exist_ok=True)
