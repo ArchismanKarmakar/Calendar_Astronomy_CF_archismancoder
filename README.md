@@ -21,7 +21,7 @@ tools/       cf_geoblock.py: block countries on every domain, Worker and Pages p
 kit/         the Python calendar kit (build PDFs locally; also generates site/ data)
 ```
 
-## Publish on Cloudflare Pages
+## Publish on Cloudflare
 
 1. **Refresh the site data with your real images** (the copy in this repo was made
    from preview images):
@@ -50,7 +50,9 @@ kit/         the Python calendar kit (build PDFs locally; also generates site/ d
 
 4. **Cloudflare dashboard → Workers & Pages → Create → Import a repository**, pick the
    repo, then:
-   - Build command: *(leave empty)*
+   - Build command: **`npm run build`** (or leave it empty). It only downloads the GNU FDL
+     text into `site/data/licences/`, which the calendar needs when a GFDL photo such as
+     Luc Viatour's Andromeda is used. Without that file the site leaves GFDL photos out.
    - Deploy command: **`npx wrangler deploy`** (the default; `wrangler.toml` already points
      at `site/` for the pages and `src/index.js` for `/api/img` and `/api/meta`)
    - Root directory: *(leave empty — the repo root)*
@@ -83,12 +85,31 @@ it in one go, a dry run first:
     python3 tools/cf_geoblock.py --countries PK,TR,CN,BD,AZ,KP
     python3 tools/cf_geoblock.py --countries PK,TR,CN,BD,AZ,KP --apply --pages-redirect
 
-## Picture thumbnails
+## Picture previews
 
-`make_site.py` writes a thumbnail for every picture in the library to `site/thumbs/`
-(from `photos/options/`, or the sheet's `photos/thumbs/`). Without one, the picker asks
-the observatory through `/api/img`, which is slower and can fail, so run
-`fetch_images.py` and `make_site.py` on your machine before every push.
+The picker loads each preview, in this order, from `site/thumbs/` (written by
+`make_site.py` from your downloaded images), then straight from the observatory's own CDN
+(cdn.eso.org, cdn.esahubble.org, cdn.esawebb.org, noirlab.edu), then through `/api/img`.
+So previews show even if the site's API is down. The full-size images for a PDF still come
+through `/api/img`, because the browser needs to read their pixels and those CDNs don't
+allow cross-site reads. If building fails, open
+`https://calendar.archismancoder.com/api/img?src=eso&id=eso2320a&r=thumb300y`, which
+shows the error.
+
+## Wikimedia Commons photos (Luc Viatour's Andromeda and Triangulum)
+
+`wm-hamois-m31` (Andromeda, default for November) and `wm-hamois-m33` (Triangulum) are
+amateur photographs on Wikimedia Commons by Luc Viatour (https://Lucnix.be). Their licence
+is checked in two places: by `fetch_images.py` on your machine, and live in each visitor's
+browser through the Commons API (Commons allows that), so they appear on the site even if
+you don't run the kit. Accepted: public domain, CC0, CC BY, CC BY-SA and the GNU FDL.
+Refused: ND and NC.
+
+Luc Viatour's photos are under the GNU Free Documentation License, which asks for the full
+licence text to go with every copy. So when one is used, the calendar's "How to read" page
+names the photo and its licence, and the PDF ends with a page carrying the whole GFDL 1.3
+text. `fetch_images.py` downloads that text for the kit, and `npm run build` fetches it for
+the site. Check each file's Commons page yourself before you publish.
 
 ## Ready-made calendars
 

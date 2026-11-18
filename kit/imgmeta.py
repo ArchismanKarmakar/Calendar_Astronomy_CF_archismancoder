@@ -168,9 +168,10 @@ def fetch(text, source=None):
 
 # ------------------------------------------------------------------ Wikimedia Commons
 # Photos by amateur and professional astrophotographers that their authors have put
-# under a free licence. Only licences that allow printing and selling are accepted:
-# public domain / CC0, CC BY, CC BY-SA (ShareAlike: the adapted page must carry the
-# same licence). NC (non-commercial), ND (no derivatives) and GFDL-only are refused.
+# under a free licence. Accepted: public domain / CC0, CC BY, CC BY-SA (ShareAlike: the
+# adapted page must carry the same licence) and the GNU FDL (the calendar then reproduces
+# the full licence text on its last page). Refused: ND (no derivatives, and a calendar page
+# is an adaptation) and NC (the site takes donations, so non-commercial terms are unclear).
 COMMONS_API = "https://commons.wikimedia.org/w/api.php"
 UA = "DeepSpaceExplorer2027-calendar/1.0 (https://archismancoder.com; calendar image import)"
 MIN_PIXELS = 4000  # long side; smaller files print soft on A3
@@ -204,8 +205,8 @@ def licence_verdict(short):
         return True, False, "public domain"
     if "CC BY" in u or u.startswith("ATTRIBUTION") or "COPYRIGHTED FREE USE" in u:
         return True, "SA" in u.split() or "BY SA" in u, "free licence"
-    if "GFDL" in u:
-        return False, False, "GFDL only (requires printing the full licence text)"
+    if "GFDL" in u:  # allowed: the calendar then carries the full GFDL text on its last page
+        return True, False, "GFDL (the calendar adds the licence text page)"
     return False, False, f"licence not recognised: {short}"
 
 
@@ -232,7 +233,9 @@ def _commons_meta(page, slot_hint=""):
         license_url=get("LicenseUrl"), page=ii.get("descriptionurl", ""), pixels=[w, h],
         downloads={"large": [u for u in (big, ii.get("url")) if u]}, file_url=big, thumb_url=ii.get("thumburl"),
         object="", catalog="", kind="", constellation="", distance="", ra="", dec="", fit="cover",
-        focus=None, zoom=1.0, note=("CC BY-SA: pages using it are shared under the same licence" if sa else ""),
+        focus=None, zoom=1.0, note=("CC BY-SA: pages using it are shared under the same licence" if sa else
+                                    "GNU FDL: the calendar adds the full licence text as its last page"
+                                    if "GFDL" in (short or "").upper() else ""),
         artist=artist,
     )
 

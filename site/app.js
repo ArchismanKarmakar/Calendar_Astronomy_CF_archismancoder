@@ -57,6 +57,7 @@ async function boot() {
     console.error(e);
     return;
   }
+  await checkCommons();
   [SAMPLE, HOLS, READY, FESTS] = await Promise.all([getJSON("sample/pages.json").catch(() => null),
     getJSON("data/holidays.json").catch(() => []), getJSON("data/downloads.json").catch(() => null),
     getJSON("data/festivals.json").catch(() => [])]);
@@ -75,12 +76,45 @@ async function boot() {
   $("#build-info").textContent = BUILD.built ? ` · data updated ${BUILD.built.slice(0, 10)}` : "";
 }
 
+/** Commons photos the kit hasn't licence-checked: check them now, in the browser. Ones that
+    fail (licence, size, or Commons unreachable within a few seconds) leave the library. */
+async function checkCommons() {
+  const todo = Object.values(LIB.images).filter((i) => i.pending && i.commons_title);
+  if (!todo.length || !window.Commons) return;
+  let res = null;
+  try {
+    res = await Promise.race([Commons.info(todo.map((i) => i.commons_title)),
+      new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 6000))]);
+  } catch (e) { console.warn("Commons check:", e.message); }
+  for (const i of todo) {
+    const r = res && res.get(i.commons_title);
+    if (r && r.ok) {
+      Object.assign(i, { pending: false, license: r.license, license_url: r.license_url, page: r.page || i.page,
+        pixels: r.pixels, file_url: r.file_url, thumb_url: r.thumb_url, credit: i.credit || r.credit,
+        gfdl: !!r.gfdl });
+    } else {
+      if (r) console.info(`${i.id} left out: ${r.reason}`);
+      delete LIB.images[i.id];
+    }
+  }
+  // GNU FDL photos need the licence text page; without the file on this site they're left out
+  const fdl = Object.values(LIB.images).filter((i) => /GFDL/i.test(i.license || ""));
+  if (fdl.length) {
+    const ok = await fetch("data/licences/fdl-1.3.txt", { method: "HEAD" }).then((r) => r.ok).catch(() => false);
+    if (!ok) {
+      console.info("GNU FDL text missing (run `npm run build` or fetch_images.py); left out:", fdl.map((i) => i.id).join(", "));
+      fdl.forEach((i) => delete LIB.images[i.id]);
+    }
+  }
+  for (const s of LIB.slots) s.options = s.options.filter((id) => LIB.images[id]);
+}
+
 /* ------------------------------------------------------------ state */
 function defaults() {
   const out = {};
   for (const s of LIB.slots) {
     const ds = [].concat(s.default);
-    out[s.slot] = ds.find((id) => LIB.images[id]) || s.options[0];
+    out[s.slot] = ds.find((id) => LIB.images[id] && !LIB.images[id].pending) || s.options[0];
   }
   return out;
 }
@@ -411,12 +445,24 @@ function bindForm() {
     $("#" + id).addEventListener("input", (e) => {
       state[id] = e.target.value.trim();
       clearTimeout(t);
-      t = setTimeout(() => changed(false, $("#pv-page").value === "cover"), 600);
+      t = setTimeout(() => changed(false, stage.slot === "cover"), 600);
     });
   }
   $("#reset-images").addEventListener("click", () => { state.images = defaults(); renderTiles(); changed(); });
-  $("#pv-go").addEventListener("click", () => preview());
-  $("#pv-page").addEventListener("change", () => { if (engineUsed) preview(); });
+  $("#pv-go").addEventListener("click", () => {
+    const box = $("#pv-box"), open = box.hidden;
+    box.hidden = !open;
+    $("#stage").classList.toggle("exact", open);
+    $("#pv-go").textContent = open ? "Back to quick view" : "Exact print preview";
+    if (open) {
+      $("#pv-page").value = stage.slot === "cover" ? "cover" : `month:${+stage.slot}`;
+      $("#pv-canvas").classList.remove("on");
+      $("#pv-empty").hidden = false;
+      $("#pv-empty").textContent = engineUsed ? "Drawing…" : "Loading the calendar engine (about 40 MB, once)…";
+      preview();
+    }
+  });
+  $("#stage-change").addEventListener("click", () => openPicker(stage.slot));
   $("#build").addEventListener("click", buildAll);
   $("#share").addEventListener("click", async () => {
     const url = shareURL();
@@ -428,30 +474,46 @@ function bindForm() {
 function changed(redraw = true, force = false) {
   syncForm();
   save();
+  renderStage();
   $("#result").hidden = true;
-  if (engineUsed && (redraw || force)) schedulePreview();
+  if (engineUsed && !$("#pv-box").hidden && (redraw || force)) schedulePreview();
 }
 
 /* ------------------------------------------------------------ tiles */
 const IC = window.ImgCheck;
-function thumbURL(img, big = false) {
-  if (!img) return "";
-  if (img.source === "own") return uploads.get(img.id)?.url || "";
-  if (img.thumb) return img.thumb;
-  if (img.source === "commons") return img.thumb_url || "";
-  if (img.source === "licensed") return img.file || "";
-  return `api/img?src=${img.source}&id=${img.id}&r=${img.source === "noirlab" ? "screen" : big ? "thumb700x" : "thumb300y"}`;
+/** The observatories' own small renditions, loaded straight from their CDNs (an <img> needs no
+    CORS), so previews never depend on this site's /api/img. */
+const CDN = {
+  eso: (id, r) => `https://cdn.eso.org/images/${r}/${id}.jpg`,
+  esahubble: (id, r) => `https://cdn.esahubble.org/archives/images/${r}/${id}.jpg`,
+  esawebb: (id, r) => `https://cdn.esawebb.org/archives/images/${r}/${id}.jpg`,
+  noirlab: (id, r) => `https://noirlab.edu/public/media/archives/images/${r}/${id}.jpg`,
+};
+/** Every place a preview can come from, best first. */
+function thumbURLs(img, big = false) {
+  if (!img) return [];
+  if (img.source === "own") return [uploads.get(img.id)?.url || ""];
+  if (img.source === "licensed") return [img.thumb, img.file].filter(Boolean);
+  if (img.source === "commons") {
+    return [img.thumb, img.thumb_url, img.commons_title && window.Commons && Commons.thumb(img.commons_title)].filter(Boolean);
+  }
+  const r = big ? "thumb700x" : "thumb300y";
+  const cdn = CDN[img.source];
+  return [img.thumb, cdn && cdn(img.id, r), cdn && cdn(img.id, "screen"),
+    `api/img?src=${img.source}&id=${img.id}&r=${img.source === "noirlab" ? "screen" : r}`].filter(Boolean);
 }
+const thumbURL = (img, big = false) => thumbURLs(img, big)[0] || "";
 /** <img> that never disappears: on error it tries the observatory's other size, then
     becomes a drawn placeholder with the object's name. */
 function photo(img, { big = false, cls = "" } = {}) {
   const wrap = h("span", { class: "ph " + cls });
   if (!img) return wrap;
-  const el = h("img", { src: thumbURL(img, big), alt: "", loading: "lazy", decoding: "async" });
+  const urls = thumbURLs(img, big);
+  let n = 0;
+  const el = h("img", { src: urls[0] || "", alt: "", loading: "lazy", decoding: "async", referrerpolicy: "no-referrer" });
   el.addEventListener("load", () => wrap.classList.add("loaded"));
   el.addEventListener("error", () => {
-    const official = !["own", "licensed", "commons"].includes(img.source);
-    if (official && !el.dataset.fb) { el.dataset.fb = "1"; el.src = `api/img?src=${img.source}&id=${img.id}&r=screen`; return; }
+    if (++n < urls.length) { el.src = urls[n]; return; }
     el.remove();
     wrap.classList.add("none");
     wrap.append(h("span", { class: "ph-fallback" }, h("b", {}, img.object || img.title || "Picture"),
@@ -482,19 +544,103 @@ function renderTiles() {
   const ol = $("#tiles");
   ol.innerHTML = "";
   const d = defaults();
+  renderStage();
   for (const s of SLOTS) {
     const img = imgInfo(state.images[s]);
     const v = img && img.source === "own" ? ownVerdict(img, s) : null;
     const bad = v && v.some((x) => x.level === "fail");
     const fit = img && img.source !== "own" ? printFit(img, s) : null;
     const flag = bad ? "fail" : fit && fit.level !== "pass" ? fit.level : "";
-    ol.append(h("li", { class: [state.images[s] !== d[s] ? "changed" : "", flag ? "flag-" + flag : ""].join(" ").trim() || null },
-      h("button", { class: "tile-btn", type: "button", onclick: () => openPicker(s),
-        "aria-label": `${slotName(s)}: ${img?.object || "no picture"}${bad ? " (doesn't fit this page)" : ""}. Change picture` },
+    ol.append(h("li", { class: [state.images[s] !== d[s] ? "changed" : "", flag ? "flag-" + flag : "", s === stage.slot ? "on" : ""].join(" ").trim() || null },
+      h("button", { class: "tile-btn", type: "button", "aria-current": s === stage.slot ? "true" : null,
+        onclick: () => (s === stage.slot ? openPicker(s) : showSlot(s)),
+        title: s === stage.slot ? "Change this picture" : `Show ${slotName(s)}`,
+        "aria-label": `${slotName(s)}: ${img?.object || "no picture"}${bad ? " (doesn't fit this page)" : ""}. ${s === stage.slot ? "Change picture" : "Show this page"}` },
         photo(img),
         h("span", { class: "cap" }, h("span", { class: "m" }, slotName(s)), h("span", { class: "o" }, img?.object || "—")),
         flag ? h("span", { class: "flag", title: bad ? "This photo doesn't fit the current page" : fit.label }, "!") : null)));
   }
+}
+
+/* ------------------------------------------------------------ stage: a live mock of one page */
+const stage = { slot: "01" };
+const edCache = new Map();
+function edition() {
+  const code = state.code;
+  if (!edCache.has(code)) edCache.set(code, getJSON(`data/editions/${code}.json`).catch(() => null));
+  return edCache.get(code);
+}
+function showSlot(slot) {
+  if (slot === stage.slot) return;
+  const fwd = SLOTS.indexOf(slot) > SLOTS.indexOf(stage.slot);
+  stage.slot = slot;
+  $("#pv-page").value = slot === "cover" ? "cover" : `month:${+slot}`;
+  const go = () => { renderTiles(); };
+  const page = $("#stage-page");
+  if (still() || !page) { go(); return; }
+  page.classList.remove("in-l", "in-r");
+  page.classList.add(fwd ? "out-l" : "out-r");
+  setTimeout(() => {
+    go();
+    page.classList.remove("out-l", "out-r");
+    void page.offsetWidth;
+    page.classList.add(fwd ? "in-r" : "in-l");
+  }, 180);
+  requestAnimationFrame(() => $("#tiles .on")?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" }));
+}
+const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+let stageToken = 0;
+async function renderStage() {
+  const box = $("#stage-page");
+  if (!box) return;
+  const tok = ++stageToken;
+  const slot = stage.slot, img = imgInfo(state.images[slot]);
+  const fmt = state.format;
+  $("#stage").dataset.format = fmt;
+  $("#stage").dataset.slot = slot === "cover" ? "cover" : "month";
+  const pic = h("button", { class: "sp-photo", type: "button", onclick: () => openPicker(slot),
+    "aria-label": `Change the ${slotName(slot)} picture` }, photo(img, { big: true }),
+    h("span", { class: "sp-swap" }, "Change picture"));
+  if (img && img.fit === "band") pic.classList.add("band");
+  const credit = h("p", { class: "sp-credit" }, img ? `Image: ${img.credit}` : "");
+  let body;
+  if (slot === "cover") {
+    body = [pic, h("div", { class: "sp-cover" },
+      h("small", {}, state.subtitle || "An astronomer's Eye on the Cosmos"),
+      h("b", {}, "2027"),
+      h("span", {}, state.title || "The Deep Space Explorer"),
+      h("em", {}, `${cityOf(state.code).city} edition`)), credit];
+  } else {
+    const m = +slot, ed = await edition();
+    if (tok !== stageToken) return;
+    body = [pic, h("div", { class: "sp-head" }, h("b", {}, MONTHS[m - 1].toUpperCase()),
+      h("span", {}, img ? [img.object, img.constellation].filter(Boolean).join(" · ") : "")), monthGrid(m, ed), credit];
+  }
+  box.replaceChildren(...body);
+}
+function monthGrid(m, ed) {
+  const ws = effWeek(); // 0 = Monday, 6 = Sunday
+  const names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const order = ws === 6 ? [6, 0, 1, 2, 3, 4, 5] : [0, 1, 2, 3, 4, 5, 6];
+  const first = (new Date(Date.UTC(2027, m - 1, 1)).getUTCDay() + 6) % 7; // Monday = 0
+  const lead = (first - order[0] + 7) % 7;
+  const days = new Date(Date.UTC(2027, m, 0)).getUTCDate();
+  const evs = new Map();
+  if (ed) for (const e of ed.events) {
+    if (e.local_date && +e.local_date.slice(5, 7) === m && e.cat !== "moon_phase" && e.cat !== "history") {
+      evs.set(+e.local_date.slice(8), e.cat);
+    }
+  }
+  const g = h("div", { class: "sp-grid" }, ...order.map((i) => h("i", {}, names[i])));
+  for (let i = 0; i < lead; i++) g.append(h("span", { class: "x" }));
+  for (let d = 1; d <= days; d++) {
+    const key = `2027-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const lit = ed && ed.illum ? ed.illum[key] : null;
+    const c = evs.get(d);
+    g.append(h("span", { class: [lit != null && lit <= 25 ? "dark" : "", c ? "ev ev-" + c : ""].join(" ").trim() || null,
+      style: `--k:${d}` }, String(d)));
+  }
+  return g;
 }
 
 /* ------------------------------------------------------------ picker */
@@ -509,7 +655,7 @@ function openPicker(slot) {
   requestAnimationFrame(() => $("#pk-rail .on")?.scrollIntoView({ block: "nearest", inline: "center" }));
 }
 $("#picker").addEventListener("click", (e) => { if (e.target.id === "picker") $("#picker").close(); });
-$("#picker").addEventListener("close", () => { renderTiles(); });
+$("#picker").addEventListener("close", () => { if (pk.slot !== stage.slot) { stage.slot = pk.slot; $("#pv-page").value = pk.slot === "cover" ? "cover" : `month:${+pk.slot}`; } renderTiles(); });
 function choose(id, { close = false } = {}) {
   state.images[pk.slot] = id;
   pk.focus = id;
@@ -651,6 +797,21 @@ function checklist(items, compact = false) {
 
 /* ------------------------------------------------------------ look up by ID */
 async function lookup(text, src) {
+  const ct = window.Commons && Commons.title(text);
+  if (ct) {  // Commons: checked in the browser, no proxy needed
+    const known = Object.values(LIB.images).find((i) => i.commons_title === ct && !i.pending);
+    if (known) return known;  // already in the collection (e.g. the Hamois Andromeda)
+    const r = (await Commons.info(ct)).get(ct);
+    if (!r || !r.ok) throw new Error(`This photo can't be used in a calendar: ${r ? r.reason : "not found"}${r && r.license ? ` (licence: ${r.license})` : ""}.`);
+    const slug = ct.toLowerCase().replace(/^file:/, "").replace(/\.(jpe?g|png|tiff?)$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 36);
+    const [w, hh] = r.pixels;
+    return { id: `wm-${slug}`, source: "commons", commons_title: ct, title: r.title_text, credit: r.credit, license: r.license,
+      page: r.page, pixels: r.pixels, renditions: [], file_url: r.file_url, thumb_url: r.thumb_url, gfdl: !!r.gfdl,
+      object: "", catalog: "", kind: "", constellation: "", distance: "", ra: "", dec: "",
+      fit: w / Math.max(1, hh) > 2.6 ? "band" : "cover", focus: null, zoom: 1, rotate: "auto",
+      note: r.sa ? "CC BY-SA: the calendar page that uses it is shared under the same licence." :
+        r.gfdl ? "GNU FDL: the calendar adds the full licence text as its last page." : "" };
+  }
   const q = new URLSearchParams({ id: text.trim() });
   if (src) q.set("src", src);
   const r = await fetch(`api/meta?${q}`);
@@ -907,9 +1068,10 @@ function makeSpec(pages, dpi) {
       const u = uploads.get(i.id);
       i._key = i.id; i._ext = u.ext;
       if (!sent.has(i.id)) { ups.push({ key: i.id, ext: u.ext, bytes: u.bytes.slice(0) }); sent.add(i.id); }
-    } else if (i.source === "commons") {  // Wikimedia Commons file, through our proxy
+    } else if (i.source === "commons") {  // Wikimedia Commons file, straight from Commons (CORS allowed)
       i._key = i.id; i._ext = "jpg";
-      if (!fetches.some((f) => f.key === i._key)) fetches.push({ key: i._key, id: i.id, url: `api/img?src=commons&u=${encodeURIComponent(i.file_url)}` });
+      if (!fetches.some((f) => f.key === i._key)) fetches.push({ key: i._key, id: i.id, url: i.file_url,
+        alt: `api/img?src=commons&u=${encodeURIComponent(i.file_url)}` });
     } else if (i.source === "licensed") {  // photographer image hosted with the site
       i._key = i.id; i._ext = "jpg";
       if (!fetches.some((f) => f.key === i._key)) fetches.push({ key: i._key, id: i.id, url: i.file });
@@ -925,7 +1087,9 @@ function makeSpec(pages, dpi) {
   const c = cityOf(state.code);
   return {
     spec: { code: c.code, format: state.format, paper: effPaper(), week_start: effWeek(), dpi, pages,
-      title: state.title, subtitle: state.subtitle, images },
+      title: state.title, subtitle: state.subtitle, images,
+      // a GNU FDL photo: the full licence text goes in as the last page
+      licence: Object.values(images).some((i) => /GFDL/i.test(i.license || "")) ? "data/licences/fdl-1.3.txt" : null },
     fetches, uploads: ups, edition: `data/editions/${c.code}.json`,
   };
 }
@@ -991,7 +1155,7 @@ async function preview() {
     pvBusy = false;
     box.classList.remove("busy");
     go.disabled = false;
-    go.textContent = "Update preview";
+    go.textContent = $("#pv-box").hidden ? "Exact print preview" : "Back to quick view";
     if (pvAgain) { pvAgain = false; preview(); }
   }
 }

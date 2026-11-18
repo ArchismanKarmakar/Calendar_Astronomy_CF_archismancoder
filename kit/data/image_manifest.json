@@ -253,6 +253,32 @@
     "focus": null,
     "zoom": 1.0,
     "note": ""
+   },
+   {
+    "id": "wm-hamois-m31",
+    "source": "commons",
+    "commons_title": "File:M31-Andromede-16-09-2023-Hamois.jpg",
+    "title": "Andromeda Galaxy from Hamois, Belgium",
+    "credit": "Luc Viatour / https://Lucnix.be",
+    "license": "checked on download",
+    "page": "https://commons.wikimedia.org/wiki/File:M31-Andromede-16-09-2023-Hamois.jpg",
+    "pixels": [
+     0,
+     0
+    ],
+    "downloads": {},
+    "object": "Andromeda Galaxy",
+    "catalog": "M31 / NGC 224",
+    "kind": "Spiral galaxy",
+    "constellation": "Andromeda",
+    "distance": "2.5 million ly",
+    "ra": "00:42:44",
+    "dec": "41:16:09",
+    "fit": "cover",
+    "focus": null,
+    "zoom": 1.0,
+    "rotate": "auto",
+    "note": "Luc Viatour's amateur photograph (Commons featured picture). GNU FDL: the calendar adds the licence text page."
    }
   ]
  },
@@ -1498,7 +1524,7 @@
     "id": "wm-hamois-m31",
     "source": "commons",
     "commons_title": "File:M31-Andromede-16-09-2023-Hamois.jpg",
-    "title": "M31 Andromeda, Hamois, 16 Sep 2023",
+    "title": "Andromeda Galaxy from Hamois, Belgium",
     "credit": "Luc Viatour / https://Lucnix.be",
     "license": "checked on download",
     "page": "https://commons.wikimedia.org/wiki/File:M31-Andromede-16-09-2023-Hamois.jpg",
@@ -1518,7 +1544,7 @@
     "focus": null,
     "zoom": 1.0,
     "rotate": "auto",
-    "note": "Wikimedia Commons; used only if its licence allows printing and selling (checked by fetch_images.py)"
+    "note": "Luc Viatour's amateur photograph (Commons featured picture). GNU FDL: the calendar adds the licence text page."
    },
    {
     "license": "CC BY 4.0",
@@ -1558,61 +1584,6 @@
     "dec": "41:16:09"
    },
    {
-    "id": "heic2501a",
-    "source": "esahubble",
-    "title": "Hubble's panoramic view of the Andromeda Galaxy",
-    "credit": "NASA, ESA, B. Williams (University of Washington)",
-    "license": "CC BY 4.0",
-    "page": "https://esahubble.org/images/heic2501a/",
-    "pixels": [
-     42208,
-     9870
-    ],
-    "downloads": {
-     "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/heic2501a.jpg",
-     "large": "https://cdn.esahubble.org/archives/images/large/heic2501a.jpg",
-     "screen": "https://cdn.esahubble.org/archives/images/screen/heic2501a.jpg"
-    },
-    "object": "Andromeda Galaxy",
-    "catalog": "M31 / NGC 224",
-    "kind": "Spiral galaxy",
-    "constellation": "Andromeda",
-    "distance": "2.5 million ly",
-    "ra": "00:42:44",
-    "dec": "41:16:09",
-    "fit": "band",
-    "focus": null,
-    "note": "Hubble mosaic: the most detailed view, with jagged edges where the tiles end",
-    "zoom": 1.6
-   },
-   {
-    "id": "heic1502a",
-    "source": "esahubble",
-    "title": "Sharpest ever view of the Andromeda Galaxy",
-    "credit": "NASA, ESA, J. Dalcanton (University of Washington, USA), B. F. Williams (University of Washington, USA), L. C. Johnson (University of Washington, USA), the PHAT team, and R. Gendler",
-    "license": "CC BY 4.0",
-    "page": "https://esahubble.org/images/heic1502a/",
-    "pixels": [
-     69536,
-     22230
-    ],
-    "downloads": {
-     "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/heic1502a.jpg",
-     "screen": "https://cdn.esahubble.org/archives/images/screen/heic1502a.jpg"
-    },
-    "object": "Andromeda Galaxy",
-    "catalog": "M31 / NGC 224",
-    "kind": "Spiral galaxy",
-    "constellation": "Andromeda",
-    "distance": "2.5 million ly",
-    "ra": "00:44:37",
-    "dec": "41:35:34",
-    "fit": "band",
-    "focus": null,
-    "note": "Hubble mosaic: the most detailed view, with jagged edges where the tiles end",
-    "zoom": 1.4
-   },
-   {
     "id": "potw1415a",
     "source": "eso",
     "title": "La Silla poses for an Ultra HD shoot",
@@ -1639,6 +1610,32 @@
     "focus": null,
     "zoom": 1.0,
     "note": ""
+   },
+   {
+    "id": "wm-hamois-m33",
+    "source": "commons",
+    "commons_title": "File:M33-Galaxie-du-Triangle-07-10-2023-Hamois.jpg",
+    "title": "Triangulum Galaxy from Hamois, Belgium",
+    "credit": "Luc Viatour / https://Lucnix.be",
+    "license": "checked on download",
+    "page": "https://commons.wikimedia.org/wiki/File:M33-Galaxie-du-Triangle-07-10-2023-Hamois.jpg",
+    "pixels": [
+     0,
+     0
+    ],
+    "downloads": {},
+    "object": "Triangulum Galaxy",
+    "catalog": "M33 / NGC 598",
+    "kind": "Spiral galaxy",
+    "constellation": "Triangulum",
+    "distance": "2.7 million ly",
+    "ra": "01:33:51",
+    "dec": "30:39:37",
+    "fit": "cover",
+    "focus": null,
+    "zoom": 1.0,
+    "rotate": "auto",
+    "note": "Luc Viatour's amateur photograph, 7759×5172 px. GNU FDL: the calendar adds the licence text page."
    }
   ]
  },
@@ -1822,13 +1819,94 @@
     "focus": null,
     "zoom": 1.0,
     "note": ""
+   },
+   {
+    "id": "wm-hamois-m31",
+    "source": "commons",
+    "commons_title": "File:M31-Andromede-16-09-2023-Hamois.jpg",
+    "title": "Andromeda Galaxy from Hamois, Belgium",
+    "credit": "Luc Viatour / https://Lucnix.be",
+    "license": "checked on download",
+    "page": "https://commons.wikimedia.org/wiki/File:M31-Andromede-16-09-2023-Hamois.jpg",
+    "pixels": [
+     0,
+     0
+    ],
+    "downloads": {},
+    "object": "Andromeda Galaxy",
+    "catalog": "M31 / NGC 224",
+    "kind": "Spiral galaxy",
+    "constellation": "Andromeda",
+    "distance": "2.5 million ly",
+    "ra": "00:42:44",
+    "dec": "41:16:09",
+    "fit": "cover",
+    "focus": null,
+    "zoom": 1.0,
+    "rotate": "auto",
+    "note": "Luc Viatour's amateur photograph (Commons featured picture). GNU FDL: the calendar adds the licence text page."
+   },
+   {
+    "id": "wm-hamois-m33",
+    "source": "commons",
+    "commons_title": "File:M33-Galaxie-du-Triangle-07-10-2023-Hamois.jpg",
+    "title": "Triangulum Galaxy from Hamois, Belgium",
+    "credit": "Luc Viatour / https://Lucnix.be",
+    "license": "checked on download",
+    "page": "https://commons.wikimedia.org/wiki/File:M33-Galaxie-du-Triangle-07-10-2023-Hamois.jpg",
+    "pixels": [
+     0,
+     0
+    ],
+    "downloads": {},
+    "object": "Triangulum Galaxy",
+    "catalog": "M33 / NGC 598",
+    "kind": "Spiral galaxy",
+    "constellation": "Triangulum",
+    "distance": "2.7 million ly",
+    "ra": "01:33:51",
+    "dec": "30:39:37",
+    "fit": "cover",
+    "focus": null,
+    "zoom": 1.0,
+    "rotate": "auto",
+    "note": "Luc Viatour's amateur photograph, 7759×5172 px. GNU FDL: the calendar adds the licence text page."
    }
   ]
  },
  {
   "slot": "11",
-  "default": "weic2425a",
+  "default": [
+   "wm-hamois-m31",
+   "weic2425a"
+  ],
   "options": [
+   {
+    "id": "wm-hamois-m31",
+    "source": "commons",
+    "commons_title": "File:M31-Andromede-16-09-2023-Hamois.jpg",
+    "title": "Andromeda Galaxy from Hamois, Belgium",
+    "credit": "Luc Viatour / https://Lucnix.be",
+    "license": "checked on download",
+    "page": "https://commons.wikimedia.org/wiki/File:M31-Andromede-16-09-2023-Hamois.jpg",
+    "pixels": [
+     0,
+     0
+    ],
+    "downloads": {},
+    "object": "Andromeda Galaxy",
+    "catalog": "M31 / NGC 224",
+    "kind": "Spiral galaxy",
+    "constellation": "Andromeda",
+    "distance": "2.5 million ly",
+    "ra": "00:42:44",
+    "dec": "41:16:09",
+    "fit": "cover",
+    "focus": null,
+    "zoom": 1.0,
+    "rotate": "auto",
+    "note": "Luc Viatour's amateur photograph (Commons featured picture). GNU FDL: the calendar adds the licence text page."
+   },
    {
     "id": "eso1205a",
     "source": "eso",
@@ -2070,6 +2148,32 @@
     "distance": "7,500 ly",
     "ra": "02:34:05",
     "dec": "61:36:03"
+   },
+   {
+    "id": "wm-hamois-m33",
+    "source": "commons",
+    "commons_title": "File:M33-Galaxie-du-Triangle-07-10-2023-Hamois.jpg",
+    "title": "Triangulum Galaxy from Hamois, Belgium",
+    "credit": "Luc Viatour / https://Lucnix.be",
+    "license": "checked on download",
+    "page": "https://commons.wikimedia.org/wiki/File:M33-Galaxie-du-Triangle-07-10-2023-Hamois.jpg",
+    "pixels": [
+     0,
+     0
+    ],
+    "downloads": {},
+    "object": "Triangulum Galaxy",
+    "catalog": "M33 / NGC 598",
+    "kind": "Spiral galaxy",
+    "constellation": "Triangulum",
+    "distance": "2.7 million ly",
+    "ra": "01:33:51",
+    "dec": "30:39:37",
+    "fit": "cover",
+    "focus": null,
+    "zoom": 1.0,
+    "rotate": "auto",
+    "note": "Luc Viatour's amateur photograph, 7759×5172 px. GNU FDL: the calendar adds the licence text page."
    }
   ]
  },

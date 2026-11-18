@@ -87,6 +87,19 @@ async function run(msg) {
     have.add(edPath);
   }
   spec.edition_path = edPath;
+  // GNU FDL photo: the licence text must be in the PDF, so a full build without it stops here
+  const lic = `${KIT}/data/licences/fdl-1.3.txt`;
+  if (spec.licence && !have.has(lic) && (spec.pages === "all" || spec.pages === "legend")) {
+    let t = null;
+    try { t = await getBytes(spec.licence); } catch (e) { /* below */ }
+    if (!t || t.length < 15000) {
+      throw new Error("A photo on your calendar is under the GNU FDL, and its licence text page couldn't be loaded " +
+        "(data/licences/fdl-1.3.txt is missing on this site). Pick another photo for that page.");
+    }
+    py.FS.mkdirTree(`${KIT}/data/licences`);
+    py.FS.writeFile(lic, t);
+    have.add(lic);
+  }
   // images: uploads arrive as bytes, the rest come through /api/img
   for (const u of uploads || []) {
     const p = `${KIT}/photos/web/${u.key}.${u.ext}`;
@@ -101,10 +114,13 @@ async function run(msg) {
     const label = `Downloading picture ${i} of ${need.length} (${f.id})`;
     status(job, label + "…", 0.25 + 0.2 * (i - 1) / need.length);
     try {
-      const b = await getBytes(f.url, (got, total) => {
+      const prog = (got, total) => {
         const mb = (got / 1e6).toFixed(1) + (total ? ` of ${(total / 1e6).toFixed(0)} MB` : " MB");
         status(job, `${label}: ${mb}`, 0.25 + 0.2 * (i - 1 + (total ? got / total : 0.5)) / need.length);
-      });
+      };
+      let b;
+      try { b = await getBytes(f.url, prog); }
+      catch (e) { if (!f.alt) throw e; b = await getBytes(f.alt, prog); }
       py.FS.writeFile(p, b);
       have.add(p);
     } catch (e) {

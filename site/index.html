@@ -16,6 +16,7 @@
 <script>try { if (localStorage.getItem("dse27-red") === "1") document.documentElement.dataset.theme = "red"; } catch (e) {}</script>
 <script src="config.js"></script>
 <script src="imgcheck.js" defer></script>
+<script src="commons.js" defer></script>
 <script src="app.js" defer></script>
 <script src="motion.js" defer></script>
 </head>
@@ -118,30 +119,50 @@
   <section id="make" class="section make" aria-labelledby="make-title">
     <div class="head">
       <h2 id="make-title">Make your own</h2>
-      <p>Your city, your format, your pictures. The calendar is built right here in your browser. The first build downloads the calendar engine (about 40 MB), which your browser keeps for next time.</p>
+      <p>Pick your city and a photograph for every month. The page you see changes as you go.</p>
     </div>
 
     <div class="maker">
-      <form class="panel settings" id="settings" onsubmit="return false">
-        <fieldset>
-          <legend>Where you observe</legend>
+      <div class="stage-col">
+        <div class="stage" id="stage" data-format="wall">
+          <div class="stage-page" id="stage-page" aria-live="polite"></div>
+          <div class="pv-canvas" id="pv-box" hidden>
+            <canvas id="pv-canvas" aria-label="Exact print preview of this page"></canvas>
+            <p class="pv-empty" id="pv-empty"></p>
+          </div>
+        </div>
+        <div class="stage-bar">
+          <button class="btn primary sm" type="button" id="stage-change">Change picture</button>
+          <button class="btn ghost sm" type="button" id="pv-go">Exact print preview</button>
+          <select id="pv-page" class="sr-only" tabindex="-1" aria-hidden="true"></select>
+        </div>
+        <ol class="tiles film" id="tiles" aria-label="Pages: pick one to see it above"></ol>
+        <button class="link reset" type="button" id="reset-images">Back to the suggested pictures</button>
+      </div>
+
+      <form class="steps" id="settings" onsubmit="return false">
+        <section class="step" aria-labelledby="st1">
+          <h3 id="st1"><i>1</i>Where you observe</h3>
           <label class="field"><span>City and time zone</span><select id="city"></select></label>
           <p class="hint" id="city-hint"></p>
-          <label class="field gap"><span>Public holidays</span><select id="holidays"></select></label>
+          <label class="field"><span>Public holidays</span><select id="holidays"></select></label>
           <p class="hint" id="hol-hint"></p>
           <label class="check fest" id="fest-row" hidden><input type="checkbox" id="festivals">
             <span><b id="fest-name">Bengali festivals</b> in marigold: <span id="fest-list"></span></span></label>
-        </fieldset>
+        </section>
 
-        <fieldset>
-          <legend>Format</legend>
-          <div class="cards2" role="radiogroup" aria-label="Format">
-            <label class="choice"><input type="radio" name="format" value="wall" checked>
+        <section class="step" aria-labelledby="st2">
+          <h3 id="st2"><i>2</i>Format</h3>
+          <div class="formats" role="radiogroup" aria-label="Format">
+            <label class="fmt"><input type="radio" name="format" value="wall" checked>
+              <span class="shape wall" aria-hidden="true"><em></em></span>
               <span><b>Wall</b><small id="wall-size">A3 portrait, 15 pages</small></span></label>
-            <label class="choice"><input type="radio" name="format" value="desk">
+            <label class="fmt"><input type="radio" name="format" value="desk">
+              <span class="shape desk" aria-hidden="true"><em></em></span>
               <span><b>Desk</b><small id="desk-size">A5 landscape, 15 pages</small></span></label>
           </div>
-          <div class="row">
+          <details class="more">
+            <summary>Paper, week start and print quality</summary>
             <div class="mini"><span id="paper-l">Paper</span>
               <div class="seg" role="radiogroup" aria-labelledby="paper-l">
                 <label><input type="radio" name="paper" value="ISO"><span>A3 / A5</span></label>
@@ -152,43 +173,24 @@
                 <label><input type="radio" name="week" value="6"><span>Sunday</span></label>
                 <label><input type="radio" name="week" value="0"><span>Monday</span></label>
               </div></div>
-          </div>
-          <div class="mini"><span id="dpi-l">Print quality</span>
-            <div class="seg" role="radiogroup" aria-labelledby="dpi-l">
-              <label><input type="radio" name="dpi" value="150"><span>Home printer</span></label>
-              <label><input type="radio" name="dpi" value="200" checked><span>Good</span></label>
-              <label><input type="radio" name="dpi" value="300"><span>Print shop</span></label>
-            </div>
-            <p class="hint" id="dpi-hint"></p></div>
-        </fieldset>
+            <div class="mini"><span id="dpi-l">Print quality</span>
+              <div class="seg" role="radiogroup" aria-labelledby="dpi-l">
+                <label><input type="radio" name="dpi" value="150"><span>Home printer</span></label>
+                <label><input type="radio" name="dpi" value="200" checked><span>Good</span></label>
+                <label><input type="radio" name="dpi" value="300"><span>Print shop</span></label>
+              </div>
+              <p class="hint" id="dpi-hint"></p></div>
+          </details>
+        </section>
 
-        <fieldset>
-          <legend>Pictures</legend>
-          <p class="hint">Each month's photograph is also its target of the month. Tap one to choose from the collection, any ESO, ESA/Hubble or ESA/Webb image, a freely licensed photo from Wikimedia Commons, or your own astrophoto.</p>
-          <ol class="tiles" id="tiles"></ol>
-          <button class="link" type="button" id="reset-images">Back to the suggested pictures</button>
-        </fieldset>
-
-        <fieldset>
-          <legend>Cover words</legend>
+        <section class="step" aria-labelledby="st3">
+          <h3 id="st3"><i>3</i>Cover words</h3>
           <label class="field"><span>Title</span><input id="title" maxlength="40" autocomplete="off"></label>
           <label class="field"><span>Subtitle</span><input id="subtitle" maxlength="60" autocomplete="off"></label>
-        </fieldset>
-      </form>
+        </section>
 
-      <aside class="output" aria-label="Preview and build">
-        <div class="panel preview">
-          <div class="preview-bar">
-            <label class="field inline"><span>Preview</span><select id="pv-page"></select></label>
-            <button class="btn ghost sm" type="button" id="pv-go">Show preview</button>
-          </div>
-          <div class="pv-canvas" id="pv-box">
-            <canvas id="pv-canvas" aria-label="Preview of the selected page"></canvas>
-            <p class="pv-empty" id="pv-empty">The preview draws one page with your settings, exactly as it will print.</p>
-          </div>
-        </div>
-        <div class="panel build">
-          <button class="btn primary wide" type="button" id="build">Make my calendar</button>
+        <div class="build" aria-label="Make the calendar">
+          <button class="btn primary wide go" type="button" id="build"><span>Make my calendar</span></button>
           <div class="progress" id="progress" hidden>
             <div class="bar"><span id="bar"></span></div>
             <p id="status" aria-live="polite"></p>
@@ -199,9 +201,9 @@
             <p class="thanks">Enjoying it? <a href="#support">Chip in for next year's edition.</a></p>
           </div>
           <p class="warn" id="warn" hidden></p>
-          <p class="fine"><button class="link" type="button" id="share">Copy a link to these settings</button></p>
+          <p class="fine">Built in your browser; the first build downloads a 40 MB engine. <button class="link" type="button" id="share">Copy a link to these settings</button></p>
         </div>
-      </aside>
+      </form>
     </div>
   </section>
 
@@ -221,7 +223,7 @@
       <details><summary>How accurate are the dates and times?</summary>
         <p>Moon phases, planets, conjunctions and occultations are computed with established astronomical models and are usually accurate to within a minute or two. Eclipse times come from NASA. Meteor-shower peaks follow the International Meteor Organization's 2027 calendar. Comet brightness is a forecast and can change. Holidays set by moon sighting are marked as estimates.</p></details>
       <details><summary>Can I use my own photograph?</summary>
-        <p>Yes. In "Make your own", tap any month's picture and choose "Your photo". The photo is read in your browser and never leaves your device. You need to own it, or have permission to print it.</p></details>
+        <p>Yes. In "Make your own", pick a month, tap "Change picture" and choose "Upload your photo". It's checked for size, sharpness and brightness against the page and paper you chose before you can use it. The photo is read in your browser and never leaves your device. You need to own it, or have permission to print it.</p></details>
       <details><summary>Can I print it for my club, or sell it?</summary>
         <p>Printing for yourself, as a gift, or for a school or astronomy club to hand out is welcome. This is a free, non-commercial project, so please don't sell copies or re-host the files without asking first. The photographs keep their own licences. The <a href="terms.html">terms</a> have the details.</p></details>
       <details><summary>Why does the first build take a while?</summary>

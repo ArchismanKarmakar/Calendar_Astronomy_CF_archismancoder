@@ -77,6 +77,11 @@ def custom_images():
 
 
 RESOLVED = os.path.join(HERE, "data", "commons_resolved.json")
+GFDL_TEXT = os.path.join(HERE, "data", "licences", "fdl-1.3.txt")
+
+
+def is_gfdl(img):
+    return "GFDL" in (img.get("license") or "").upper()
 
 
 def commons_resolved():

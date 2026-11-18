@@ -33,6 +33,23 @@
   if (cv) {
     const cx = cv.getContext("2d");
     let W = 0, H = 0, dpr = 1, stars = [], meteor = null, nextMeteor = 3000, last = 0, running = false, mx = 0, my = 0, tx = 0, ty = 0;
+    let figure = null, nextFigure = 1200;
+    /* a "constellation": a short chain of bright stars near each other, drawn line by line */
+    function makeFigure() {
+      const bright = stars.filter((s) => s.z > 0.55 && s.x > W * 0.05 && s.x < W * 0.95 && s.y < H * 0.7);
+      if (bright.length < 6) return null;
+      let cur = bright[Math.floor(Math.random() * bright.length)];
+      const chain = [cur], used = new Set([cur]);
+      const reach = Math.max(90, Math.min(W, H) * 0.2);
+      for (let k = 0; k < 6; k++) {
+        const near = bright.filter((s) => !used.has(s) && Math.hypot(s.x - cur.x, s.y - cur.y) < reach)
+          .sort((a, b) => Math.hypot(a.x - cur.x, a.y - cur.y) - Math.hypot(b.x - cur.x, b.y - cur.y));
+        if (!near.length) break;
+        cur = near[Math.min(near.length - 1, Math.floor(Math.random() * 2))];
+        chain.push(cur); used.add(cur);
+      }
+      return chain.length >= 4 ? { chain, t: 0 } : null;
+    }
     const colour = () => (root.dataset.theme === "red" ? [212, 42, 30] : null);
     function size() {
       const r = cv.getBoundingClientRect();
@@ -64,6 +81,30 @@
         if (s.r > 1.4) { cx.fillStyle = `rgba(${r},${g},${b},${0.08 * tw})`; cx.beginPath(); cx.arc(px, py, s.r * 3.2, 0, 6.283); cx.fill(); }
       }
       if (!still.matches) {
+        nextFigure -= dt;
+        if (!figure && nextFigure < 0) { figure = makeFigure(); nextFigure = 9000 + Math.random() * 5000; }
+        if (figure) {
+          figure.t += dt;
+          const segs = figure.chain.length - 1, draw = 2600, hold = 2600, fade = 1400;
+          const shown = Math.min(segs, (figure.t / draw) * segs);
+          const al = figure.t < draw + hold ? 1 : Math.max(0, 1 - (figure.t - draw - hold) / fade);
+          const [r, g, b] = red || [233, 188, 112];
+          cx.strokeStyle = `rgba(${r},${g},${b},${0.42 * al})`; cx.lineWidth = 0.9; cx.lineCap = "round";
+          cx.beginPath();
+          const P = (s) => [s.x + tx * s.z * 18, s.y + ty * s.z * 12];
+          let [x0, y0] = P(figure.chain[0]); cx.moveTo(x0, y0);
+          for (let i = 0; i < Math.ceil(shown); i++) {
+            const [ax, ay] = P(figure.chain[i]), [bx, by] = P(figure.chain[i + 1]);
+            const f = Math.min(1, shown - i);
+            cx.lineTo(ax + (bx - ax) * f, ay + (by - ay) * f);
+          }
+          cx.stroke();
+          for (let i = 0; i <= Math.floor(shown); i++) {  // the joined stars brighten
+            const [px, py] = P(figure.chain[i]);
+            cx.fillStyle = `rgba(${r},${g},${b},${0.22 * al})`; cx.beginPath(); cx.arc(px, py, 5, 0, 6.283); cx.fill();
+          }
+          if (figure.t > draw + hold + fade) figure = null;
+        }
         nextMeteor -= dt;
         if (!meteor && nextMeteor < 0) {
           meteor = { x: W * (0.25 + Math.random() * 0.7), y: H * Math.random() * 0.35, v: 0.75 + Math.random() * 0.4, life: 0 };
@@ -118,6 +159,50 @@
       fan.style.setProperty("--ry", ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
     });
     fan.addEventListener("pointerleave", () => { fan.style.setProperty("--rx", 0); fan.style.setProperty("--ry", 0); });
+  }
+
+  /* ---------------------------------------------------------- scroll progress line */
+  const prog = document.createElement("div");
+  prog.className = "scroll-line";
+  prog.setAttribute("aria-hidden", "true");
+  document.body.append(prog);
+  addEventListener("scroll", () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`;
+  }, { passive: true });
+
+  /* ---------------------------------------------------------- 3D tilt: the maker's page and calendar cards */
+  if (!still.matches && matchMedia("(hover: hover)").matches) {
+    const tilt = (host, target, k = 1) => {
+      host.addEventListener("pointermove", (e) => {
+        const r = host.getBoundingClientRect();
+        const t = typeof target === "function" ? target() : target;
+        if (!t) return;
+        t.style.setProperty("--tx", (((e.clientX - r.left) / r.width - 0.5) * k).toFixed(3));
+        t.style.setProperty("--ty", (((e.clientY - r.top) / r.height - 0.5) * k).toFixed(3));
+      });
+      host.addEventListener("pointerleave", () => {
+        const t = typeof target === "function" ? target() : target;
+        if (t) { t.style.setProperty("--tx", 0); t.style.setProperty("--ty", 0); }
+      });
+    };
+    const st = document.querySelector("#stage");
+    if (st) tilt(st, () => document.querySelector("#stage-page"));
+    document.addEventListener("pointerover", (e) => {
+      const card = e.target.closest && e.target.closest(".ed");
+      if (card && !card.dataset.tilt) { card.dataset.tilt = "1"; tilt(card, card, 0.6); }
+    });
+  }
+
+  /* ---------------------------------------------------------- sample strip drifts as you scroll past */
+  const strip = document.querySelector("#strip");
+  if (strip && !still.matches) {
+    addEventListener("scroll", () => {
+      const r = strip.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight) return;
+      const p = (innerHeight - r.top) / (innerHeight + r.height);
+      strip.style.setProperty("--drift", `${(0.5 - p) * 60}px`);
+    }, { passive: true });
   }
 
   /* ---------------------------------------------------------- scroll reveals */

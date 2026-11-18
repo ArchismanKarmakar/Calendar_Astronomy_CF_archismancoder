@@ -114,8 +114,8 @@ def resolve_commons(man):
     for s in man:
         for o in s["options"]:
             t = o.get("commons_title")
-            if not t or o["id"] in res:
-                continue
+            if not t or (res.get(o["id"]) or {}).get("ok"):
+                continue  # accepted before; refused ones are checked again (rules or licences change)
             try:
                 m = imgmeta.commons_fetch(t)
             except Exception as e:
@@ -129,6 +129,32 @@ def resolve_commons(man):
                 print(f"  skip {o['id']}: {m['reason']} (licence: {m['license'] or 'none'}) — "
                       f"ask the photographer for permission, then add it with choose_images.py --custom --share")
     util.write_json(util.RESOLVED, res)
+    if any("GFDL" in (r.get("license") or "").upper() for r in res.values() if r.get("ok")):
+        gfdl_text()
+
+
+GFDL_URL = "https://www.gnu.org/licenses/fdl-1.3.txt"
+
+
+def gfdl_text():
+    """The GNU FDL 1.3 text, printed as the calendar's last page when a GFDL photo is used."""
+    dest = util.GFDL_TEXT
+    if os.path.exists(dest) and os.path.getsize(dest) > 15000:
+        return
+    import urllib.request
+    try:
+        req = urllib.request.Request(GFDL_URL, headers={"User-Agent": "DeepSpaceExplorer2027-calendar/1.0"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            txt = r.read().decode("utf-8")
+        if "GNU Free Documentation License" not in txt:
+            raise ValueError("unexpected content")
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        with open(dest, "w", encoding="utf-8") as f:
+            f.write(txt)
+        print(f"  ok   GNU FDL 1.3 text saved to {os.path.relpath(dest, util.HERE)}")
+    except Exception as e:
+        print(f"  !! could not download the GNU FDL text ({e}). Save {GFDL_URL} as "
+              f"{os.path.relpath(dest, util.HERE)} before building with a GFDL photo.")
 
 
 def main(argv=None):

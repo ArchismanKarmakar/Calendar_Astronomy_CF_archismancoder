@@ -180,6 +180,15 @@ def build_pdf(code, fmt, sel, dpi, cfg, outdir, months=range(1, 13), extra_pages
     if "year" in parts:
         R.year_page(c, page("year at a glance"), lay, loc, plate, desk=fmt == "desk")
         c.showPage()
+    gfdl = [o for o in credits if util.is_gfdl(o)]
+    if gfdl and "legend" in parts:  # the GNU FDL asks for its full text to travel with every copy
+        if os.path.exists(util.GFDL_TEXT):
+            with open(util.GFDL_TEXT, encoding="utf-8") as f:
+                text = f.read()
+            R.licence_pages(c, lambda: page("licence"), text, gfdl, desk=fmt == "desk")
+        else:
+            print(f"!! {', '.join(o['id'] for o in gfdl)} is GNU FDL but {util.GFDL_TEXT} is missing: "
+                  f"run fetch_images.py so the licence page can be added")
     if progress:
         progress(total, total, "saving PDF")
     c.save()

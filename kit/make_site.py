@@ -113,17 +113,33 @@ def library():
             e["thumb"] = f"thumbs/{iid}.jpg"
             have += 1
         images[iid] = e
-    def first(d):  # a list of defaults means the first one in the published library
-        ds = d if isinstance(d, list) else [d]
-        return next((x for x in ds if x in images), ds[-1])
+    # Commons photos whose licence fetch_images.py hasn't checked yet: the site checks them
+    # itself in the visitor's browser (Commons answers cross-site requests) and drops any
+    # whose licence or size doesn't pass.
+    pend = 0
+    for s in man:
+        for o in s["options"]:
+            if o.get("commons_title") and o["id"] not in images:
+                images[o["id"]] = dict({k: o.get(k) for k in ("id", "source", "title", "credit", "page", "object",
+                                                              "catalog", "kind", "constellation", "distance", "ra",
+                                                              "dec", "fit", "focus", "zoom", "note", "rotate")},
+                                       commons_title=o["commons_title"], pending=True, pixels=[0, 0], license="",
+                                       renditions=[])
+                pend += 1
+    if pend:
+        print(f"  library: {pend} Commons photos not checked here; the site checks their licence in the browser")
+
+    def first(d):  # a list of defaults: the site takes the first one whose licence check passes
+        ds = [x for x in (d if isinstance(d, list) else [d]) if x in images]
+        return ds if len(ds) > 1 else (ds[0] if ds else (d[-1] if isinstance(d, list) else d))
     slots = [dict(slot=s["slot"], name=MONTHS[i], default=first(s["default"]),
                   options=[o["id"] for o in s["options"] if o["id"] in images]) for i, s in enumerate(man)]
     compact(os.path.join(SITE, "data", "library.json"), dict(slots=slots, images=images))
     print(f"  library: {len(images)} images, {have} thumbnails")
     missing = [i for i, e in images.items() if not e.get("thumb")]
     if missing:
-        print(f"  !! no thumbnail for {len(missing)} images (run fetch_images.py first, or the picker "
-              f"falls back to the observatory through /api/img): {', '.join(missing)}")
+        print(f"  !! no thumbnail for {len(missing)} images (the picker loads those from the "
+              f"observatory's own CDN; run fetch_images.py to bundle them): {', '.join(missing)}")
 
 
 def fonts():
@@ -138,6 +154,13 @@ def kit_zip():
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
         for f in KIT_FILES:
             z.write(f, f)
+        lic = os.path.relpath(util.GFDL_TEXT, util.HERE)
+        if os.path.exists(lic):  # printed as the last page when a GNU FDL photo is used
+            z.write(lic, lic)
+            os.makedirs(os.path.join(SITE, "data", "licences"), exist_ok=True)
+            shutil.copyfile(lic, os.path.join(SITE, "data", "licences", os.path.basename(lic)))
+        elif any(util.is_gfdl(o) for o in util.library().values()):
+            print(f"  !! a GNU FDL photo is in the library but {lic} is missing; run fetch_images.py")
     with open(os.path.join(SITE, "py", "kit.zip"), "wb") as f:
         f.write(buf.getvalue())
     import hashlib
@@ -290,7 +313,7 @@ def main(argv=None):
         samples(ready_made(a.ready, a.ready_dpi, a.ready_quality))
     info.update(fonts=FONT_NAMES, built=datetime.now(timezone.utc).isoformat(timespec="seconds"), year=2027)
     compact(os.path.join(SITE, "data", "build.json"), info)
-    print("Done. Commit and push; Cloudflare Pages publishes the site folder.")
+    print("Done. Commit and push; Cloudflare deploys the site folder.")
 
 
 if __name__ == "__main__":

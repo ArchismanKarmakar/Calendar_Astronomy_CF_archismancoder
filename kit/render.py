@@ -899,7 +899,12 @@ def legend(c, P, cfg, loc, manifest, bg_path, desk=False):
            "Comets: BAA Comet Section, Comet Prospects for 2027, and Seiichi Yoshida's comet catalogue. Images: ESO, "
            "ESA/Hubble, ESA/Webb and NOIRLab under CC BY 4.0; their use does not imply endorsement by ESO, ESA, NASA, "
            "NSF or NOIRLab."
-           + ("" if all_cc else " Other photographs are © their credited authors and used with permission."))
+           + (" Photographs marked GFDL are © their credited authors and licensed under the GNU Free Documentation "
+              "License 1.2 or any later version, with no Invariant Sections, Front-Cover or Back-Cover Texts; the "
+              "licence text is reproduced on the last page." if any("GFDL" in (it.get("license") or "").upper()
+                                                                     for it in manifest) else "")
+           + (" Other photographs are © their credited authors and used with permission."
+              if any(it.get("source") == "licensed" for it in manifest) else ""))
     sf = 6.0 * s + 0.4
     for ln in P.wrap(src, "light", sf, W - 2 * mg):
         P.text(mg, yy, ln, "light", sf, T["text2"])
@@ -992,3 +997,47 @@ def year_page(c, P, cfg, loc, bg_path, desk=False):
         P.text(x + 17 + sw, yb, e["name"], "semi", 7.8, T["text"], maxw=colw - 17 - sw)
         P.text(x + 13, yb + 9.6, e.get("local_note") or e.get("note", ""), "reg", 6.7, T["text2"], maxw=colw - 13)
     footer(P, cfg, loc, "15", mg)
+
+
+# ============================================================ GNU FDL TEXT
+def licence_pages(c, new_page, text, imgs, desk=False):
+    """The full GNU FDL text in small type, flowed over as many pages as it needs."""
+    P = new_page()
+    W, H = P.W, P.H
+    s = 0.6 if desk else 1.0
+    mg = min(W, H) * 0.06
+    def head(P):
+        P.rect(-30, -30, W + 60, H + 60, T["ink"], 1)  # bleed included
+        P.text(mg, mg + 12 * s, "LICENCE FOR THE GNU FDL PHOTOGRAPHS", "semi", 6.5 * s + 1, T["gold"], tracking=1.5 * s)
+        who = "; ".join(f"{('Cover' if o['slot'] == 'cover' else MON3[int(o['slot']) - 1])}: "
+                        f"{o.get('object') or o.get('title')} \u00a9 {o['credit']}" for o in imgs)
+        y = mg + 26 * s
+        for ln in P.wrap(who + ". These photographs are used under the GNU Free Documentation License, Version 1.2 "
+                         "or any later version (Version 1.3 is reproduced below), with no Invariant Sections, no "
+                         "Front-Cover Texts and no Back-Cover Texts.", "reg", 6 * s + 0.6, W - 2 * mg):
+            P.text(mg, y, ln, "reg", 6 * s + 0.6, T["text"])
+            y += (6 * s + 0.6) * 1.35
+        return y + 6 * s
+    fs = 4.6 * s + 0.9
+    lh = fs * 1.22
+    ncol = 2 if desk else 3
+    gap = 10 * s
+    colw = (W - 2 * mg - gap * (ncol - 1)) / ncol
+    lines = []
+    for para in text.replace("\r", "").split("\n"):
+        lines += P.wrap(para.strip(), "reg", fs, colw) if para.strip() else [""]
+    y0 = head(P)
+    col, y = 0, y0
+    for ln in lines:
+        if y + lh > H - mg:
+            col += 1
+            y = y0
+            if col >= ncol:
+                c.showPage()
+                P = new_page()
+                y0 = head(P)
+                col, y = 0, y0
+        if ln:
+            P.text(mg + col * (colw + gap), y, ln, "reg", fs, T["text2"])
+        y += lh
+    c.showPage()
