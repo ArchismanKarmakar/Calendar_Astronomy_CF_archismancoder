@@ -14,8 +14,9 @@ tools, image fetchers and build scripts are not in it.)
 
 ```
 site/        the website (static files, served as-is), incl. terms.html and downloads/
-functions/   two small Cloudflare functions: /api/img and /api/meta
-lib/         code shared by the functions
+functions/   the two small API handlers (/api/img and /api/meta), wired up by src/index.js
+src/         the Worker entry point (routes /api/*, serves the site)
+lib/         code shared by the handlers
 kit/         the Python calendar kit (build PDFs locally; also generates site/ data)
 ```
 
@@ -46,19 +47,19 @@ kit/         the Python calendar kit (build PDFs locally; also generates site/ d
    git push -u origin main
    ```
 
-4. **Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git**, pick the
+4. **Cloudflare dashboard → Workers & Pages → Create → Import a repository**, pick the
    repo, then:
-   - Framework preset: **None**
    - Build command: *(leave empty)*
-   - Build output directory: **`site`**
-   - Root directory: *(leave empty — the repo root, so `functions/` is found)*
+   - Deploy command: **`npx wrangler deploy`** (the default; `wrangler.toml` already points
+     at `site/` for the pages and `src/index.js` for `/api/img` and `/api/meta`)
+   - Root directory: *(leave empty — the repo root)*
 
    Cloudflare deploys again on every push.
 
-5. **Custom domain**: in the Pages project → Custom domains → Set up a domain →
-   `calendar.archismancoder.com` (or `astro.archismancoder.com` if you plan more astronomy
-   tools there). Because archismancoder.com is already on Cloudflare DNS, the CNAME is
-   created for you; the certificate takes a few minutes.
+5. **Custom domain**: open the project → Settings → Domains & Routes → Add → Custom
+   domain → `calendar.archismancoder.com` (or `astro.archismancoder.com`). Because
+   archismancoder.com is already on Cloudflare DNS, the record and certificate are created
+   for you.
 
 ## Ready-made calendars
 
