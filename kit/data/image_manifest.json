@@ -1,0 +1,2285 @@
+[
+    {
+        "slot": "cover",
+        "default": "eso1208a",
+        "options": [
+            {
+                "id": "eso1208a",
+                "source": "eso",
+                "title": "ESO's VLT reveals the Carina Nebula's hidden secrets",
+                "credit": "ESO/T. Preibisch",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1208a/",
+                "pixels": [
+                    13092,
+                    8926
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1208a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1208a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1208a.jpg"
+                },
+                "object": "Carina Nebula",
+                "catalog": "NGC 3372",
+                "kind": "Emission nebula",
+                "constellation": "Carina",
+                "distance": "7,500 ly",
+                "ra": "10:45:08",
+                "dec": "-59:52:04",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "heic0707a",
+                "source": "esahubble",
+                "title": "Star birth in the extreme",
+                "credit": "NASA, ESA, N. Smith (University of California, Berkeley), and The Hubble Heritage Team (STScI/AURA)",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic0707a/",
+                "pixels": [
+                    29566,
+                    14321
+                ],
+                "downloads": {
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic0707a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic0707a.jpg"
+                },
+                "object": "Carina Nebula",
+                "catalog": "NGC 3372",
+                "kind": "Emission nebula",
+                "constellation": "Carina",
+                "distance": "7,500 ly",
+                "ra": "10:44:29",
+                "dec": "-59:35:47",
+                "fit": "cover",
+                "focus": null,
+                "note": "Large JPEG only — very big download",
+                "zoom": 1.0
+            },
+            {
+                "id": "eso1237c",
+                "source": "eso",
+                "title": "Wide-field view of the entire Seagull Nebula (IC 2177)",
+                "credit": "ESO/Digitized Sky Survey 2. Acknowledgement: Davide De Martin",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1237c/",
+                "pixels": [
+                    10693,
+                    10714
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1237c.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1237c.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1237c.jpg"
+                },
+                "object": "Seagull Nebula",
+                "catalog": "IC 2177",
+                "kind": "Emission nebula",
+                "constellation": "Monoceros",
+                "distance": "3,700 ly",
+                "ra": "07:04:43",
+                "dec": "-10:29:30",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "",
+                "fit": "cover",
+                "id": "weic2205a",
+                "source": "esawebb",
+                "title": "NIRCam Image of the \"Cosmic Cliffs\" in Carina",
+                "credit": "NASA, ESA, CSA, and STScI",
+                "page": "https://esawebb.org/images/weic2205a/",
+                "pixels": [
+                    14575,
+                    8441
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2205a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2205a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2205a.jpg"
+                },
+                "object": "Cosmic Cliffs, Carina Nebula",
+                "catalog": "NGC 3324",
+                "kind": "Star-forming region",
+                "constellation": "Carina",
+                "distance": "7,600 ly",
+                "ra": "10:36:51",
+                "dec": "-58:37:12"
+            },
+            {
+                "id": "eso2320a",
+                "source": "eso",
+                "title": "The Running Chicken Nebula",
+                "credit": "ESO/VPHAS+ team. Acknowledgement: CASU",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso2320a/",
+                "pixels": [
+                    42057,
+                    37010
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso2320a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso2320a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso2320a.jpg"
+                },
+                "object": "Running Chicken Nebula",
+                "catalog": "IC 2944",
+                "kind": "Emission nebula",
+                "constellation": "Centaurus",
+                "distance": "6,500 ly",
+                "ra": "11:35:12",
+                "dec": "-63:10:31",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2612a",
+                "source": "esawebb",
+                "title": "The Cigar Galaxy: M82 (Webb and Hubble image)",
+                "credit": "NASA, ESA, CSA, A. Smercina (STScI), T. Williams (University of Manchester). Image processing: A. Pagan (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2612a/",
+                "pixels": [
+                    15187,
+                    10238
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2612a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2612a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2612a.jpg"
+                },
+                "object": "Cigar Galaxy",
+                "catalog": "M82",
+                "kind": "Starburst galaxy",
+                "constellation": "Ursa Major",
+                "distance": "12 million ly",
+                "ra": "09:55:54",
+                "dec": "69:40:51",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2622a",
+                "source": "esawebb",
+                "title": "Cat's Head Nebula (Hubble WFC3, Webb NIRCam, and Webb MIRI images)",
+                "credit": "NASA & ESA",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2622a/",
+                "pixels": [
+                    8355,
+                    4870
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2622a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2622a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2622a.jpg"
+                },
+                "object": "Cat's Head Nebula",
+                "catalog": "",
+                "kind": "Emission nebula",
+                "constellation": "Carina",
+                "distance": "7,500 ly",
+                "ra": "10:45:59",
+                "dec": "-60:06:24",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2605a",
+                "source": "esawebb",
+                "title": "Exposed Cranium Nebula (NIRCam and MIRI images)",
+                "credit": "NASA, ESA, CSA, STScI, Image Processing: Joseph DePasquale (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2605a/",
+                "pixels": [
+                    8832,
+                    4535
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2605a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2605a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2605a.jpg"
+                },
+                "object": "Exposed Cranium Nebula",
+                "catalog": "PMR 1",
+                "kind": "Planetary nebula",
+                "constellation": "",
+                "distance": "",
+                "ra": "",
+                "dec": "",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "potw1415a",
+                "source": "eso",
+                "title": "La Silla poses for an Ultra HD shoot",
+                "credit": "ESO/B. Tafreshi (twanight.org)",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/potw1415a/",
+                "pixels": [
+                    3723,
+                    5245
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/potw1415a.jpg",
+                    "large": "https://cdn.eso.org/images/large/potw1415a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/potw1415a.jpg"
+                },
+                "object": "La Silla and the Milky Way",
+                "catalog": "",
+                "kind": "Observatory",
+                "constellation": "",
+                "distance": "",
+                "ra": "",
+                "dec": "",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            }
+        ]
+    },
+    {
+        "slot": "01",
+        "default": "eso1006a",
+        "options": [
+            {
+                "id": "eso1006a",
+                "source": "eso",
+                "title": "VISTA's infrared view of the Orion Nebula",
+                "credit": "ESO/J. Emerson/VISTA. Acknowledgment: Cambridge Astronomical Survey Unit",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1006a/",
+                "pixels": [
+                    12640,
+                    15546
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1006a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1006a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1006a.jpg"
+                },
+                "object": "Orion Nebula",
+                "catalog": "M42 / NGC 1976",
+                "kind": "Emission nebula",
+                "constellation": "Orion",
+                "distance": "1,350 ly",
+                "ra": "05:35:17",
+                "dec": "-05:23:28",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "eso1701a",
+                "source": "eso",
+                "title": "The Orion A molecular cloud from VISTA",
+                "credit": "ESO/VISION survey",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1701a/",
+                "pixels": [
+                    39578,
+                    23069
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1701a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1701a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1701a.jpg"
+                },
+                "object": "Orion A molecular cloud",
+                "catalog": "M42 region",
+                "kind": "Molecular cloud",
+                "constellation": "Orion",
+                "distance": "1,350 ly",
+                "ra": "05:36:21",
+                "dec": "-06:00:37",
+                "fit": "band",
+                "focus": null,
+                "note": "",
+                "zoom": 1.3
+            },
+            {
+                "id": "heic0601a",
+                "source": "esahubble",
+                "title": "Hubble's sharpest view of the Orion Nebula",
+                "credit": "NASA, ESA, M. Robberto (Space Telescope Science Institute/ESA) and the Hubble Space Telescope Orion Treasury Project Team",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic0601a/",
+                "pixels": [
+                    18000,
+                    18000
+                ],
+                "downloads": {
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic0601a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic0601a.jpg"
+                },
+                "object": "Orion Nebula",
+                "catalog": "M42 / NGC 1976",
+                "kind": "Emission nebula",
+                "constellation": "Orion",
+                "distance": "1,350 ly",
+                "ra": "05:35:10",
+                "dec": "-05:24:50",
+                "fit": "cover",
+                "focus": null,
+                "note": "Large JPEG only — very big download",
+                "zoom": 1.0
+            },
+            {
+                "id": "eso0202a",
+                "source": "eso",
+                "title": "The Horsehead Nebula",
+                "credit": "ESO",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso0202a/",
+                "pixels": [
+                    4961,
+                    5105
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso0202a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso0202a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso0202a.jpg"
+                },
+                "object": "Horsehead Nebula",
+                "catalog": "Barnard 33",
+                "kind": "Dark nebula",
+                "constellation": "Orion",
+                "distance": "1,300 ly",
+                "ra": "05:40:59",
+                "dec": "-02:27:30",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2219a",
+                "source": "esawebb",
+                "title": "Protostar L1527",
+                "credit": "NASA, ESA, CSA, and STScI, J. DePasquale (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2219a/",
+                "pixels": [
+                    4373,
+                    4462
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2219a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2219a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2219a.jpg"
+                },
+                "object": "Protostar L1527",
+                "catalog": "LDN 1527",
+                "kind": "Protostar",
+                "constellation": "Taurus",
+                "distance": "460 ly",
+                "ra": "04:39:54",
+                "dec": "26:03:09",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "",
+                "fit": "cover",
+                "id": "noao-ic1805",
+                "source": "noirlab",
+                "title": "Open Cluster IC 1805 (the Heart Nebula)",
+                "credit": "T.A. Rector (University of Alaska Anchorage) and H. Schweiker (WIYN and NOIRLab/NSF/AURA)",
+                "page": "https://noirlab.edu/public/images/noao-ic1805/",
+                "pixels": [
+                    8243,
+                    8300
+                ],
+                "downloads": {
+                    "publicationjpg": [
+                        "https://noirlab.edu/public/media/archives/images/publicationjpg/noao-ic1805.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/publicationjpg/noao-ic1805.jpg"
+                    ],
+                    "large": [
+                        "https://noirlab.edu/public/media/archives/images/large/noao-ic1805.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/large/noao-ic1805.jpg"
+                    ],
+                    "screen": [
+                        "https://noirlab.edu/public/media/archives/images/screen/noao-ic1805.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/screen/noao-ic1805.jpg"
+                    ]
+                },
+                "object": "Heart Nebula",
+                "catalog": "IC 1805",
+                "kind": "Emission nebula",
+                "constellation": "Cassiopeia",
+                "distance": "7,500 ly",
+                "ra": "02:34:05",
+                "dec": "61:36:03"
+            }
+        ]
+    },
+    {
+        "slot": "02",
+        "default": "eso2320a",
+        "options": [
+            {
+                "id": "eso1238a",
+                "source": "eso",
+                "title": "Thor's Helmet Nebula imaged on the occasion of ESO's 50th anniversary",
+                "credit": "ESO/B. Bailleul",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1238a/",
+                "pixels": [
+                    3424,
+                    3437
+                ],
+                "downloads": {
+                    "large": "https://cdn.eso.org/images/large/eso1238a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1238a.jpg"
+                },
+                "object": "Thor's Helmet",
+                "catalog": "NGC 2359",
+                "kind": "Wolf-Rayet nebula",
+                "constellation": "Canis Major",
+                "distance": "15,000 ly",
+                "ra": "07:18:30",
+                "dec": "-13:13:48",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "eso1237c",
+                "source": "eso",
+                "title": "Wide-field view of the entire Seagull Nebula (IC 2177)",
+                "credit": "ESO/Digitized Sky Survey 2. Acknowledgement: Davide De Martin",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1237c/",
+                "pixels": [
+                    10693,
+                    10714
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1237c.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1237c.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1237c.jpg"
+                },
+                "object": "Seagull Nebula",
+                "catalog": "IC 2177",
+                "kind": "Emission nebula",
+                "constellation": "Monoceros",
+                "distance": "3,700 ly",
+                "ra": "07:04:43",
+                "dec": "-10:29:30",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "",
+                "fit": "cover",
+                "id": "weic2205a",
+                "source": "esawebb",
+                "title": "NIRCam Image of the \"Cosmic Cliffs\" in Carina",
+                "credit": "NASA, ESA, CSA, and STScI",
+                "page": "https://esawebb.org/images/weic2205a/",
+                "pixels": [
+                    14575,
+                    8441
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2205a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2205a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2205a.jpg"
+                },
+                "object": "Cosmic Cliffs, Carina Nebula",
+                "catalog": "NGC 3324",
+                "kind": "Star-forming region",
+                "constellation": "Carina",
+                "distance": "7,600 ly",
+                "ra": "10:36:51",
+                "dec": "-58:37:12"
+            },
+            {
+                "id": "eso2320a",
+                "source": "eso",
+                "title": "The Running Chicken Nebula",
+                "credit": "ESO/VPHAS+ team. Acknowledgement: CASU",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso2320a/",
+                "pixels": [
+                    42057,
+                    37010
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso2320a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso2320a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso2320a.jpg"
+                },
+                "object": "Running Chicken Nebula",
+                "catalog": "IC 2944",
+                "kind": "Emission nebula",
+                "constellation": "Centaurus",
+                "distance": "6,500 ly",
+                "ra": "11:35:12",
+                "dec": "-63:10:31",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "potw1847a",
+                "source": "esahubble",
+                "title": "Different generations",
+                "credit": "ESA/Hubble & NASA",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/potw1847a/",
+                "pixels": [
+                    4073,
+                    3965
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/potw1847a.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/potw1847a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/potw1847a.jpg"
+                },
+                "object": "NGC 1866",
+                "catalog": "NGC 1866",
+                "kind": "Globular cluster",
+                "constellation": "Dorado",
+                "distance": "",
+                "ra": "05:13:39",
+                "dec": "-65:27:53",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2622a",
+                "source": "esawebb",
+                "title": "Cat's Head Nebula (Hubble WFC3, Webb NIRCam, and Webb MIRI images)",
+                "credit": "NASA & ESA",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2622a/",
+                "pixels": [
+                    8355,
+                    4870
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2622a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2622a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2622a.jpg"
+                },
+                "object": "Cat's Head Nebula",
+                "catalog": "",
+                "kind": "Emission nebula",
+                "constellation": "Carina",
+                "distance": "7,500 ly",
+                "ra": "10:45:59",
+                "dec": "-60:06:24",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2622b",
+                "source": "esawebb",
+                "title": "Cat's Head Nebula (Hubble WFC3 image)",
+                "credit": "NASA, ESA, STScI. Image Processing: J. Depasquale (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2622b/",
+                "pixels": [
+                    3579,
+                    5271
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2622b.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2622b.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2622b.jpg"
+                },
+                "object": "Cat's Head Nebula",
+                "catalog": "",
+                "kind": "Emission nebula",
+                "constellation": "Carina",
+                "distance": "7,500 ly",
+                "ra": "10:45:59",
+                "dec": "-60:06:24",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            }
+        ]
+    },
+    {
+        "slot": "03",
+        "default": "weic2207b",
+        "options": [
+            {
+                "id": "eso1126a",
+                "source": "eso",
+                "title": "VST's view of the Leo Triplet and beyond",
+                "credit": "ESO/INAF-VST/OmegaCAM. Acknowledgement: OmegaCen/Astro-WISE/Kapteyn Institute",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1126a/",
+                "pixels": [
+                    15513,
+                    12558
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1126a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1126a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1126a.jpg"
+                },
+                "object": "Leo Triplet",
+                "catalog": "M65 / M66 / NGC 3628",
+                "kind": "Galaxy group",
+                "constellation": "Leo",
+                "distance": "35 million ly",
+                "ra": "11:18:56",
+                "dec": "13:05:32",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "heic1006a",
+                "source": "esahubble",
+                "title": "Hubble snaps heavyweight of the Leo Triplet",
+                "credit": "NASA, ESA and the Hubble Heritage (STScI/AURA)-ESA/Hubble Collaboration. Acknowledgement: Davide De Martin and Robert Gendler",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic1006a/",
+                "pixels": [
+                    3903,
+                    2702
+                ],
+                "downloads": {
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic1006a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic1006a.jpg"
+                },
+                "object": "Messier 66",
+                "catalog": "M66 / NGC 3627",
+                "kind": "Spiral galaxy",
+                "constellation": "Leo",
+                "distance": "35 million ly",
+                "ra": "11:20:16",
+                "dec": "12:58:55",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "potw2344a",
+                "source": "esahubble",
+                "title": "The dancer in Dorado",
+                "credit": "ESA/Hubble & NASA, D. Calzetti and the LEGUS team, R. Chandar",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/potw2344a/",
+                "pixels": [
+                    3869,
+                    4165
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/potw2344a.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/potw2344a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/potw2344a.jpg"
+                },
+                "object": "NGC 1566",
+                "catalog": "NGC 1566",
+                "kind": "Spiral galaxy",
+                "constellation": "Dorado",
+                "distance": "60 million ly",
+                "ra": "04:20:00",
+                "dec": "-54:56:15",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2426a",
+                "source": "esawebb",
+                "title": "Galaxies IC 2163 and NGC 2207 (Webb and Hubble image)",
+                "credit": "NASA, ESA, CSA, STScI",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2426a/",
+                "pixels": [
+                    6353,
+                    2983
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2426a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2426a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2426a.jpg"
+                },
+                "object": "IC 2163 and NGC 2207",
+                "catalog": "IC 2163 / NGC 2207",
+                "kind": "Interacting galaxies",
+                "constellation": "Canis Major",
+                "distance": "120 million ly",
+                "ra": "06:16:25",
+                "dec": "-21:22:29",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2207b",
+                "source": "esawebb",
+                "title": "Southern Ring Nebula (NIRCam Image)",
+                "credit": "NASA, ESA, CSA, STScI, and the Webb ERO Production Team",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2207b/",
+                "pixels": [
+                    4833,
+                    4501
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2207b.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2207b.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2207b.jpg"
+                },
+                "object": "Southern Ring Nebula",
+                "catalog": "NGC 3132",
+                "kind": "Planetary nebula",
+                "constellation": "Vela",
+                "distance": "2,500 ly",
+                "ra": "10:07:02",
+                "dec": "-40:26:11",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2612a",
+                "source": "esawebb",
+                "title": "The Cigar Galaxy: M82 (Webb and Hubble image)",
+                "credit": "NASA, ESA, CSA, A. Smercina (STScI), T. Williams (University of Manchester). Image processing: A. Pagan (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2612a/",
+                "pixels": [
+                    15187,
+                    10238
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2612a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2612a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2612a.jpg"
+                },
+                "object": "Cigar Galaxy",
+                "catalog": "M82",
+                "kind": "Starburst galaxy",
+                "constellation": "Ursa Major",
+                "distance": "12 million ly",
+                "ra": "09:55:54",
+                "dec": "69:40:51",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            }
+        ]
+    },
+    {
+        "slot": "04",
+        "default": "weic2612a",
+        "options": [
+            {
+                "id": "heic0506a",
+                "source": "esahubble",
+                "title": "Out of this whirl: The Whirlpool Galaxy (M51) and companion galaxy",
+                "credit": "NASA, ESA, S. Beckwith (STScI), and The Hubble Heritage Team (STScI/AURA)",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic0506a/",
+                "pixels": [
+                    11477,
+                    7965
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/heic0506a.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic0506a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic0506a.jpg"
+                },
+                "object": "Whirlpool Galaxy",
+                "catalog": "M51 / NGC 5194",
+                "kind": "Interacting spiral galaxy",
+                "constellation": "Canes Venatici",
+                "distance": "23 million ly",
+                "ra": "13:29:53",
+                "dec": "47:11:43",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "heic0602a",
+                "source": "esahubble",
+                "title": "Largest ever galaxy portrait - stunning HD image of Pinwheel Galaxy",
+                "credit": "European Space Agency & NASA",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic0602a/",
+                "pixels": [
+                    15852,
+                    12392
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/heic0602a.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic0602a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic0602a.jpg"
+                },
+                "object": "Pinwheel Galaxy",
+                "catalog": "M101 / NGC 5457",
+                "kind": "Spiral galaxy",
+                "constellation": "Ursa Major",
+                "distance": "23 million ly",
+                "ra": "14:03:35",
+                "dec": "54:18:04",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "",
+                "fit": "cover",
+                "id": "noao1309a",
+                "source": "noirlab",
+                "title": "M51, Whirlpool Galaxy",
+                "credit": "K. Rhode, M. Young and WIYN/NOIRLab/NSF/AURA",
+                "page": "https://noirlab.edu/public/images/noao1309a/",
+                "pixels": [
+                    8000,
+                    7450
+                ],
+                "downloads": {
+                    "publicationjpg": [
+                        "https://noirlab.edu/public/media/archives/images/publicationjpg/noao1309a.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/publicationjpg/noao1309a.jpg"
+                    ],
+                    "large": [
+                        "https://noirlab.edu/public/media/archives/images/large/noao1309a.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/large/noao1309a.jpg"
+                    ],
+                    "screen": [
+                        "https://noirlab.edu/public/media/archives/images/screen/noao1309a.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/screen/noao1309a.jpg"
+                    ]
+                },
+                "object": "Whirlpool Galaxy",
+                "catalog": "M51 / NGC 5194",
+                "kind": "Interacting spiral galaxy",
+                "constellation": "Canes Venatici",
+                "distance": "23 million ly",
+                "ra": "13:29:53",
+                "dec": "47:11:43"
+            },
+            {
+                "id": "heic0604a",
+                "source": "esahubble",
+                "title": "The magnificent starburst galaxy Messier 82",
+                "credit": "NASA, ESA and the Hubble Heritage Team (STScI/AURA). Acknowledgment: J. Gallagher (University of Wisconsin), M. Mountain (STScI) and P. Puxley (NSF)",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic0604a/",
+                "pixels": [
+                    9500,
+                    7400
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/heic0604a.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic0604a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic0604a.jpg"
+                },
+                "object": "Cigar Galaxy",
+                "catalog": "M82",
+                "kind": "Starburst galaxy",
+                "constellation": "Ursa Major",
+                "distance": "13 million ly",
+                "ra": "09:55:55",
+                "dec": "69:40:54",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2612a",
+                "source": "esawebb",
+                "title": "The Cigar Galaxy: M82 (Webb and Hubble image)",
+                "credit": "NASA, ESA, CSA, A. Smercina (STScI), T. Williams (University of Manchester). Image processing: A. Pagan (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2612a/",
+                "pixels": [
+                    15187,
+                    10238
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2612a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2612a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2612a.jpg"
+                },
+                "object": "Cigar Galaxy",
+                "catalog": "M82",
+                "kind": "Starburst galaxy",
+                "constellation": "Ursa Major",
+                "distance": "12 million ly",
+                "ra": "09:55:54",
+                "dec": "69:40:51",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            }
+        ]
+    },
+    {
+        "slot": "05",
+        "default": "heic2506a",
+        "options": [
+            {
+                "id": "eso0007a",
+                "source": "eso",
+                "title": "Fine shades of a Sombrero",
+                "credit": "ESO/P. Barthel. Acknowledgments: Mark Neeser (Kapteyn Institute, Groningen) and Richard Hook (ST/ECF, Garching, Germany)",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso0007a/",
+                "pixels": [
+                    4961,
+                    4961
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso0007a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso0007a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso0007a.jpg"
+                },
+                "object": "Sombrero Galaxy",
+                "catalog": "M104 / NGC 4594",
+                "kind": "Spiral galaxy",
+                "constellation": "Virgo",
+                "distance": "31 million ly",
+                "ra": "12:39:59",
+                "dec": "-11:37:23",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "heic2506a",
+                "source": "esahubble",
+                "title": "Sombrero Galaxy",
+                "credit": "ESA/Hubble & NASA, K. Noll",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic2506a/",
+                "pixels": [
+                    14319,
+                    8477
+                ],
+                "downloads": {
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic2506a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic2506a.jpg"
+                },
+                "object": "Sombrero Galaxy",
+                "catalog": "M104 / NGC 4594",
+                "kind": "Spiral galaxy",
+                "constellation": "Virgo",
+                "distance": "30 million ly",
+                "ra": "12:39:59",
+                "dec": "-11:37:17",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "opo0328a",
+                "source": "esahubble",
+                "title": "Hubble mosaic of the majestic Sombrero Galaxy",
+                "credit": "NASA/ESA and The Hubble Heritage Team (STScI/AURA)",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/opo0328a/",
+                "pixels": [
+                    11472,
+                    6429
+                ],
+                "downloads": {
+                    "large": "https://cdn.esahubble.org/archives/images/large/opo0328a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/opo0328a.jpg"
+                },
+                "object": "Sombrero Galaxy",
+                "catalog": "M104 / NGC 4594",
+                "kind": "Spiral galaxy",
+                "constellation": "Virgo",
+                "distance": "30 million ly",
+                "ra": "12:39:59",
+                "dec": "-11:37:22",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "eso1907a",
+                "source": "eso",
+                "title": "First Image of a Black Hole",
+                "credit": "EHT Collaboration",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1907a/",
+                "pixels": [
+                    7416,
+                    4320
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1907a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1907a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1907a.jpg"
+                },
+                "object": "Black hole in Messier 87",
+                "catalog": "M87*",
+                "kind": "Black hole",
+                "constellation": "Virgo",
+                "distance": "",
+                "ra": "12:30:49",
+                "dec": "12:23:28",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2403a",
+                "source": "esawebb",
+                "title": "PHANGS image mosaic",
+                "credit": "NASA, ESA, CSA, STScI, J. Lee (STScI), T. Williams (Oxford), PHANGS Team, E. Wheatley (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2403a/",
+                "pixels": [
+                    4500,
+                    4500
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2403a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2403a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2403a.jpg"
+                },
+                "object": "PHANGS galaxies",
+                "catalog": "",
+                "kind": "Galaxy mosaic",
+                "constellation": "",
+                "distance": "",
+                "ra": "",
+                "dec": "",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            }
+        ]
+    },
+    {
+        "slot": "06",
+        "default": "opo0840a",
+        "options": [
+            {
+                "id": "opo0840a",
+                "source": "esahubble",
+                "title": "Hubble image of globular cluster M13",
+                "credit": "NASA, ESA, and the Hubble Heritage Team (STScI/AURA)",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/opo0840a/",
+                "pixels": [
+                    6360,
+                    6360
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/opo0840a.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/opo0840a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/opo0840a.jpg"
+                },
+                "object": "Great Hercules Cluster",
+                "catalog": "M13 / NGC 6205",
+                "kind": "Globular cluster",
+                "constellation": "Hercules",
+                "distance": "25,000 ly",
+                "ra": "16:41:41",
+                "dec": "36:27:37",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "potw1011a",
+                "source": "esahubble",
+                "title": "The crowded heart of the Hercules globular cluster",
+                "credit": "ESA/Hubble and NASA",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/potw1011a/",
+                "pixels": [
+                    3018,
+                    3018
+                ],
+                "downloads": {
+                    "large": "https://cdn.esahubble.org/archives/images/large/potw1011a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/potw1011a.jpg"
+                },
+                "object": "Great Hercules Cluster (core)",
+                "catalog": "M13 / NGC 6205",
+                "kind": "Globular cluster",
+                "constellation": "Hercules",
+                "distance": "25,000 ly",
+                "ra": "16:41:41",
+                "dec": "36:27:37",
+                "fit": "cover",
+                "focus": null,
+                "note": "3018 px — slightly upscaled on A3",
+                "zoom": 1.0
+            },
+            {
+                "id": "eso1003a",
+                "source": "eso",
+                "title": "The Cat's Paw Nebula",
+                "credit": "ESO",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1003a/",
+                "pixels": [
+                    7738,
+                    8038
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1003a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1003a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1003a.jpg"
+                },
+                "object": "Cat's Paw Nebula",
+                "catalog": "NGC 6334",
+                "kind": "Emission nebula",
+                "constellation": "Scorpius",
+                "distance": "5,500 ly",
+                "ra": "17:19:58",
+                "dec": "-35:57:47",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            }
+        ]
+    },
+    {
+        "slot": "07",
+        "default": "eso1403a",
+        "options": [
+            {
+                "id": "eso1403a",
+                "source": "eso",
+                "title": "VST images the Lagoon Nebula",
+                "credit": "ESO/VPHAS+ team",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1403a/",
+                "pixels": [
+                    16358,
+                    11184
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1403a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1403a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1403a.jpg"
+                },
+                "object": "Lagoon Nebula",
+                "catalog": "M8 / NGC 6523",
+                "kind": "Emission nebula",
+                "constellation": "Sagittarius",
+                "distance": "5,000 ly",
+                "ra": "18:03:37",
+                "dec": "-24:23:12",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "heic1808a",
+                "source": "esahubble",
+                "title": "Hubble's 28th birthday picture: The Lagoon Nebula",
+                "credit": "NASA, ESA, STScI",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic1808a/",
+                "pixels": [
+                    4782,
+                    6028
+                ],
+                "downloads": {
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic1808a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic1808a.jpg"
+                },
+                "object": "Lagoon Nebula (core)",
+                "catalog": "M8 / NGC 6523",
+                "kind": "Emission nebula",
+                "constellation": "Sagittarius",
+                "distance": "4,000 ly",
+                "ra": "18:03:39",
+                "dec": "-24:22:50",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "eso0930a",
+                "source": "eso",
+                "title": "The Trifid Nebula",
+                "credit": "ESO",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso0930a/",
+                "pixels": [
+                    3497,
+                    5752
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso0930a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso0930a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso0930a.jpg"
+                },
+                "object": "Trifid Nebula",
+                "catalog": "M20 / NGC 6514",
+                "kind": "Emission nebula",
+                "constellation": "Sagittarius",
+                "distance": "5,500 ly",
+                "ra": "18:02:42",
+                "dec": "-22:58:16",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "potw1415a",
+                "source": "eso",
+                "title": "La Silla poses for an Ultra HD shoot",
+                "credit": "ESO/B. Tafreshi (twanight.org)",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/potw1415a/",
+                "pixels": [
+                    3723,
+                    5245
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/potw1415a.jpg",
+                    "large": "https://cdn.eso.org/images/large/potw1415a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/potw1415a.jpg"
+                },
+                "object": "La Silla and the Milky Way",
+                "catalog": "",
+                "kind": "Observatory",
+                "constellation": "",
+                "distance": "",
+                "ra": "",
+                "dec": "",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            }
+        ]
+    },
+    {
+        "slot": "08",
+        "default": "heic1501a",
+        "options": [
+            {
+                "id": "heic1501a",
+                "source": "esahubble",
+                "title": "New view of the Pillars of Creation — visible",
+                "credit": "NASA, ESA/Hubble and the Hubble Heritage Team",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic1501a/",
+                "pixels": [
+                    6780,
+                    7071
+                ],
+                "downloads": {
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic1501a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic1501a.jpg"
+                },
+                "object": "Pillars of Creation, Eagle Nebula",
+                "catalog": "M16 / NGC 6611",
+                "kind": "Star-forming region",
+                "constellation": "Serpens",
+                "distance": "7,000 ly",
+                "ra": "18:18:48",
+                "dec": "-13:49:00",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "eso1719a",
+                "source": "eso",
+                "title": "The VST captures three spectacular nebulae in one image",
+                "credit": "ESO",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1719a/",
+                "pixels": [
+                    93031,
+                    35412
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1719a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1719a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1719a.jpg"
+                },
+                "object": "Eagle & Omega Nebulae",
+                "catalog": "M16 / M17 / Sh 2-54",
+                "kind": "Star-forming regions",
+                "constellation": "Serpens",
+                "distance": "~6,000 ly",
+                "ra": "18:19:30",
+                "dec": "-14:06:09",
+                "fit": "band",
+                "focus": null,
+                "note": "",
+                "zoom": 1.3
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "",
+                "fit": "cover",
+                "id": "weic2216b",
+                "source": "esawebb",
+                "title": "Webb Takes a Stunning, Star-Filled Portrait of the Pillars of Creation (Full View)",
+                "credit": "NASA, ESA, CSA, STScI; J. DePasquale, A. Koekemoer, A. Pagan (STScI).",
+                "page": "https://esawebb.org/images/weic2216b/",
+                "pixels": [
+                    8423,
+                    14589
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2216b.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2216b.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2216b.jpg"
+                },
+                "object": "Pillars of Creation, Eagle Nebula",
+                "catalog": "M16",
+                "kind": "Star-forming region",
+                "constellation": "Serpens",
+                "distance": "6,500 ly",
+                "ra": "18:18:55",
+                "dec": "-13:51:06"
+            },
+            {
+                "id": "eso0926a",
+                "source": "eso",
+                "title": "The Eagle Nebula",
+                "credit": "ESO",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso0926a/",
+                "pixels": [
+                    8084,
+                    8084
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso0926a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso0926a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso0926a.jpg"
+                },
+                "object": "Eagle Nebula",
+                "catalog": "M16 / NGC 6611",
+                "kind": "Emission nebula",
+                "constellation": "Serpens Cauda",
+                "distance": "7,000 ly",
+                "ra": "18:18:48",
+                "dec": "-13:49:12",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "potw1415a",
+                "source": "eso",
+                "title": "La Silla poses for an Ultra HD shoot",
+                "credit": "ESO/B. Tafreshi (twanight.org)",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/potw1415a/",
+                "pixels": [
+                    3723,
+                    5245
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/potw1415a.jpg",
+                    "large": "https://cdn.eso.org/images/large/potw1415a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/potw1415a.jpg"
+                },
+                "object": "La Silla and the Milky Way",
+                "catalog": "",
+                "kind": "Observatory",
+                "constellation": "",
+                "distance": "",
+                "ra": "",
+                "dec": "",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2503a",
+                "source": "esawebb",
+                "title": "Actively forming star system Lynds 483 (NIRCam image)",
+                "credit": "NASA, ESA, CSA, STScI",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2503a/",
+                "pixels": [
+                    4328,
+                    4581
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2503a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2503a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2503a.jpg"
+                },
+                "object": "Lynds 483",
+                "catalog": "LDN 483",
+                "kind": "Protostar",
+                "constellation": "Serpens Cauda",
+                "distance": "650 ly",
+                "ra": "18:17:32",
+                "dec": "-04:39:42",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            }
+        ]
+    },
+    {
+        "slot": "09",
+        "default": "potw1415a",
+        "options": [
+            {
+                "id": "wm-hamois-m31",
+                "source": "commons",
+                "commons_title": "File:M31-Andromede-16-09-2023-Hamois.jpg",
+                "title": "M31 Andromeda, Hamois, 16 Sep 2023",
+                "credit": "Luc Viatour / https://Lucnix.be",
+                "license": "checked on download",
+                "page": "https://commons.wikimedia.org/wiki/File:M31-Andromede-16-09-2023-Hamois.jpg",
+                "pixels": [
+                    0,
+                    0
+                ],
+                "downloads": {},
+                "object": "Andromeda Galaxy",
+                "catalog": "M31 / NGC 224",
+                "kind": "Spiral galaxy",
+                "constellation": "Andromeda",
+                "distance": "2.5 million ly",
+                "ra": "00:42:44",
+                "dec": "41:16:09",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "rotate": "auto",
+                "note": "Wikimedia Commons; used only if its licence allows printing and selling (checked by fetch_images.py)"
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "Whole galaxy with M32 and M110; no mosaic edges",
+                "fit": "cover",
+                "id": "noao-m31",
+                "source": "noirlab",
+                "title": "The Andromeda Galaxy",
+                "credit": "T.A.Rector and B.A.Wolpa/NOIRLab/NSF/AURA",
+                "page": "https://noirlab.edu/public/images/noao-m31/",
+                "pixels": [
+                    8175,
+                    8292
+                ],
+                "downloads": {
+                    "publicationjpg": [
+                        "https://noirlab.edu/public/media/archives/images/publicationjpg/noao-m31.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/publicationjpg/noao-m31.jpg"
+                    ],
+                    "large": [
+                        "https://noirlab.edu/public/media/archives/images/large/noao-m31.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/large/noao-m31.jpg"
+                    ],
+                    "screen": [
+                        "https://noirlab.edu/public/media/archives/images/screen/noao-m31.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/screen/noao-m31.jpg"
+                    ]
+                },
+                "object": "Andromeda Galaxy",
+                "catalog": "M31 / NGC 224",
+                "kind": "Spiral galaxy",
+                "constellation": "Andromeda",
+                "distance": "2.5 million ly",
+                "ra": "00:42:44",
+                "dec": "41:16:09"
+            },
+            {
+                "id": "heic2501a",
+                "source": "esahubble",
+                "title": "Hubble's panoramic view of the Andromeda Galaxy",
+                "credit": "NASA, ESA, B. Williams (University of Washington)",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic2501a/",
+                "pixels": [
+                    42208,
+                    9870
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/heic2501a.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic2501a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic2501a.jpg"
+                },
+                "object": "Andromeda Galaxy",
+                "catalog": "M31 / NGC 224",
+                "kind": "Spiral galaxy",
+                "constellation": "Andromeda",
+                "distance": "2.5 million ly",
+                "ra": "00:42:44",
+                "dec": "41:16:09",
+                "fit": "band",
+                "focus": null,
+                "note": "Hubble mosaic: the most detailed view, with jagged edges where the tiles end",
+                "zoom": 1.6
+            },
+            {
+                "id": "heic1502a",
+                "source": "esahubble",
+                "title": "Sharpest ever view of the Andromeda Galaxy",
+                "credit": "NASA, ESA, J. Dalcanton (University of Washington, USA), B. F. Williams (University of Washington, USA), L. C. Johnson (University of Washington, USA), the PHAT team, and R. Gendler",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic1502a/",
+                "pixels": [
+                    69536,
+                    22230
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/heic1502a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic1502a.jpg"
+                },
+                "object": "Andromeda Galaxy",
+                "catalog": "M31 / NGC 224",
+                "kind": "Spiral galaxy",
+                "constellation": "Andromeda",
+                "distance": "2.5 million ly",
+                "ra": "00:44:37",
+                "dec": "41:35:34",
+                "fit": "band",
+                "focus": null,
+                "note": "Hubble mosaic: the most detailed view, with jagged edges where the tiles end",
+                "zoom": 1.4
+            },
+            {
+                "id": "potw1415a",
+                "source": "eso",
+                "title": "La Silla poses for an Ultra HD shoot",
+                "credit": "ESO/B. Tafreshi (twanight.org)",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/potw1415a/",
+                "pixels": [
+                    3723,
+                    5245
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/potw1415a.jpg",
+                    "large": "https://cdn.eso.org/images/large/potw1415a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/potw1415a.jpg"
+                },
+                "object": "La Silla and the Milky Way",
+                "catalog": "",
+                "kind": "Observatory",
+                "constellation": "",
+                "distance": "",
+                "ra": "",
+                "dec": "",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            }
+        ]
+    },
+    {
+        "slot": "10",
+        "default": "eso1424a",
+        "options": [
+            {
+                "id": "eso1424a",
+                "source": "eso",
+                "title": "VST snaps a very detailed view of the Triangulum Galaxy",
+                "credit": "ESO",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1424a/",
+                "pixels": [
+                    19058,
+                    15983
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1424a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1424a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1424a.jpg"
+                },
+                "object": "Triangulum Galaxy",
+                "catalog": "M33 / NGC 598",
+                "kind": "Spiral galaxy",
+                "constellation": "Triangulum",
+                "distance": "3 million ly",
+                "ra": "01:33:52",
+                "dec": "30:40:26",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "eso1025a",
+                "source": "eso",
+                "title": "VISTA's infrared view of the Sculptor Galaxy (NGC 253)",
+                "credit": "ESO/J. Emerson/VISTA. Acknowledgment: Cambridge Astronomical Survey Unit",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1025a/",
+                "pixels": [
+                    6761,
+                    4501
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1025a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1025a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1025a.jpg"
+                },
+                "object": "Sculptor Galaxy",
+                "catalog": "NGC 253",
+                "kind": "Starburst spiral galaxy",
+                "constellation": "Sculptor",
+                "distance": "13 million ly",
+                "ra": "00:47:30",
+                "dec": "-25:17:22",
+                "fit": "cover",
+                "focus": null,
+                "note": "Low in the south from northern latitudes",
+                "zoom": 1.0
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "",
+                "fit": "cover",
+                "id": "noao-m33_opt",
+                "source": "noirlab",
+                "title": "M33, NGC 598",
+                "credit": "T.A.Rector (NRAO/AUI/NSF and NOIRLab/NSF/AURA) and M.Hanna (NOIRLab/NSF/AURA)",
+                "page": "https://noirlab.edu/public/images/noao-m33_opt/",
+                "pixels": [
+                    8107,
+                    8270
+                ],
+                "downloads": {
+                    "publicationjpg": [
+                        "https://noirlab.edu/public/media/archives/images/publicationjpg/noao-m33_opt.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/publicationjpg/noao-m33_opt.jpg"
+                    ],
+                    "large": [
+                        "https://noirlab.edu/public/media/archives/images/large/noao-m33_opt.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/large/noao-m33_opt.jpg"
+                    ],
+                    "screen": [
+                        "https://noirlab.edu/public/media/archives/images/screen/noao-m33_opt.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/screen/noao-m33_opt.jpg"
+                    ]
+                },
+                "object": "Triangulum Galaxy",
+                "catalog": "M33 / NGC 598",
+                "kind": "Spiral galaxy",
+                "constellation": "Triangulum",
+                "distance": "2.7 million ly",
+                "ra": "01:33:51",
+                "dec": "30:39:37"
+            },
+            {
+                "id": "heic0910i",
+                "source": "esahubble",
+                "title": "Galactic wreckage in Stephan's Quintet",
+                "credit": "NASA, ESA and the Hubble SM4 ERO Team",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic0910i/",
+                "pixels": [
+                    6064,
+                    6760
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/heic0910i.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic0910i.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic0910i.jpg"
+                },
+                "object": "Stephan's Quintet",
+                "catalog": "HCG 92",
+                "kind": "Galaxy group",
+                "constellation": "Pegasus",
+                "distance": "300 million ly",
+                "ra": "22:35:59",
+                "dec": "33:57:36",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "Irregular mosaic footprint (black gaps): frames poorly; set --fit/focus before using"
+            },
+            {
+                "id": "potw1805a",
+                "source": "esahubble",
+                "title": "Twins with differences",
+                "credit": "ESA/Hubble & NASA/D. Milisavljevic (Purdue University)",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/potw1805a/",
+                "pixels": [
+                    4061,
+                    3038
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/potw1805a.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/potw1805a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/potw1805a.jpg"
+                },
+                "object": "NGC 7331",
+                "catalog": "NGC 7331",
+                "kind": "Spiral galaxy",
+                "constellation": "Pegasus",
+                "distance": "45 million ly",
+                "ra": "22:37:05",
+                "dec": "34:24:31",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "heic1118a",
+                "source": "esahubble",
+                "title": "Hubble view of star-forming region S106",
+                "credit": "NASA & ESA",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic1118a/",
+                "pixels": [
+                    4356,
+                    3202
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/heic1118a.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic1118a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic1118a.jpg"
+                },
+                "object": "Sharpless 2-106",
+                "catalog": "S106 IR / Sh 2-106",
+                "kind": "Star-forming region",
+                "constellation": "Cygnus",
+                "distance": "3,300 ly",
+                "ra": "20:27:26",
+                "dec": "37:22:39",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            }
+        ]
+    },
+    {
+        "slot": "11",
+        "default": "weic2425a",
+        "options": [
+            {
+                "id": "eso1205a",
+                "source": "eso",
+                "title": "VISTA's look at the Helix Nebula",
+                "credit": "ESO/VISTA/J. Emerson. Acknowledgment: Cambridge Astronomical Survey Unit",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso1205a/",
+                "pixels": [
+                    6592,
+                    6592
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1205a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso1205a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso1205a.jpg"
+                },
+                "object": "Helix Nebula",
+                "catalog": "NGC 7293",
+                "kind": "Planetary nebula",
+                "constellation": "Aquarius",
+                "distance": "700 ly",
+                "ra": "22:29:39",
+                "dec": "-20:50:14",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "eso0907a",
+                "source": "eso",
+                "title": "The Helix Nebula",
+                "credit": "ESO",
+                "license": "CC BY 4.0",
+                "page": "https://www.eso.org/public/images/eso0907a/",
+                "pixels": [
+                    7059,
+                    6535
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso0907a.jpg",
+                    "large": "https://cdn.eso.org/images/large/eso0907a.jpg",
+                    "screen": "https://cdn.eso.org/images/screen/eso0907a.jpg"
+                },
+                "object": "Helix Nebula",
+                "catalog": "NGC 7293",
+                "kind": "Planetary nebula",
+                "constellation": "Aquarius",
+                "distance": "700 ly",
+                "ra": "22:29:39",
+                "dec": "-20:50:14",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "",
+                "fit": "cover",
+                "id": "noao0307a",
+                "source": "noirlab",
+                "title": "The Helix Nebula, NGC 7293",
+                "credit": "NASA, NOAO, ESA, the Hubble Helix Nebula Team, M. Meixner (STScI), and T.A. Rector (NRAO)",
+                "page": "https://noirlab.edu/public/images/noao0307a/",
+                "pixels": [
+                    16000,
+                    16000
+                ],
+                "downloads": {
+                    "publicationjpg": [
+                        "https://noirlab.edu/public/media/archives/images/publicationjpg/noao0307a.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/publicationjpg/noao0307a.jpg"
+                    ],
+                    "large": [
+                        "https://noirlab.edu/public/media/archives/images/large/noao0307a.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/large/noao0307a.jpg"
+                    ],
+                    "screen": [
+                        "https://noirlab.edu/public/media/archives/images/screen/noao0307a.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/screen/noao0307a.jpg"
+                    ]
+                },
+                "object": "Helix Nebula",
+                "catalog": "NGC 7293",
+                "kind": "Planetary nebula",
+                "constellation": "Aquarius",
+                "distance": "650 ly",
+                "ra": "22:29:39",
+                "dec": "-20:50:14"
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "Small Magellanic Cloud: a southern-sky target",
+                "fit": "cover",
+                "id": "weic2425a",
+                "source": "esawebb",
+                "title": "NGC 602 (NIRCam and MIRI image)",
+                "credit": "ESA/Webb, NASA & CSA, P. Zeidler, E. Sabbi, A. Nota, M. Zamani (ESA/Webb)",
+                "page": "https://esawebb.org/images/weic2425a/",
+                "pixels": [
+                    8588,
+                    5617
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2425a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2425a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2425a.jpg"
+                },
+                "object": "NGC 602",
+                "catalog": "NGC 602",
+                "kind": "Young star cluster and nebula",
+                "constellation": "Hydrus",
+                "distance": "200,000 ly",
+                "ra": "01:29:24",
+                "dec": "-73:33:40"
+            },
+            {
+                "id": "heic1118a",
+                "source": "esahubble",
+                "title": "Hubble view of star-forming region S106",
+                "credit": "NASA & ESA",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic1118a/",
+                "pixels": [
+                    4356,
+                    3202
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/heic1118a.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic1118a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic1118a.jpg"
+                },
+                "object": "Sharpless 2-106",
+                "catalog": "S106 IR / Sh 2-106",
+                "kind": "Star-forming region",
+                "constellation": "Cygnus",
+                "distance": "3,300 ly",
+                "ra": "20:27:26",
+                "dec": "37:22:39",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "opo0432d",
+                "source": "esahubble",
+                "title": "A new view of the Helix Nebula",
+                "credit": "NASA, ESA, C.R. O'Dell (Vanderbilt University), and M. Meixner, P. McCullough, and G. Bacon (Space Telescope Science Institute)",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/opo0432d/",
+                "pixels": [
+                    6145,
+                    6623
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esahubble.org/archives/images/publicationjpg/opo0432d.jpg",
+                    "large": "https://cdn.esahubble.org/archives/images/large/opo0432d.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/opo0432d.jpg"
+                },
+                "object": "Helix Nebula",
+                "catalog": "NGC 7293",
+                "kind": "Planetary nebula",
+                "constellation": "Aquarius",
+                "distance": "700 ly",
+                "ra": "22:29:42",
+                "dec": "-20:50:13",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2605a",
+                "source": "esawebb",
+                "title": "Exposed Cranium Nebula (NIRCam and MIRI images)",
+                "credit": "NASA, ESA, CSA, STScI, Image Processing: Joseph DePasquale (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2605a/",
+                "pixels": [
+                    8832,
+                    4535
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2605a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2605a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2605a.jpg"
+                },
+                "object": "Exposed Cranium Nebula",
+                "catalog": "PMR 1",
+                "kind": "Planetary nebula",
+                "constellation": "",
+                "distance": "",
+                "ra": "",
+                "dec": "",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "",
+                "fit": "cover",
+                "id": "noao-ic1805",
+                "source": "noirlab",
+                "title": "Open Cluster IC 1805 (the Heart Nebula)",
+                "credit": "T.A. Rector (University of Alaska Anchorage) and H. Schweiker (WIYN and NOIRLab/NSF/AURA)",
+                "page": "https://noirlab.edu/public/images/noao-ic1805/",
+                "pixels": [
+                    8243,
+                    8300
+                ],
+                "downloads": {
+                    "publicationjpg": [
+                        "https://noirlab.edu/public/media/archives/images/publicationjpg/noao-ic1805.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/publicationjpg/noao-ic1805.jpg"
+                    ],
+                    "large": [
+                        "https://noirlab.edu/public/media/archives/images/large/noao-ic1805.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/large/noao-ic1805.jpg"
+                    ],
+                    "screen": [
+                        "https://noirlab.edu/public/media/archives/images/screen/noao-ic1805.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/screen/noao-ic1805.jpg"
+                    ]
+                },
+                "object": "Heart Nebula",
+                "catalog": "IC 1805",
+                "kind": "Emission nebula",
+                "constellation": "Cassiopeia",
+                "distance": "7,500 ly",
+                "ra": "02:34:05",
+                "dec": "61:36:03"
+            }
+        ]
+    },
+    {
+        "slot": "12",
+        "default": "weic2326a",
+        "options": [
+            {
+                "id": "heic0515a",
+                "source": "esahubble",
+                "title": "Most detailed image of the Crab Nebula",
+                "credit": "NASA, ESA and Allison Loll/Jeff Hester (Arizona State University). Acknowledgement: Davide De Martin (ESA/Hubble)",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic0515a/",
+                "pixels": [
+                    3864,
+                    3864
+                ],
+                "downloads": {
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic0515a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic0515a.jpg"
+                },
+                "object": "Crab Nebula",
+                "catalog": "M1 / NGC 1952",
+                "kind": "Supernova remnant",
+                "constellation": "Taurus",
+                "distance": "6,500 ly",
+                "ra": "05:34:32",
+                "dec": "22:00:52",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "id": "heic2607a",
+                "source": "esahubble",
+                "title": "Crab Nebula (2024 Hubble image)",
+                "credit": "NASA, ESA, STScI, W. Blair (JHU). Image Processing: J. DePasquale (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esahubble.org/images/heic2607a/",
+                "pixels": [
+                    3864,
+                    3864
+                ],
+                "downloads": {
+                    "large": "https://cdn.esahubble.org/archives/images/large/heic2607a.jpg",
+                    "screen": "https://cdn.esahubble.org/archives/images/screen/heic2607a.jpg"
+                },
+                "object": "Crab Nebula",
+                "catalog": "M1 / NGC 1952",
+                "kind": "Supernova remnant",
+                "constellation": "Taurus",
+                "distance": "6,500 ly",
+                "ra": "05:34:33",
+                "dec": "22:00:55",
+                "fit": "cover",
+                "focus": null,
+                "note": "",
+                "zoom": 1.0
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "",
+                "fit": "cover",
+                "id": "weic2326a",
+                "source": "esawebb",
+                "title": "The Crab Nebula",
+                "credit": "NASA, ESA, CSA, STScI, T. Temim (Princeton University)",
+                "page": "https://esawebb.org/images/weic2326a/",
+                "pixels": [
+                    10509,
+                    9151
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2326a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2326a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2326a.jpg"
+                },
+                "object": "Crab Nebula",
+                "catalog": "M1",
+                "kind": "Supernova remnant",
+                "constellation": "Taurus",
+                "distance": "6,500 ly",
+                "ra": "05:34:33",
+                "dec": "22:01:00"
+            },
+            {
+                "id": "weic2219a",
+                "source": "esawebb",
+                "title": "Protostar L1527",
+                "credit": "NASA, ESA, CSA, and STScI, J. DePasquale (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2219a/",
+                "pixels": [
+                    4373,
+                    4462
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2219a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2219a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2219a.jpg"
+                },
+                "object": "Protostar L1527",
+                "catalog": "LDN 1527",
+                "kind": "Protostar",
+                "constellation": "Taurus",
+                "distance": "460 ly",
+                "ra": "04:39:54",
+                "dec": "26:03:09",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2207b",
+                "source": "esawebb",
+                "title": "Southern Ring Nebula (NIRCam Image)",
+                "credit": "NASA, ESA, CSA, STScI, and the Webb ERO Production Team",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2207b/",
+                "pixels": [
+                    4833,
+                    4501
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2207b.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2207b.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2207b.jpg"
+                },
+                "object": "Southern Ring Nebula",
+                "catalog": "NGC 3132",
+                "kind": "Planetary nebula",
+                "constellation": "Vela",
+                "distance": "2,500 ly",
+                "ra": "10:07:02",
+                "dec": "-40:26:11",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "id": "weic2605a",
+                "source": "esawebb",
+                "title": "Exposed Cranium Nebula (NIRCam and MIRI images)",
+                "credit": "NASA, ESA, CSA, STScI, Image Processing: Joseph DePasquale (STScI)",
+                "license": "CC BY 4.0",
+                "page": "https://esawebb.org/images/weic2605a/",
+                "pixels": [
+                    8832,
+                    4535
+                ],
+                "downloads": {
+                    "publicationjpg": "https://cdn.esawebb.org/archives/images/publicationjpg/weic2605a.jpg",
+                    "large": "https://cdn.esawebb.org/archives/images/large/weic2605a.jpg",
+                    "screen": "https://cdn.esawebb.org/archives/images/screen/weic2605a.jpg"
+                },
+                "object": "Exposed Cranium Nebula",
+                "catalog": "PMR 1",
+                "kind": "Planetary nebula",
+                "constellation": "",
+                "distance": "",
+                "ra": "",
+                "dec": "",
+                "fit": "cover",
+                "focus": null,
+                "zoom": 1.0,
+                "note": ""
+            },
+            {
+                "license": "CC BY 4.0",
+                "focus": null,
+                "zoom": 1.0,
+                "note": "",
+                "fit": "cover",
+                "id": "noao-ic1805",
+                "source": "noirlab",
+                "title": "Open Cluster IC 1805 (the Heart Nebula)",
+                "credit": "T.A. Rector (University of Alaska Anchorage) and H. Schweiker (WIYN and NOIRLab/NSF/AURA)",
+                "page": "https://noirlab.edu/public/images/noao-ic1805/",
+                "pixels": [
+                    8243,
+                    8300
+                ],
+                "downloads": {
+                    "publicationjpg": [
+                        "https://noirlab.edu/public/media/archives/images/publicationjpg/noao-ic1805.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/publicationjpg/noao-ic1805.jpg"
+                    ],
+                    "large": [
+                        "https://noirlab.edu/public/media/archives/images/large/noao-ic1805.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/large/noao-ic1805.jpg"
+                    ],
+                    "screen": [
+                        "https://noirlab.edu/public/media/archives/images/screen/noao-ic1805.jpg",
+                        "https://storage.noirlab.edu/media/archives/images/screen/noao-ic1805.jpg"
+                    ]
+                },
+                "object": "Heart Nebula",
+                "catalog": "IC 1805",
+                "kind": "Emission nebula",
+                "constellation": "Cassiopeia",
+                "distance": "7,500 ly",
+                "ra": "02:34:05",
+                "dec": "61:36:03"
+            }
+        ]
+    }
+]

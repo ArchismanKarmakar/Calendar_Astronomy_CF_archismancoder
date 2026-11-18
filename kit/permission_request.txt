@@ -1,0 +1,20 @@
+Subject: Permission to print your photo of {OBJECT} in a 2027 astronomy calendar
+
+Hi {NAME},
+
+I'm Archisman Karmakar (ArchismanCoder). I make "The Deep Space Explorer 2027", an astronomy
+calendar that lists each month's eclipses, meteor showers, comets and dark-sky nights for the
+reader's city, with one deep-sky photograph per month.
+
+I'd love to use your photo of {OBJECT} ({LINK}) for {MONTH}. It would be printed:
+  - full width on the month page, cropped to fit (and, if needed, rotated so the galaxy lies along the page);
+  - with your credit in full on that page: "{CREDIT}", plus your website if you'd like;
+  - in the printed calendar, which I sell, in PDFs on calendar.archismancoder.com, and in its previews.
+
+Could you let me know whether that's OK, and how you'd like to be credited? If you prefer a
+fee or a different arrangement, I'm happy to hear it. I can also send you the page before it's
+printed, and a free copy.
+
+Thank you, and clear skies,
+Archisman Karmakar
+https://archismancoder.com

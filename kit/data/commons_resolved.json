@@ -1,0 +1,22 @@
+{
+ "wm-hamois-m31": {
+  "ok": true,
+  "reason": "free licence",
+  "credit": "I, Luc Viatour",
+  "license": "CC BY-SA 2.5",
+  "page": "https://commons.wikimedia.org/wiki/File:M31-Andromede-16-09-2023-Hamois.jpg",
+  "pixels": [
+   8161,
+   5395
+  ],
+  "downloads": {
+   "large": [
+    "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/M31-Andromede-16-09-2023-Hamois.jpg/3840px-M31-Andromede-16-09-2023-Hamois.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "https://upload.wikimedia.org/wikipedia/commons/5/57/M31-Andromede-16-09-2023-Hamois.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+   ]
+  },
+  "file_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/M31-Andromede-16-09-2023-Hamois.jpg/3840px-M31-Andromede-16-09-2023-Hamois.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "thumb_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/M31-Andromede-16-09-2023-Hamois.jpg/3840px-M31-Andromede-16-09-2023-Hamois.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "note": "CC BY-SA: pages using it are shared under the same licence"
+ }
+}

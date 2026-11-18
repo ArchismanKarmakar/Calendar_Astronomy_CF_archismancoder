@@ -1,0 +1,8 @@
+# Cloudflare Pages project settings (used when the project is connected to GitHub).
+name = "deep-space-explorer-2027"
+pages_build_output_dir = "site"
+compatibility_date = "2025-06-01"
+
+[vars]
+# Set to "1" only if another site of yours must use the image proxy.
+ALLOW_ANY_ORIGIN = "0"

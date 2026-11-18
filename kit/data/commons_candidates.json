@@ -1,0 +1,27 @@
+{
+ "_about": "Wikimedia Commons photos to check with: python choose_images.py --check-commons. Each is tested for a licence that allows printing and selling, and at least 4000 px. Add more titles or categories freely.",
+ "files": {
+  "09": ["File:M31-Andromede-16-09-2023-Hamois.jpg", "File:Andromeda_Galaxy_with_Satellite_Galaxies.jpg",
+         "File:Andromeda_galaxy_2023.jpg", "File:M31,_the_Andromeda_Galaxy,_Killarney_Provincial_Park_Observatory.jpg",
+         "File:The_Andromeda_Galaxy_M31.jpg", "File:M31_Andromeda_galaxia.jpg"],
+  "01": ["File:The_Orion_Nebula_M42.jpg", "File:The_Great_Orion_Nebula_(M42).jpg", "File:The_Great_Nebula_of_Orion_(M42).jpg",
+         "File:Orion_Nebula_and_Running_Man_Nebula_(M42_and_Sh2-279).jpg",
+         "File:M42_Orion_Nebula_from_the_Mount_Lemmon_SkyCenter_Schulman_Telescope_courtesy_Adam_Block.jpg"],
+  "04": ["File:M51_-_The_Whirlpool_Galaxy.jpg", "File:The_Whirlpool_Galaxy_-_M51_-_Flickr_-_CajunAstro.jpg"],
+  "06": ["File:The_Great_Globular_Cluster_in_Hercules_-_M13.jpg", "File:M13_(Hercules_globular_cluster).jpg"],
+  "10": ["File:M33-Galaxie-du-Triangle-07-10-2023-Hamois.jpg", "File:M33_-_Triangulum_Galaxy.jpg", "File:M33.jpg"],
+  "11": ["File:Helix_Nebula.jpg", "File:NGC_7293.jpg"]
+ },
+ "categories": {
+  "09": ["Category:Andromeda Galaxy"],
+  "01": ["Category:Orion Nebula"],
+  "04": ["Category:Whirlpool Galaxy"],
+  "06": ["Category:Hercules Cluster"],
+  "07": ["Category:Lagoon Nebula"],
+  "08": ["Category:Eagle Nebula"],
+  "10": ["Category:Triangulum Galaxy"],
+  "11": ["Category:Helix Nebula"],
+  "12": ["Category:Amateur pictures of the Crab Nebula"],
+  "03": ["Category:Leo Triplet"]
+ }
+}

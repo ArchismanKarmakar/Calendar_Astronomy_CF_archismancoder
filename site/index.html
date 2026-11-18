@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Space Explorer 2027 — the astronomy calendar for your sky</title>
+<meta name="description" content="A free 2027 astronomy calendar: eclipses, meteor showers, comets, conjunctions and dark-sky nights computed for your city, under ESO, ESA/Hubble, ESA/Webb and NOIRLab photographs. Download a ready-made edition or make your own.">
+<meta property="og:title" content="Deep Space Explorer 2027">
+<meta property="og:description" content="The night sky of 2027, computed for your city. Free wall and desk calendars with ESO, ESA/Hubble, ESA/Webb and NOIRLab images.">
+<meta property="og:image" content="sample/wall-01.jpg">
+<meta name="theme-color" content="#05060B">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/Fraunces-Display.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/Geist-Regular.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="style.css">
+<script>try { if (localStorage.getItem("dse27-red") === "1") document.documentElement.dataset.theme = "red"; } catch (e) {}</script>
+<script src="config.js"></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#downloads">Skip to the downloads</a>
+
+<header class="nav-wrap">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="./" aria-label="Deep Space Explorer 2027, home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="15" cy="17" r="9" fill="currentColor"/><circle cx="19" cy="14" r="8.4" fill="var(--bg)"/><circle cx="25" cy="7" r="1.4" fill="currentColor"/></svg>
+      <span>Deep Space Explorer</span>
+    </a>
+    <div class="nav-links">
+      <a href="#downloads">Calendars</a>
+      <a href="#make">Make your own</a>
+      <a href="#support">Support</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <button class="redlight" id="redlight" type="button" aria-pressed="false" title="Red light keeps your eyes dark-adapted at the telescope">
+      <span class="dot" aria-hidden="true"></span><span class="lbl">Red light</span>
+    </button>
+    <a class="btn primary sm nav-cta" href="#downloads">Download</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="glow" aria-hidden="true"></div>
+    <p class="pill reveal">2027 edition<span></span>63 cities<span></span>free to print</p>
+    <h1 id="hero-title" class="reveal">The night sky of 2027, on&nbsp;your&nbsp;wall.</h1>
+    <p class="lede reveal">A wall and desk calendar for astronomers and astrophotographers. Eclipses, meteor showers, comets and dark-sky nights are computed for your city, under photographs from ESO, ESA/Hubble, ESA/Webb and NOIRLab.</p>
+    <div class="actions reveal">
+      <a class="btn primary" href="#downloads">Download a calendar</a>
+      <a class="btn ghost" href="#make">Make your own</a>
+    </div>
+    <ul class="stats reveal" id="stats" aria-live="polite"></ul>
+    <div class="fan reveal" aria-hidden="true">
+      <img class="pg pg1" src="sample/wall-01.jpg" alt="" width="782" height="1100">
+      <img class="pg pg2" src="sample/wall-04.jpg" alt="" width="782" height="1100">
+      <img class="pg pg3" src="sample/wall-11.jpg" alt="" width="782" height="1100">
+    </div>
+  </section>
+
+  <section id="downloads" class="section" aria-labelledby="dl-title">
+    <div class="head">
+      <h2 id="dl-title">Ready-made calendars</h2>
+      <p>Print-ready PDFs for the most-requested regions. Each is computed for its own time zone and city, with that country's public holidays.</p>
+    </div>
+    <div class="editions" id="editions"></div>
+    <p class="after">Not your city? <a href="#make">Make your own</a> for any of 63 cities, with your own pictures and holidays.</p>
+  </section>
+
+  <section id="inside" class="section" aria-labelledby="inside-title">
+    <div class="head row">
+      <div>
+        <h2 id="inside-title">Look inside</h2>
+        <p>Fifteen pages: a cover, a guide to the symbols, twelve months and the year at a glance. Shown: the <span id="sample-ed">India</span> edition.</p>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="Sample format">
+        <label><input type="radio" name="sfmt" value="wall" checked><span>Wall</span></label>
+        <label><input type="radio" name="sfmt" value="desk"><span>Desk</span></label>
+      </div>
+    </div>
+    <div class="strip" id="strip" tabindex="0" aria-label="Sample pages, scroll sideways"></div>
+
+    <div class="bento">
+      <article class="tile t-wide">
+        <svg class="ico wide" viewBox="0 0 120 24" aria-hidden="true"><g fill="currentColor"><circle cx="12" cy="12" r="9" opacity=".25"/><path d="M12 3a9 9 0 0 1 0 18z"/><circle cx="42" cy="12" r="9"/><circle cx="72" cy="12" r="9" opacity=".25"/><path d="M72 3a9 9 0 0 0 0 18z"/><circle cx="102" cy="12" r="9" opacity=".25"/></g></svg>
+        <h3>Every night, rated for the Moon</h3>
+        <p>Each date shows how much of the Moon is lit at 9 pm. Dark nights are tinted, so galaxy and nebula sessions can be planned at a glance.</p>
+      </article>
+      <article class="tile">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21 15 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="m17 3 1.2 3.8L22 8l-3.8 1.2L17 13l-1.2-3.8L12 8l3.8-1.2z" fill="currentColor"/></svg>
+        <h3>Times to the minute</h3>
+        <p>Eclipses as seen from your city, meteor peaks, oppositions, conjunctions and occultations, in local time with daylight saving.</p>
+      </article>
+      <article class="tile">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor"/><ellipse cx="12" cy="12" rx="10.5" ry="3.6" fill="none" stroke="currentColor" stroke-width="1.4" transform="rotate(-18 12 12)"/></svg>
+        <h3>A target every month</h3>
+        <p>The photograph's own galaxy or nebula, and the time it stands highest from where you are.</p>
+      </article>
+      <article class="tile">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="13" y="13" width="4" height="4" rx="1" fill="currentColor"/></svg>
+        <h3>Your holidays, or none</h3>
+        <p>Public holidays for 245 countries in red, and Bengali festivals (Durga Puja, Lakshmi, Saraswati and Bishwakarma Puja) in marigold. Leave them out for a pure sky calendar.</p>
+      </article>
+      <article class="tile t-wide">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 13h7M9 17h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <h3>Ready for the printer</h3>
+        <p>A3 or Tabloid wall calendars and A5 or half-letter desk calendars, with bleed for print shops and each image's full credit on its page.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="make" class="section make" aria-labelledby="make-title">
+    <div class="head">
+      <h2 id="make-title">Make your own</h2>
+      <p>Your city, your format, your pictures. The calendar is built right here in your browser. The first build downloads the calendar engine (about 40 MB), which your browser keeps for next time.</p>
+    </div>
+
+    <div class="maker">
+      <form class="panel settings" id="settings" onsubmit="return false">
+        <fieldset>
+          <legend>Where you observe</legend>
+          <label class="field"><span>City and time zone</span><select id="city"></select></label>
+          <p class="hint" id="city-hint"></p>
+          <label class="field gap"><span>Public holidays</span><select id="holidays"></select></label>
+          <p class="hint" id="hol-hint"></p>
+          <label class="check fest" id="fest-row" hidden><input type="checkbox" id="festivals">
+            <span><b id="fest-name">Bengali festivals</b> in marigold: <span id="fest-list"></span></span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Format</legend>
+          <div class="cards2" role="radiogroup" aria-label="Format">
+            <label class="choice"><input type="radio" name="format" value="wall" checked>
+              <span><b>Wall</b><small id="wall-size">A3 portrait, 15 pages</small></span></label>
+            <label class="choice"><input type="radio" name="format" value="desk">
+              <span><b>Desk</b><small id="desk-size">A5 landscape, 15 pages</small></span></label>
+          </div>
+          <div class="row">
+            <div class="mini"><span id="paper-l">Paper</span>
+              <div class="seg" role="radiogroup" aria-labelledby="paper-l">
+                <label><input type="radio" name="paper" value="ISO"><span>A3 / A5</span></label>
+                <label><input type="radio" name="paper" value="US"><span>US sizes</span></label>
+              </div></div>
+            <div class="mini"><span id="week-l">Weeks start on</span>
+              <div class="seg" role="radiogroup" aria-labelledby="week-l">
+                <label><input type="radio" name="week" value="6"><span>Sunday</span></label>
+                <label><input type="radio" name="week" value="0"><span>Monday</span></label>
+              </div></div>
+          </div>
+          <div class="mini"><span id="dpi-l">Print quality</span>
+            <div class="seg" role="radiogroup" aria-labelledby="dpi-l">
+              <label><input type="radio" name="dpi" value="150"><span>Home printer</span></label>
+              <label><input type="radio" name="dpi" value="200" checked><span>Good</span></label>
+              <label><input type="radio" name="dpi" value="300"><span>Print shop</span></label>
+            </div>
+            <p class="hint" id="dpi-hint"></p></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Pictures</legend>
+          <p class="hint">Each month's photograph is also its target of the month. Tap one to choose from the collection, any ESO, ESA/Hubble or ESA/Webb image, a freely licensed photo from Wikimedia Commons, or your own astrophoto.</p>
+          <ol class="tiles" id="tiles"></ol>
+          <button class="link" type="button" id="reset-images">Back to the suggested pictures</button>
+        </fieldset>
+
+        <fieldset>
+          <legend>Cover words</legend>
+          <label class="field"><span>Title</span><input id="title" maxlength="40" autocomplete="off"></label>
+          <label class="field"><span>Subtitle</span><input id="subtitle" maxlength="60" autocomplete="off"></label>
+        </fieldset>
+      </form>
+
+      <aside class="output" aria-label="Preview and build">
+        <div class="panel preview">
+          <div class="preview-bar">
+            <label class="field inline"><span>Preview</span><select id="pv-page"></select></label>
+            <button class="btn ghost sm" type="button" id="pv-go">Show preview</button>
+          </div>
+          <div class="pv-canvas" id="pv-box">
+            <canvas id="pv-canvas" aria-label="Preview of the selected page"></canvas>
+            <p class="pv-empty" id="pv-empty">The preview draws one page with your settings, exactly as it will print.</p>
+          </div>
+        </div>
+        <div class="panel build">
+          <button class="btn primary wide" type="button" id="build">Make my calendar</button>
+          <div class="progress" id="progress" hidden>
+            <div class="bar"><span id="bar"></span></div>
+            <p id="status" aria-live="polite"></p>
+          </div>
+          <div class="result" id="result" hidden>
+            <a class="btn primary wide" id="download" download>Download</a>
+            <p class="hint" id="result-note"></p>
+            <p class="thanks">Enjoying it? <a href="#support">Chip in for next year's edition.</a></p>
+          </div>
+          <p class="warn" id="warn" hidden></p>
+          <p class="fine"><button class="link" type="button" id="share">Copy a link to these settings</button></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="support" class="section" aria-labelledby="support-title">
+    <div class="head">
+      <h2 id="support-title">Keep it free</h2>
+      <p>Everything here is free: no ads, no account, nothing for sale. If you'd like to say thanks, an optional donation helps cover hosting. It doesn't buy anything extra.</p>
+    </div>
+    <div class="donate" id="donate"></div>
+  </section>
+
+  <section id="faq" class="section" aria-labelledby="faq-title">
+    <div class="head"><h2 id="faq-title">Questions</h2></div>
+    <div class="faq">
+      <details><summary>How do I print it?</summary>
+        <p>Print at 100% ("actual size") on the paper named in the file: A3 or Tabloid for the wall calendar, A5 or half-letter for the desk calendar. The PDFs include bleed so a print shop can trim to the edge. On a home printer, choose "fit to page".</p></details>
+      <details><summary>How accurate are the dates and times?</summary>
+        <p>Moon phases, planets, conjunctions and occultations are computed with established astronomical models and are usually accurate to within a minute or two. Eclipse times come from NASA. Meteor-shower peaks follow the International Meteor Organization's 2027 calendar. Comet brightness is a forecast and can change. Holidays set by moon sighting are marked as estimates.</p></details>
+      <details><summary>Can I use my own photograph?</summary>
+        <p>Yes. In "Make your own", tap any month's picture and choose "Your photo". The photo is read in your browser and never leaves your device. You need to own it, or have permission to print it.</p></details>
+      <details><summary>Can I print it for my club, or sell it?</summary>
+        <p>Printing for yourself, as a gift, or for a school or astronomy club to hand out is welcome. This is a free, non-commercial project, so please don't sell copies or re-host the files without asking first. The photographs keep their own licences. The <a href="terms.html">terms</a> have the details.</p></details>
+      <details><summary>Why does the first build take a while?</summary>
+        <p>The calendar is drawn on your device rather than on a server. The first time, your browser downloads the drawing engine (about 40 MB) and the full-size photographs. Later builds reuse them.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-top">
+    <a class="brand" href="./"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="15" cy="17" r="9" fill="currentColor"/><circle cx="19" cy="14" r="8.4" fill="var(--bg)"/><circle cx="25" cy="7" r="1.4" fill="currentColor"/></svg><span>Deep Space Explorer</span></a>
+    <nav aria-label="Footer"><a href="#downloads">Calendars</a><a href="#make">Make your own</a><a href="#support">Support</a><a href="terms.html">Terms</a></nav>
+  </div>
+  <div class="foot-cols">
+    <p><b>Images</b> ESO, ESA/Hubble, ESA/Webb and NOIRLab (CC BY 4.0), and astrophotographers on Wikimedia Commons who chose a free licence. Every image's full credit and licence is printed on its page. Their use does not imply endorsement. This is an independent, non-commercial project and is not affiliated with them.</p>
+    <p><b>Data</b> Sky events computed with PyEphem. Eclipses: NASA GSFC. Meteor showers: IMO. Comets: BAA Comet Section and Seiichi Yoshida. Holidays: the open-source python-holidays project.</p>
+    <p><b>Privacy</b> Calendars are built in your browser. Photos you add stay on your device. No cookies and no tracking.</p>
+  </div>
+  <p class="by">© 2026 <a id="author" href="https://archismancoder.com">ArchismanCoder</a><span id="build-info"></span></p>
+</footer>
+
+<dialog id="picker" aria-labelledby="pk-title">
+  <form method="dialog" class="pk-head"><h3 id="pk-title">Choose a picture</h3><button class="x" value="close" aria-label="Close">×</button></form>
+  <div class="tabs" role="tablist">
+    <button role="tab" type="button" data-tab="suggested" aria-selected="true">Suggested</button>
+    <button role="tab" type="button" data-tab="all" aria-selected="false">All pictures</button>
+    <button role="tab" type="button" data-tab="id" aria-selected="false">ESO / ESA-Hubble ID</button>
+    <button role="tab" type="button" data-tab="own" aria-selected="false">Your photo</button>
+  </div>
+  <div class="pk-body" id="pk-body"></div>
+</dialog>
+
+<dialog id="lightbox" aria-label="Sample page">
+  <form method="dialog"><button class="x" value="close" aria-label="Close">×</button></form>
+  <button class="lb-nav prev" type="button" aria-label="Previous page">‹</button>
+  <img id="lb-img" alt="">
+  <button class="lb-nav next" type="button" aria-label="Next page">›</button>
+</dialog>
+</body>
+</html>

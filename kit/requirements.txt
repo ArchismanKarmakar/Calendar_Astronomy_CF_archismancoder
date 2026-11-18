@@ -1,0 +1,9 @@
+ephem
+reportlab
+fonttools
+pillow
+numpy
+scipy
+tzdata
+holidays
+pypdfium2  # only for make_site.py sample previews
