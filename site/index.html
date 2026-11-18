@@ -68,7 +68,7 @@
   <section id="downloads" class="section" aria-labelledby="dl-title">
     <div class="head">
       <h2 id="dl-title">Ready-made calendars</h2>
-      <p>Print-ready PDFs for the most-requested regions. Each is computed for its own time zone and city, with that country's public holidays.</p>
+      <p>Print-ready PDFs for the most-requested regions. Each is computed for its own time zone and city, with that country's public holidays. Every month shows a galaxy or nebula that is well placed in that month's evening sky, with the time it's highest.</p>
     </div>
     <div class="editions" id="editions"></div>
     <p class="after">Not your city? <a href="#make">Make your own</a> for any of 63 cities, with your own pictures and holidays.</p>
@@ -120,6 +120,7 @@
     <div class="head">
       <h2 id="make-title">Make your own</h2>
       <p>Pick your city and a photograph for every month. The page you see changes as you go.</p>
+      <p class="basis">Each month's suggested picture is that month's target: a galaxy, nebula or star cluster that stands highest in the evening sky that month. Its page prints the time it's highest from your city. Pictures aren't chosen for that month's events; those appear in the grid. The cover isn't tied to a date, and September's default shows the Milky Way over ESO's La Silla Observatory rather than a single target.</p>
     </div>
 
     <div class="maker">
@@ -136,6 +137,7 @@
           <button class="btn ghost sm" type="button" id="pv-go">Exact print preview</button>
           <select id="pv-page" class="sr-only" tabindex="-1" aria-hidden="true"></select>
         </div>
+        <p class="why" id="why" aria-live="polite"></p>
         <ol class="tiles film" id="tiles" aria-label="Pages: pick one to see it above"></ol>
         <button class="link reset" type="button" id="reset-images">Back to the suggested pictures</button>
       </div>

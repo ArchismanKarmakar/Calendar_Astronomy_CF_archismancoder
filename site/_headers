@@ -7,6 +7,10 @@
   Cache-Control: public, max-age=604800
 /thumbs/*
   Cache-Control: public, max-age=604800
+/previews/*
+  Cache-Control: public, max-age=604800
+/library/*
+  Cache-Control: public, max-age=2592000
 /sample/*
   Cache-Control: public, max-age=86400
 /py/*

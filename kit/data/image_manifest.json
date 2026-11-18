@@ -466,7 +466,7 @@
  },
  {
   "slot": "02",
-  "default": "eso2320a",
+  "default": "eso1238a",
   "options": [
    {
     "id": "eso1238a",
@@ -667,7 +667,7 @@
  },
  {
   "slot": "03",
-  "default": "weic2207b",
+  "default": "weic2612a",
   "options": [
    {
     "id": "eso1126a",
@@ -840,8 +840,35 @@
  },
  {
   "slot": "04",
-  "default": "weic2612a",
+  "default": "heic1006a",
   "options": [
+   {
+    "id": "heic1006a",
+    "source": "esahubble",
+    "title": "Hubble snaps heavyweight of the Leo Triplet",
+    "credit": "NASA, ESA and the Hubble Heritage (STScI/AURA)-ESA/Hubble Collaboration. Acknowledgement: Davide De Martin and Robert Gendler",
+    "license": "CC BY 4.0",
+    "page": "https://esahubble.org/images/heic1006a/",
+    "pixels": [
+     3903,
+     2702
+    ],
+    "downloads": {
+     "large": "https://cdn.esahubble.org/archives/images/large/heic1006a.jpg",
+     "screen": "https://cdn.esahubble.org/archives/images/screen/heic1006a.jpg"
+    },
+    "object": "Messier 66",
+    "catalog": "M66 / NGC 3627",
+    "kind": "Spiral galaxy",
+    "constellation": "Leo",
+    "distance": "35 million ly",
+    "ra": "11:20:16",
+    "dec": "12:58:55",
+    "fit": "cover",
+    "focus": null,
+    "note": "",
+    "zoom": 1.0
+   },
    {
     "id": "heic0506a",
     "source": "esahubble",
@@ -986,6 +1013,62 @@
     "distance": "12 million ly",
     "ra": "09:55:54",
     "dec": "69:40:51",
+    "fit": "cover",
+    "focus": null,
+    "zoom": 1.0,
+    "note": ""
+   },
+   {
+    "id": "eso1126a",
+    "source": "eso",
+    "title": "VST's view of the Leo Triplet and beyond",
+    "credit": "ESO/INAF-VST/OmegaCAM. Acknowledgement: OmegaCen/Astro-WISE/Kapteyn Institute",
+    "license": "CC BY 4.0",
+    "page": "https://www.eso.org/public/images/eso1126a/",
+    "pixels": [
+     15513,
+     12558
+    ],
+    "downloads": {
+     "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso1126a.jpg",
+     "large": "https://cdn.eso.org/images/large/eso1126a.jpg",
+     "screen": "https://cdn.eso.org/images/screen/eso1126a.jpg"
+    },
+    "object": "Leo Triplet",
+    "catalog": "M65 / M66 / NGC 3628",
+    "kind": "Galaxy group",
+    "constellation": "Leo",
+    "distance": "35 million ly",
+    "ra": "11:18:56",
+    "dec": "13:05:32",
+    "fit": "cover",
+    "focus": null,
+    "note": "",
+    "zoom": 1.0
+   },
+   {
+    "id": "eso2320a",
+    "source": "eso",
+    "title": "The Running Chicken Nebula",
+    "credit": "ESO/VPHAS+ team. Acknowledgement: CASU",
+    "license": "CC BY 4.0",
+    "page": "https://www.eso.org/public/images/eso2320a/",
+    "pixels": [
+     42057,
+     37010
+    ],
+    "downloads": {
+     "publicationjpg": "https://cdn.eso.org/images/publicationjpg/eso2320a.jpg",
+     "large": "https://cdn.eso.org/images/large/eso2320a.jpg",
+     "screen": "https://cdn.eso.org/images/screen/eso2320a.jpg"
+    },
+    "object": "Running Chicken Nebula",
+    "catalog": "IC 2944",
+    "kind": "Emission nebula",
+    "constellation": "Centaurus",
+    "distance": "6,500 ly",
+    "ra": "11:35:12",
+    "dec": "-63:10:31",
     "fit": "cover",
     "focus": null,
     "zoom": 1.0,
@@ -1878,7 +1961,7 @@
   "slot": "11",
   "default": [
    "wm-hamois-m31",
-   "weic2425a"
+   "noao-m31"
   ],
   "options": [
    {

@@ -85,20 +85,60 @@ it in one go, a dry run first:
     python3 tools/cf_geoblock.py --countries PK,TR,CN,BD,AZ,KP
     python3 tools/cf_geoblock.py --countries PK,TR,CN,BD,AZ,KP --apply --pages-redirect
 
-## Picture previews
+## Pictures live in this repo
 
-The picker loads each preview, in this order, from `site/thumbs/` (written by
-`make_site.py` from your downloaded images), then straight from the observatory's own CDN
-(cdn.eso.org, cdn.esahubble.org, cdn.esawebb.org, noirlab.edu), then through `/api/img`.
-So previews show even if the site's API is down. The full-size images for a PDF still come
-through `/api/img`, because the browser needs to read their pixels and those CDNs don't
-allow cross-site reads. If building fails, open
-`https://calendar.archismancoder.com/api/img?src=eso&id=eso2320a&r=thumb300y`, which
-shows the error.
+Every picture is served from your own site, so building a calendar never depends on ESO,
+ESA or NOIRLab being reachable. ESO's CDN, for one, refuses Cloudflare's servers (the
+"HTTP 525" errors). `make_site.py` writes three files per picture from the originals
+that `fetch_images.py` downloaded:
+
+| Folder | Size | Used for |
+|---|---|---|
+| `site/library/<id>.jpg` | enough for 300 dpi on an A3 or Tabloid cover with bleed (e.g. 7590×5175 px), at most 24 MB | printing |
+| `site/previews/<id>.jpg` | 1600 px | the live page in Make your own, the picker |
+| `site/thumbs/<id>.jpg` | 640 px | picker grid and filmstrip |
+
+```bash
+cd kit
+python fetch_images.py            # downloads every original (several GB, kept out of git in kit/photos/)
+python make_site.py               # writes the three sizes and site/data/library.json
+git add site && git commit -m "pictures" && git push
+```
+
+Expect roughly 0.5 to 1 GB in `site/library/`. That's fine for GitHub (100 MB per file,
+and every file here is under 24 MB) and for Cloudflare (25 MiB per file). To keep the repo
+smaller, run `python make_site.py --print-dpi 240` after deleting `site/library/`. A picture
+with no copy here falls back to the observatory: previews straight from its CDN, print files
+through `/api/img`.
+
+## How the default pictures are chosen
+
+Each month's picture is that month's target: a galaxy, nebula or star cluster that stands
+highest in the evening sky that month, at around 21:00 to 23:00 on the 15th. The page prints the time it's
+highest and its altitude for the chosen city. Pictures aren't chosen for that month's events;
+those are in the grid. Within that rule, Webb and Hubble images are preferred. The site
+explains this in Make your own, shows each picture's time for the visitor's city, and flags
+objects that never rise there.
+
+| Page | Default | Highest on the 15th from New Delhi |
+|---|---|---|
+| Cover | Carina Nebula (ESO) | not tied to a date |
+| Jan | Orion Nebula (ESO) | 22:18, 56° |
+| Feb | Thor's Helmet (ESO) | 21:59, 48° |
+| Mar | Cigar Galaxy (Webb) | 22:47, 49° |
+| Apr | Messier 66 (Hubble) | 22:08, 74° |
+| May | Sombrero Galaxy (Hubble) | 21:29, 50° |
+| Jun | Hercules Cluster (Hubble) | 23:28, 82° |
+| Jul | Lagoon Nebula (ESO) | 22:53, 37° |
+| Aug | Pillars of Creation (Hubble) | 21:06, 48° |
+| Sep | Milky Way over La Silla (ESO) | a landscape, your choice; no target time |
+| Oct | Triangulum Galaxy (ESO) | 00:20, 88° |
+| Nov | Andromeda Galaxy (Luc Viatour) | 21:27, 77° |
+| Dec | Crab Nebula (Webb) | 00:20, 83° |
 
 ## Wikimedia Commons photos (Luc Viatour's Andromeda and Triangulum)
 
-`wm-hamois-m31` (Andromeda, default for November) and `wm-hamois-m33` (Triangulum) are
+`wm-hamois-m31` (Andromeda, default for November; if its licence check fails, NOIRLab's Andromeda is used) and `wm-hamois-m33` (Triangulum) are
 amateur photographs on Wikimedia Commons by Luc Viatour (https://Lucnix.be). Their licence
 is checked in two places: by `fetch_images.py` on your machine, and live in each visitor's
 browser through the Commons API (Commons allows that), so they appear on the site even if

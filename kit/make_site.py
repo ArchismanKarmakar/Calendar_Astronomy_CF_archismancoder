@@ -69,50 +69,103 @@ def editions():
     compact(os.path.join(SITE, "data", "cities.json"), cities)
 
 
+# Every picture is served from this site in three sizes, so nothing depends on the
+# observatories' servers when someone builds a calendar:
+#   site/library/<id>.jpg   print copy: enough pixels for 300 dpi on the biggest page it can go
+#                           on (an A3 or Tabloid cover, with bleed), at most 24 MB (Cloudflare
+#                           serves files up to 25 MiB)
+#   site/previews/<id>.jpg  1600 px, for the live page in "Make your own" and the picker
+#   site/thumbs/<id>.jpg    640 px, for the picker grid and the filmstrip
+COVER_FRAMES_300 = [(3579, 5031), (3375, 5175)]  # A3 and Tabloid with bleed, in pixels at 300 dpi
+PRINT_DPI = 300  # --print-dpi: 240 roughly halves the repo with little visible loss
+PRINT_MAX_BYTES = 24e6
+PRINT_MAX_SIDE = 12000
+
+
+def print_size(w, h, zoom=1.0):
+    """The smallest size (keeping the aspect) that still fills either cover at 300 dpi."""
+    a = w / h
+    need_h = max(max(fh, fw / a) for fw, fh in COVER_FRAMES_300) * PRINT_DPI / 300 * max(1.0, zoom or 1.0)
+    scale = min(1.0, need_h / h, PRINT_MAX_SIDE / max(w, h))
+    return max(1, round(w * scale)), max(1, round(h * scale))
+
+
+def save_under(im, out, limit, qualities=(92, 90, 88, 86, 84, 82, 80, 78)):
+    """Save as JPEG at the best quality that fits under `limit` bytes; shrink 8% a step if needed."""
+    from PIL import Image
+    while True:
+        for q in qualities:
+            im.save(out, quality=q, optimize=True, progressive=True, subsampling=0 if q >= 90 else 2)
+            if os.path.getsize(out) <= limit:
+                return q
+        im = im.resize((round(im.width * 0.92), round(im.height * 0.92)), Image.LANCZOS)
+
+
+def fresh(dst, src):
+    return os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src)
+
+
 def library():
     from PIL import Image
     Image.MAX_IMAGE_PIXELS = None
     man = util.manifest()
     lib = util.library(man)
-    os.makedirs(os.path.join(SITE, "thumbs"), exist_ok=True)
-    images, have = {}, 0
+    for d in ("thumbs", "previews", "library"):
+        os.makedirs(os.path.join(SITE, d), exist_ok=True)
+    images, have, printed, total = {}, 0, 0, 0
+    no_print = []
     for iid, o in lib.items():
         if o.get("source") == "own":
             continue  # your private photos stay out of the public site
         e = {k: o.get(k) for k in ("id", "source", "title", "credit", "license", "page", "pixels", "object", "catalog",
                                    "kind", "constellation", "distance", "ra", "dec", "fit", "focus", "zoom", "note",
-                                   "rotate", "file_url", "thumb_url")}
+                                   "rotate", "file_url", "thumb_url", "commons_title")}
+        e = {k: v for k, v in e.items() if v is not None}
         e["renditions"] = list(o.get("downloads", {}))
         src = util.option_path(o)
-        if o.get("source") == "licensed":  # photographer images are served from the site itself
-            if not os.path.exists(src):
-                print(f"  !! {iid}: {src} is missing; left out of the site")
-                continue
-            os.makedirs(os.path.join(SITE, "library"), exist_ok=True)
-            out = os.path.join(SITE, "library", f"{iid}.jpg")
-            with Image.open(src) as im:
-                im = im.convert("RGB")
-                im.thumbnail((7000, 7000))
-                for q in (92, 88, 84, 80):
-                    im.save(out, quality=q, optimize=True)
-                    if os.path.getsize(out) < 24e6:
-                        break
-            e["file"] = f"library/{iid}.jpg"
-        dst = os.path.join(SITE, "thumbs", f"{iid}.jpg")
-        if not os.path.exists(src):  # no full image here: the sheet's thumbnail is enough for the picker
-            alt = os.path.join(os.path.dirname(util.OPTIONS_DIR), "thumbs", f"{iid}.jpg")
-            src = alt if os.path.exists(alt) else src
         if os.path.exists(src):
-            if not os.path.exists(dst) or os.path.getmtime(dst) < os.path.getmtime(src):
+            out = os.path.join(SITE, "library", f"{iid}.jpg")
+            prv = os.path.join(SITE, "previews", f"{iid}.jpg")
+            tmb = os.path.join(SITE, "thumbs", f"{iid}.jpg")
+            if not (fresh(out, src) and fresh(prv, src) and fresh(tmb, src)):
                 with Image.open(src) as im:
-                    if im.format == "JPEG":
-                        im.draft("RGB", (1200, 1200))
                     im = im.convert("RGB")
-                    im.thumbnail((640, 640))
-                    im.save(dst, quality=82, optimize=True, progressive=True)
-            e["thumb"] = f"thumbs/{iid}.jpg"
+                    if not fresh(out, src):
+                        size = print_size(im.width, im.height, o.get("zoom") or 1.0)
+                        big = im if size == im.size else im.resize(size, Image.LANCZOS)
+                        q = save_under(big, out, PRINT_MAX_BYTES)
+                        print(f"  print  {iid:16} {big.width}x{big.height}  q{q}  {os.path.getsize(out) / 1e6:5.1f} MB")
+                    if not fresh(prv, src):
+                        p = im.copy(); p.thumbnail((1600, 1600), Image.LANCZOS)
+                        p.save(prv, quality=82, optimize=True, progressive=True)
+                    if not fresh(tmb, src):
+                        t = im.copy(); t.thumbnail((640, 640), Image.LANCZOS)
+                        t.save(tmb, quality=80, optimize=True, progressive=True)
+            with Image.open(out) as pim:
+                e["orig_pixels"] = e.get("pixels")
+                e["pixels"] = list(pim.size)  # what actually prints
+            e["file"], e["preview"], e["thumb"] = f"library/{iid}.jpg", f"previews/{iid}.jpg", f"thumbs/{iid}.jpg"
+            e.pop("pending", None)
+            printed += 1
             have += 1
+            total += os.path.getsize(out) + os.path.getsize(prv) + os.path.getsize(tmb)
+        else:
+            no_print.append(iid)
+            alt = os.path.join(os.path.dirname(util.OPTIONS_DIR), "thumbs", f"{iid}.jpg")  # the sheet's thumbnail
+            dst = os.path.join(SITE, "thumbs", f"{iid}.jpg")
+            if os.path.exists(alt):
+                if not fresh(dst, alt):
+                    with Image.open(alt) as im:
+                        im = im.convert("RGB"); im.thumbnail((640, 640))
+                        im.save(dst, quality=80, optimize=True, progressive=True)
+                e["thumb"] = f"thumbs/{iid}.jpg"
+                have += 1
         images[iid] = e
+    # drop files of pictures that left the library
+    for d in ("library", "previews", "thumbs"):
+        for f in glob.glob(os.path.join(SITE, d, "*.jpg")):
+            if os.path.basename(f)[:-4] not in images:
+                os.remove(f)
     # Commons photos whose licence fetch_images.py hasn't checked yet: the site checks them
     # itself in the visitor's browser (Commons answers cross-site requests) and drops any
     # whose licence or size doesn't pass.
@@ -135,11 +188,11 @@ def library():
     slots = [dict(slot=s["slot"], name=MONTHS[i], default=first(s["default"]),
                   options=[o["id"] for o in s["options"] if o["id"] in images]) for i, s in enumerate(man)]
     compact(os.path.join(SITE, "data", "library.json"), dict(slots=slots, images=images))
-    print(f"  library: {len(images)} images, {have} thumbnails")
-    missing = [i for i, e in images.items() if not e.get("thumb")]
-    if missing:
-        print(f"  !! no thumbnail for {len(missing)} images (the picker loads those from the "
-              f"observatory's own CDN; run fetch_images.py to bundle them): {', '.join(missing)}")
+    print(f"  library: {len(images)} images; {printed} with print copies in site/ ({total / 1e6:.0f} MB), "
+          f"{have} with thumbnails")
+    if no_print:
+        print(f"  !! {len(no_print)} images have no downloaded original, so the site falls back to the observatory "
+              f"for them (run fetch_images.py, then make_site.py): {', '.join(no_print)}")
 
 
 def fonts():
@@ -295,6 +348,8 @@ def main(argv=None):
     ap.add_argument("--ready", nargs="*", default=["IN", "US-ET", "US-PT", "UK", "CET", "JP"],
                     help="editions to publish as ready-made downloads (first one feeds the page previews)")
     ap.add_argument("--ready-dpi", type=int, default=200)
+    ap.add_argument("--print-dpi", type=int, default=300,
+                    help="resolution of the print copies kept in site/library/ (300 = sharp on an A3 cover)")
     ap.add_argument("--ready-quality", type=int, default=84, help="JPEG quality of the photographs in those PDFs")
     a = ap.parse_args(argv)
     if not util.events_current():
@@ -303,6 +358,8 @@ def main(argv=None):
     if not os.path.exists("fonts/Fraunces-Title.ttf"):
         import setup_fonts
         setup_fonts.main()
+    global PRINT_DPI
+    PRINT_DPI = a.print_dpi
     print(f"== building site data in {SITE}")
     fonts()
     info = kit_zip()

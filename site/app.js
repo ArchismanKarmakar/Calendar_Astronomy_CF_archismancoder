@@ -493,13 +493,15 @@ const CDN = {
 function thumbURLs(img, big = false) {
   if (!img) return [];
   if (img.source === "own") return [uploads.get(img.id)?.url || ""];
-  if (img.source === "licensed") return [img.thumb, img.file].filter(Boolean);
+  // this site's own copies first (made by make_site.py), the original host only as a fallback
+  const mine = big ? [img.preview, img.thumb] : [img.thumb, img.preview];
+  if (img.source === "licensed") return [...mine, img.file].filter(Boolean);
   if (img.source === "commons") {
-    return [img.thumb, img.thumb_url, img.commons_title && window.Commons && Commons.thumb(img.commons_title)].filter(Boolean);
+    return [...mine, img.thumb_url, img.commons_title && window.Commons && Commons.thumb(img.commons_title)].filter(Boolean);
   }
   const r = big ? "thumb700x" : "thumb300y";
   const cdn = CDN[img.source];
-  return [img.thumb, cdn && cdn(img.id, r), cdn && cdn(img.id, "screen"),
+  return [...mine, cdn && cdn(img.id, r), cdn && cdn(img.id, "screen"),
     `api/img?src=${img.source}&id=${img.id}&r=${img.source === "noirlab" ? "screen" : r}`].filter(Boolean);
 }
 const thumbURL = (img, big = false) => thumbURLs(img, big)[0] || "";
@@ -562,6 +564,48 @@ function renderTiles() {
   }
 }
 
+/* ------------------------------------------------------------ the month's target */
+// Each month's suggested picture is a galaxy, nebula or cluster that stands highest in the
+// evening sky that month; the calendar prints when, for the chosen city. This is the same
+// sum as kit/skycalc.py transit_simple (within about a minute).
+const hms = (v) => { const t = String(v).trim(), sg = t.startsWith("-") ? -1 : 1; const [a, b = 0, c = 0] = t.replace(/^[-+]/, "").split(":").map(Number); return sg * (a + b / 60 + c / 3600); };
+function tzMinutes(tz, d) {
+  try {
+    const s = d.toLocaleString("en-US", { timeZone: tz, hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
+    const [md, t] = s.split(", "), [mo, da, yr] = md.split("/").map(Number), [hh, mi] = t.split(":").map(Number);
+    return (Date.UTC(yr, mo - 1, da, hh % 24, mi) - d) / 60000;
+  } catch (e) { return 0; }
+}
+/** {time:"22:18", alt:56} for the 15th of month m, or null when the picture has no sky position. */
+function highest(img, m, c = cityOf(state.code)) {
+  if (!img || !img.ra || !img.dec || !c || !m) return null;
+  const dec = hms(img.dec), rad = Math.PI / 180;
+  let ra = hms(img.ra) * 15;
+  ra += (27 + (m - 0.5) / 12) * (3.075 + 1.336 * Math.sin(ra * rad) * Math.tan(dec * rad)) * 15 / 3600;
+  const noon = new Date(Date.UTC(2027, m - 1, 15, 12));
+  const t0 = new Date(noon.getTime() - tzMinutes(c.tz, noon) * 60000);
+  const jd = t0.getTime() / 86400000 + 2440587.5;
+  const lst = (((280.46061837 + 360.98564736629 * (jd - 2451545)) + c.lon) % 360 + 360) % 360;
+  const tt = new Date(t0.getTime() + ((((ra - lst) % 360) + 360) % 360) / 360.98564736629 * 86400000);
+  const time = tt.toLocaleTimeString("en-GB", { timeZone: c.tz, hour: "2-digit", minute: "2-digit", hour12: false });
+  return { time, alt: Math.round(90 - Math.abs(c.lat - dec)) };
+}
+/** One sentence on why this picture is on this page. */
+function whyText(slot, img) {
+  const c = cityOf(state.code);
+  if (!img) return "";
+  if (slot === "cover") return "The cover is chosen to look good on the wall; it isn't tied to a date.";
+  const m = +slot, name = img.object || img.title || "This object";
+  const hi = highest(img, m, c);
+  if (!hi) return img.source === "own"
+    ? "Add the object's position (RA and Dec) to your photo to get its best viewing time printed on the page."
+    : `${name} is a landscape, so this page has no target time.`;
+  const when = `highest at ${hi.time} on 15 ${MONTHS[m - 1]} from ${c.city}`;
+  if (hi.alt <= 0) return `${name} never rises above the horizon from ${c.city}. It still prints, but you can't observe it from there; another picture may suit you better.`;
+  if (hi.alt < 20) return `Target of the month: ${name}, ${when}, but only ${hi.alt}° up, low in the sky from there.`;
+  return `Target of the month: ${name}, ${when}, ${hi.alt}° above the horizon.`;
+}
+
 /* ------------------------------------------------------------ stage: a live mock of one page */
 const stage = { slot: "01" };
 const edCache = new Map();
@@ -613,10 +657,17 @@ async function renderStage() {
   } else {
     const m = +slot, ed = await edition();
     if (tok !== stageToken) return;
+    const hi = highest(img, m);
     body = [pic, h("div", { class: "sp-head" }, h("b", {}, MONTHS[m - 1].toUpperCase()),
-      h("span", {}, img ? [img.object, img.constellation].filter(Boolean).join(" · ") : "")), monthGrid(m, ed), credit];
+      h("span", {}, img ? [img.object, img.constellation, hi && hi.alt > 0 ? `highest ${hi.time}` : ""].filter(Boolean).join(" · ") : "")), monthGrid(m, ed), credit];
   }
   box.replaceChildren(...body);
+  const why = $("#why");
+  if (why) {
+    why.textContent = whyText(slot, img);
+    const hi = slot !== "cover" && highest(img, +slot);
+    why.classList.toggle("low", !!hi && hi.alt < 20);
+  }
 }
 function monthGrid(m, ed) {
   const ws = effWeek(); // 0 = Monday, 6 = Sunday
@@ -670,8 +721,8 @@ function renderPicker({ keepScroll = false } = {}) {
   const top = keepScroll && grid ? grid.scrollTop : 0;
   $("#pk-title").textContent = pk.slot === "cover" ? "Cover picture" : `${slotName(pk.slot)} picture`;
   $("#pk-sub").textContent = pk.slot === "cover"
-    ? "Fills the whole front page."
-    : `Fills the ${state.format === "wall" ? "top half of the page" : "left panel"}; it is also the month's target object.`;
+    ? "Fills the whole front page. Any picture works; the cover isn't tied to a date."
+    : `Suggested pictures are objects that stand highest in the ${slotName(pk.slot)} evening sky. The one you pick becomes the month's target, with the time it's highest from ${cityOf(state.code).city}.`;
   // month rail
   const rail = $("#pk-rail");
   rail.innerHTML = "";
@@ -755,6 +806,8 @@ function card(img, i) {
     h("span", { class: "cap" }, h("span", { class: "t" }, img.object || img.title),
       h("span", { class: "s" }, [img.kind, img.constellation].filter(Boolean).join(" · ") || img.title || ""),
       fit ? h("span", { class: `q q-${fit.level}`, title: `${Math.round(fit.ppi)} ppi on this page` }, fit.label) : null,
+      (() => { const hi = pk.slot !== "cover" && highest(img, +pk.slot);
+        return hi && hi.alt <= 0 ? h("span", { class: "q q-sky" }, `Not visible from ${cityOf(state.code).city}`) : null; })(),
       ownBad ? h("span", { class: "q q-fail" }, "Doesn't fit this page") : null),
     h("span", { class: "tick", "aria-hidden": "true", html: '<svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' }));
   return b;
@@ -776,6 +829,7 @@ function drawDetail(aside, img) {
       h("p", { class: "eyebrow" }, SRC_NAME[img.source] || img.source, img.source === "own" ? "" : ` · ${img.id}`),
       h("h4", {}, img.object || img.title),
       img.title && img.title !== img.object ? h("p", { class: "dim" }, img.title) : null,
+      pk.slot !== "cover" ? h("p", { class: "skyline" }, whyText(pk.slot, img)) : null,
       fit ? h("p", { class: `fitline q-${fit.level}` }, h("i"), `${fit.label}: ${Math.round(fit.ppi)} ppi on ${paperLabel()}`) : null,
       v ? checklist(v, true) : null,
       h("dl", {}, facts.flatMap(([k, val]) => [h("dt", {}, k), h("dd", {}, val)])),
@@ -1068,19 +1122,15 @@ function makeSpec(pages, dpi) {
       const u = uploads.get(i.id);
       i._key = i.id; i._ext = u.ext;
       if (!sent.has(i.id)) { ups.push({ key: i.id, ext: u.ext, bytes: u.bytes.slice(0) }); sent.add(i.id); }
-    } else if (i.source === "commons") {  // Wikimedia Commons file, straight from Commons (CORS allowed)
-      i._key = i.id; i._ext = "jpg";
-      if (!fetches.some((f) => f.key === i._key)) fetches.push({ key: i._key, id: i.id, url: i.file_url,
-        alt: `api/img?src=commons&u=${encodeURIComponent(i.file_url)}` });
-    } else if (i.source === "licensed") {  // photographer image hosted with the site
-      i._key = i.id; i._ext = "jpg";
-      if (!fetches.some((f) => f.key === i._key)) fetches.push({ key: i._key, id: i.id, url: i.file });
     } else {
-      const r = rendition(i);
-      i._key = `${i.id}-${r}`; i._ext = "jpg";
-      if (!fetches.some((f) => f.key === i._key)) {
-        fetches.push({ key: i._key, id: i.id, url: `api/img?src=${i.source}&id=${i.id}&r=${r}` });
-      }
+      // 1. the print copy kept in this site's repo (site/library/, made by make_site.py)
+      // 2. the original host: Commons directly (it allows it), the observatories through /api/img
+      const urls = [];
+      if (i.file) urls.push(i.file);
+      if (i.source === "commons" && i.file_url) urls.push(i.file_url, `api/img?src=commons&u=${encodeURIComponent(i.file_url)}`);
+      else if (i.source !== "licensed" && i.source !== "commons") urls.push(`api/img?src=${i.source}&id=${i.id}&r=${rendition(i)}`);
+      i._key = i.file ? i.id : `${i.id}-${rendition(i)}`; i._ext = "jpg";
+      if (urls.length && !fetches.some((f) => f.key === i._key)) fetches.push({ key: i._key, id: i.id, url: urls[0], alts: urls.slice(1) });
     }
     images[s] = i;
   }

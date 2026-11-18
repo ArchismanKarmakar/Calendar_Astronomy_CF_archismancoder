@@ -673,3 +673,10 @@ dialog::backdrop { background: rgba(0, 0, 0, .7); backdrop-filter: blur(4px); }
 .strip button:hover img { transform: translateY(-4px); box-shadow: 0 0 0 1px var(--line2), 0 24px 40px -22px #000; }
 .ed img { transition: transform .5s cubic-bezier(.2, .8, .2, 1); }
 .ed:hover img { transform: rotate(-2deg) scale(1.03); }
+
+/* why this picture */
+.why { margin: -2px auto 0; max-width: 56ch; text-align: center; font-size: 13.5px; line-height: 1.5; color: var(--dim); min-height: 2.6em; text-wrap: balance; }
+.why.low { color: var(--caution); }
+.head .basis { margin-top: 12px; font-size: 15px; }
+.skyline { font-size: 13px; color: var(--dim); margin: 2px 0 10px; line-height: 1.5; }
+.q.q-sky { color: var(--caution); }

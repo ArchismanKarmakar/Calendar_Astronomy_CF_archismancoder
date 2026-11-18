@@ -118,9 +118,11 @@ async function run(msg) {
         const mb = (got / 1e6).toFixed(1) + (total ? ` of ${(total / 1e6).toFixed(0)} MB` : " MB");
         status(job, `${label}: ${mb}`, 0.25 + 0.2 * (i - 1 + (total ? got / total : 0.5)) / need.length);
       };
-      let b;
-      try { b = await getBytes(f.url, prog); }
-      catch (e) { if (!f.alt) throw e; b = await getBytes(f.alt, prog); }
+      let b = null, err = null;
+      for (const u of [f.url, ...(f.alts || []), f.alt].filter(Boolean)) {  // this site's copy first
+        try { b = await getBytes(u, prog); break; } catch (e) { err = err || e; }
+      }
+      if (!b) throw err || new Error("no source");
       py.FS.writeFile(p, b);
       have.add(p);
     } catch (e) {
