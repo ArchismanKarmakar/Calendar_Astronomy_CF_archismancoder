@@ -1,6 +1,6 @@
 # Cloudflare Workers project (static site + two small API routes).
 # Deploy command: npx wrangler deploy      (Workers & Pages -> Create -> Import a repository)
-name = "deep-space-explorer-2027"
+name = "calendar-astronomy-cf-archismancoder"
 main = "src/index.js"
 compatibility_date = "2025-06-01"
 
@@ -14,6 +14,26 @@ run_worker_first = ["/api/*"]
 # Set to "1" only if another site of yours must use the image proxy.
 ALLOW_ANY_ORIGIN = "0"
 
+[observability]
+enabled = false
+head_sampling_rate = 1
+redact_query_string = false
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 1
+persist = true
+
+[observability.issue_detection]
+enabled = true
+
 # Custom domain (uncomment after the first deploy, or add it in the dashboard:
 # Worker -> Settings -> Domains & Routes -> Add -> Custom domain):
 # routes = [{ pattern = "calendar.archismancoder.com", custom_domain = true }]
+
