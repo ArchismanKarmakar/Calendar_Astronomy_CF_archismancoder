@@ -1,0 +1,14 @@
+{
+  "name": "deep-space-explorer-2027",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Free 2027 astronomy calendar (Cloudflare Worker + static assets)",
+  "scripts": {
+    "build": "echo \"Nothing to build: ./site is served as is\"",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}
