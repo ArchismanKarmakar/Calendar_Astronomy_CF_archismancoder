@@ -493,8 +493,13 @@ const CDN = {
 function thumbURLs(img, big = false) {
   if (!img) return [];
   if (img.source === "own") return [uploads.get(img.id)?.url || ""];
-  // this site's own copies first (made by make_site.py), the original host only as a fallback
-  const mine = big ? [img.preview, img.thumb] : [img.thumb, img.preview];
+  // this site's own copies first (site/previews, site/thumbs), the original host only as a fallback.
+  // The standard paths are tried even when library.json doesn't list them, so a stale list
+  // can never send a visitor to the observatory for a picture the site already has.
+  const stored = !img.pending && /^[\w.-]+$/.test(img.id || "");
+  const own = (d) => (stored ? `${d}/${img.id}.jpg` : null);
+  const mine = [...new Set((big ? [img.preview, own("previews"), img.thumb, own("thumbs")]
+    : [img.thumb, own("thumbs"), img.preview, own("previews")]).filter(Boolean))];
   if (img.source === "licensed") return [...mine, img.file].filter(Boolean);
   if (img.source === "commons") {
     return [...mine, img.thumb_url, img.commons_title && window.Commons && Commons.thumb(img.commons_title)].filter(Boolean);
@@ -1127,9 +1132,10 @@ function makeSpec(pages, dpi) {
       // 2. the original host: Commons directly (it allows it), the observatories through /api/img
       const urls = [];
       if (i.file) urls.push(i.file);
+      if (/^[\w.-]+$/.test(i.id || "") && !urls.includes(`library/${i.id}.jpg`)) urls.push(`library/${i.id}.jpg`);
       if (i.source === "commons" && i.file_url) urls.push(i.file_url, `api/img?src=commons&u=${encodeURIComponent(i.file_url)}`);
       else if (i.source !== "licensed" && i.source !== "commons") urls.push(`api/img?src=${i.source}&id=${i.id}&r=${rendition(i)}`);
-      i._key = i.file ? i.id : `${i.id}-${rendition(i)}`; i._ext = "jpg";
+      i._key = i.id; i._ext = "jpg";
       if (urls.length && !fetches.some((f) => f.key === i._key)) fetches.push({ key: i._key, id: i.id, url: urls[0], alts: urls.slice(1) });
     }
     images[s] = i;

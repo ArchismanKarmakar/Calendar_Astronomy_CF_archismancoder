@@ -3,8 +3,9 @@
 #   site/previews/<id>.jpg  1600 px
 #   site/thumbs/<id>.jpg    640 px
 #   site/data/library.json  the site's picture list
-# Runs when the image list changes, or by hand: Actions -> Pictures -> Run workflow.
-# Pictures already stored are skipped, so later runs only fetch new ones.
+# Runs after every push to main, or by hand: Actions -> Pictures -> Run workflow.
+# Pictures already stored at full print size are skipped; smaller copies (e.g. a 4000 px
+# rendition of a 13000 px original) are replaced by full-size downloads.
 name: Pictures
 
 on:
@@ -14,12 +15,11 @@ on:
         description: "Download every picture again"
         type: boolean
         default: false
+  # After every push: about 20 s when nothing needs downloading. It rewrites
+  # site/data/library.json from the pictures actually in site/library, so the site always
+  # knows which pictures it has (even if an old library.json was copied over it).
   push:
     branches: [main]
-    paths:
-      - kit/data/image_manifest.json
-      - kit/data/custom_images.json
-      - .github/workflows/pictures.yml
 
 permissions:
   contents: write
@@ -45,14 +45,14 @@ jobs:
       - name: Download pictures and make the website copies
         working-directory: kit
         run: |
-          python fetch_images.py --drop-originals --workers 3 ${{ inputs.force && '--force' || '' }} || echo "::warning::some pictures could not be downloaded; see the log"
+          python fetch_images.py --drop-originals --workers 3 --max-mb 600 ${{ inputs.force && '--force' || '' }} || echo "::warning::some pictures could not be downloaded; see the log"
 
       - name: Commit the pictures
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for p in site/library site/previews site/thumbs site/data/library.json site/data/licences kit/data/commons_resolved.json kit/data/licences; do
+          for p in site/library site/previews site/thumbs site/data/library.json site/data/licences kit/data/commons_resolved.json kit/data/licences kit/data/full_size_unavailable.json; do
             [ -e "$p" ] && git add -A "$p"
           done
           if git diff --cached --quiet; then

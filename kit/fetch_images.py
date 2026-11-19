@@ -85,10 +85,41 @@ def download(url, dest, label, total):
     return got, size, time.time() - t0
 
 
+NO_FULL_IDS = set()
+
+
+def big_enough(path, opt):
+    """True if the file at `path` has the pixels a 300 dpi print copy needs (or all the
+    original has). A 4000 px 'large' rendition of a 13000 px original is not enough."""
+    try:
+        from PIL import Image
+        import make_site
+        Image.MAX_IMAGE_PIXELS = None
+        with Image.open(path) as im:
+            w, h = im.size
+        W, H = (opt.get("pixels") or [0, 0])[:2]
+        if not W or not H:
+            return True  # original size unknown: keep what we have
+        nw, nh = make_site.print_size(W, H, opt.get("zoom") or 1.0)
+        return max(w, h) >= max(nw, nh) * 0.97
+    except Exception:
+        return False
+
+
+NO_FULL = os.path.join(util.HERE, "data", "full_size_unavailable.json")  # tried, only a smaller rendition exists
+
+
 def fetch_option(opt, prefer, max_mb, force):
     dest = util.original_path(opt)
-    if not force and (os.path.exists(dest) or os.path.exists(util.site_copy_path(opt))):
-        return opt, "present", None  # already downloaded, or its print copy is already in the repo
+    copy = util.site_copy_path(opt)
+    if not force and opt["id"] in NO_FULL_IDS and os.path.exists(copy):
+        return opt, "present", None  # the full-size file couldn't be had last time; keep the copy
+    if not force:
+        if os.path.exists(dest) and big_enough(dest, opt):
+            return opt, "present", None
+        if not os.path.exists(dest) and os.path.exists(copy) and big_enough(copy, opt):
+            return opt, "present", None  # its print copy is already in the repo, at full print size
+        # missing, or only a small rendition so far: download the full-size file
     order = ["large", "publicationjpg", "screen"] if prefer == "large" else ["publicationjpg", "large", "screen"]
     errors = []
     tries = []
@@ -208,6 +239,8 @@ def main(argv=None):
                 seen.add(o["id"])
                 todo.append(o)
     print(f"{len(todo)} images to check ({'selected only' if a.selected_only else 'all options'})")
+    global NO_FULL_IDS
+    NO_FULL_IDS = set(util.read_json(NO_FULL) if os.path.exists(NO_FULL) else [])
     failed = []
     site = None
     if not a.no_site:
@@ -225,12 +258,25 @@ def main(argv=None):
             orig = util.original_path(opt)
             if site and os.path.exists(orig):
                 try:
+                    if status != "present":  # a new download replaces the older, smaller copies
+                        for d in ("library", "previews", "thumbs"):
+                            old = os.path.join(site.SITE, d, f"{opt['id']}.jpg")
+                            if os.path.exists(old):
+                                os.remove(old)
                     site.site_copies(opt["id"], orig, opt.get("zoom") or 1.0)
                 except Exception as e:
                     say(f"  !!   {opt['id']:9} website copy failed: {e}")
                     continue
+                if status != "present" and not big_enough(orig, opt):
+                    NO_FULL_IDS.add(opt["id"])  # only a smaller rendition exists: don't retry on every run
+                elif status != "present":
+                    NO_FULL_IDS.discard(opt["id"])
                 if a.drop_originals:
                     os.remove(orig)
+    util.write_json(NO_FULL, sorted(NO_FULL_IDS))
+    if NO_FULL_IDS:
+        say(f"  note: {len(NO_FULL_IDS)} pictures are only available below full print size: {' '.join(sorted(NO_FULL_IDS))} "
+            f"(listed in data/full_size_unavailable.json; --force tries again)")
     if site:
         print("\n== website copies (site/library, site/previews, site/thumbs) and site/data/library.json")
         site.library()

@@ -119,8 +119,14 @@ async function run(msg) {
         status(job, `${label}: ${mb}`, 0.25 + 0.2 * (i - 1 + (total ? got / total : 0.5)) / need.length);
       };
       let b = null, err = null;
-      for (const u of [f.url, ...(f.alts || []), f.alt].filter(Boolean)) {  // this site's copy first
-        try { b = await getBytes(u, prog); break; } catch (e) { err = err || e; }
+      // this site's own copy first (site/library/<id>.jpg), the original host only as a fallback
+      const isImg = (x) => x && x.length > 1000 && ((x[0] === 0xFF && x[1] === 0xD8) || (x[0] === 0x89 && x[1] === 0x50));
+      for (const u of [f.url, ...(f.alts || []), f.alt].filter(Boolean)) {
+        try {
+          const got = await getBytes(u, prog);
+          if (isImg(got)) { b = got; break; }
+          err = err || new Error(`${u} is not an image`);
+        } catch (e) { err = err || e; }
       }
       if (!b) throw err || new Error("no source");
       py.FS.writeFile(p, b);

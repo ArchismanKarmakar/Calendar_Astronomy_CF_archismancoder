@@ -97,10 +97,16 @@ the "HTTP 525" error). Three files per picture:
 | `site/previews/<id>.jpg` | 1600 px | the live page in Make your own, the picker |
 | `site/thumbs/<id>.jpg` | 640 px | picker grid and filmstrip |
 
-**Easiest: let GitHub do it.** Push the repo, then on GitHub open **Actions → Pictures → Run
-workflow**. It downloads every picture, makes the three files, commits them, and Cloudflare
-redeploys. It runs again by itself whenever `kit/data/image_manifest.json` changes, and only
-fetches pictures that aren't stored yet. If the commit step fails with "permission denied",
+**Easiest: let GitHub do it.** The **Pictures** workflow runs after every push to `main`
+(or by hand: Actions → Pictures → Run workflow). It downloads any picture that isn't stored
+yet, or is stored below full print size, makes the three files, rewrites
+`site/data/library.json` from what is actually in `site/library/`, commits, and Cloudflare
+redeploys. With nothing to download it takes about 20 seconds. Pictures whose full-size file
+can't be had are listed in `kit/data/full_size_unavailable.json` and not retried (run the
+workflow with "Download every picture again" to retry).
+
+The website always tries `library/<id>.jpg` first for every picture, even if
+`library.json` doesn't list it, and only falls back to the observatory if that file is missing. If the commit step fails with "permission denied",
 set **Settings → Actions → General → Workflow permissions** to "Read and write".
 
 **Or on your computer** (`build.py --fetch` does the same):
